@@ -7,6 +7,10 @@ import { BotanicalRusticTemplate } from './designs/botanical-rustic';
 import { GoldenArabicTemplate } from './designs/golden-arabic';
 import { HeavenlyRosesTemplate } from './designs/heavenly-roses';
 import { ButterflyEleganceTemplate } from './designs/butterfly-elegance';
+import { RoyalVelvetTemplate } from './designs/royal-velvet';
+import { PalaceGatesTemplate } from './designs/palace-gates';
+import { CelestialStardustTemplate } from './designs/celestial-stardust';
+import { PearlBoxTemplate } from './designs/pearl-box';
 
 export interface RegisteredTemplate {
   component: React.FC<TemplateRenderContext>;
@@ -192,6 +196,117 @@ export const templateRegistry: Record<string, RegisteredTemplate> = {
         { key: 'timeline4Time', label: 'الفقرة 4 - الوقت', type: 'text', defaultValue: '20:30' },
         { key: 'closingTitle', label: 'عنوان الختام', type: 'text', defaultValue: 'Thank You!' },
         { key: 'closingSubtitle', label: 'الرسالة الختامية', type: 'text', defaultValue: "We can't wait to celebrate with you!" }
+      ]
+    }
+  },
+  'royal-velvet': {
+    component: RoyalVelvetTemplate,
+    metadata: {
+      id: 'royal-velvet',
+      name: 'Royal Velvet 🎀',
+      description: 'مخمل ملكي زمردي فاخر مع شريط ساتان ذهبي ينفك بنعومة ومونوغرام مذهب.',
+      previewImage: '/assets/templates/royal-velvet.jpg',
+      version: '1.0.0',
+      supportedFeatures: ['HERO', 'VENUE', 'MAPS', 'MUSIC', 'GALLERY', 'CUSTOM_MESSAGE', 'COUNTDOWN', 'CONTACTS', 'SHARE'],
+      customFields: [
+        { key: 'ribbonText', label: 'نص شريط الساتان التفاعلي', type: 'text', defaultValue: 'انقر لفتح الدعوة الملكية ✨' },
+        { key: 'monogramText', label: 'حروف المونوغرام الملكي (مثال: A & F)', type: 'text', defaultValue: '' },
+        { key: 'introVerse', label: 'الآية الكريمة أو عبارة الترحيب', type: 'textarea', defaultValue: '«وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا وَجَعَلَ بَيْنَكُم مَّوَدَّةً وَرَحْمَةً»' },
+        { key: 'invitationNote', label: 'نص بطاقة الدعوة الترحيبي', type: 'textarea', defaultValue: 'يتشرف العروسان بدعوتكم لمشاركتهما أجمل لحظات العمر وتتويج قصة حبهما بفرحة تكتمل بوجودكم.' },
+        { key: 'dressCode', label: 'قواعد اللباس (Dress Code)', type: 'text', defaultValue: 'ملابس رسمية / Formal Black Tie' },
+        { key: 'timeline1Title', label: 'الفقرة 1 - العنوان', type: 'text', defaultValue: 'استقبال الضيوف الكرام' },
+        { key: 'timeline1Time', label: 'الفقرة 1 - التوقيت', type: 'text', defaultValue: '07:30 PM' },
+        { key: 'timeline1Desc', label: 'الفقرة 1 - الوصف', type: 'text', defaultValue: 'مراسم الترحيب وبداية توافد الأهل والأحباب' },
+        { key: 'timeline2Title', label: 'الفقرة 2 - العنوان', type: 'text', defaultValue: 'الزفة الملكية وعقد القران' },
+        { key: 'timeline2Time', label: 'الفقرة 2 - التوقيت', type: 'text', defaultValue: '08:45 PM' },
+        { key: 'timeline2Desc', label: 'الفقرة 2 - الوصف', type: 'text', defaultValue: 'لحظات مباركة البداية وبدء مراسم الاحتفال' },
+        { key: 'timeline3Title', label: 'الفقرة 3 - العنوان', type: 'text', defaultValue: 'العشاء الملكي' },
+        { key: 'timeline3Time', label: 'الفقرة 3 - التوقيت', type: 'text', defaultValue: '10:15 PM' },
+        { key: 'timeline3Desc', label: 'الفقرة 3 - الوصف', type: 'text', defaultValue: 'بوفيه عشاء فاخر احتفاءً بضيوفنا الأعزاء' },
+        { key: 'closingMessage', label: 'العبارة الختامية', type: 'text', defaultValue: 'حضوركم شرف لنا ويزيد ليلتنا بهجة وسروراً 🤍' }
+      ]
+    }
+  },
+  'palace-gates': {
+    component: PalaceGatesTemplate,
+    metadata: {
+      id: 'palace-gates',
+      name: 'Grand Palace Gates 🏰',
+      description: 'بوابات قصر ذهبية ثلاثية الأبعاد تنفتح لتكشف عن قاعة ملكية ساحرة وثريات متلألئة.',
+      previewImage: '/assets/templates/palace-gates.jpg',
+      version: '1.0.0',
+      supportedFeatures: ['HERO', 'VENUE', 'MAPS', 'MUSIC', 'GALLERY', 'CUSTOM_MESSAGE', 'COUNTDOWN', 'CONTACTS', 'SHARE'],
+      customFields: [
+        { key: 'gateCrestText', label: 'الشعار أعلى البوابة الملكية', type: 'text', defaultValue: 'ROYAL PALACE BALLROOM' },
+        { key: 'gatesButtonText', label: 'نص زر فتح بوابات القصر', type: 'text', defaultValue: 'اضغط لفتح بوابات القصر ⚜️' },
+        { key: 'ballroomQuote', label: 'العبارة الترحيبية داخل قاعة القصر', type: 'textarea', defaultValue: '«بَارَكَ اللَّهُ لَكُمَا وَبَارَكَ عَلَيْكُمَا وَجَمَعَ بَيْنَكُمَا فِي خَيْرٍ»' },
+        { key: 'invitationNote', label: 'نص بطاقة الدعوة الملكية', type: 'textarea', defaultValue: 'يسعدنا ويشرفنا دعوتكم لحضور حفل الزفاف الملكي ومشاركتنا بهجة هذا اليوم التاريخي في حياتنا.' },
+        { key: 'dressCode', label: 'قواعد اللباس (Dress Code)', type: 'text', defaultValue: 'أزياء سهرة فاخرة / Formal Evening Wear' },
+        { key: 'timeline1Title', label: 'الفقرة 1 - العنوان', type: 'text', defaultValue: 'توافد الضيوف الملكي' },
+        { key: 'timeline1Time', label: 'الفقرة 1 - التوقيت', type: 'text', defaultValue: '07:00 PM' },
+        { key: 'timeline1Desc', label: 'الفقرة 1 - الوصف', type: 'text', defaultValue: 'استقبال وترحيب بالمشروبات الخاصة وموسيقى كلاسيكية' },
+        { key: 'timeline2Title', label: 'الفقرة 2 - العنوان', type: 'text', defaultValue: 'الدخول الملكي والزفة' },
+        { key: 'timeline2Time', label: 'الفقرة 2 - التوقيت', type: 'text', defaultValue: '08:30 PM' },
+        { key: 'timeline2Desc', label: 'الفقرة 2 - الوصف', type: 'text', defaultValue: 'إطلالة العروسين وبداية مراسم الاحتفال الكبرى' },
+        { key: 'timeline3Title', label: 'الفقرة 3 - العنوان', type: 'text', defaultValue: 'العشاء الفاخر' },
+        { key: 'timeline3Time', label: 'الفقرة 3 - التوقيت', type: 'text', defaultValue: '10:00 PM' },
+        { key: 'timeline3Desc', label: 'الفقرة 3 - الوصف', type: 'text', defaultValue: 'مأدبة عشاء ملكية احتفاءً بجمعنا المبارك' },
+        { key: 'closingMessage', label: 'العبارة الختامية', type: 'text', defaultValue: 'بوجودكم تدوم الأفراح وتكتمل سعادتنا ✨' }
+      ]
+    }
+  },
+  'celestial-stardust': {
+    component: CelestialStardustTemplate,
+    metadata: {
+      id: 'celestial-stardust',
+      name: 'Celestial Stardust 🌌',
+      description: 'سماء النجوم والفلك الليلي مع هلال ذهبي متوهج وأبراج فلكية مرسومة بالنور.',
+      previewImage: '/assets/templates/celestial-stardust.jpg',
+      version: '1.0.0',
+      supportedFeatures: ['HERO', 'VENUE', 'MAPS', 'MUSIC', 'GALLERY', 'CUSTOM_MESSAGE', 'COUNTDOWN', 'CONTACTS', 'SHARE'],
+      customFields: [
+        { key: 'celestialSubtitle', label: 'العنوان التمهيدي في السماء', type: 'text', defaultValue: 'WRITTEN IN THE STARS ✨' },
+        { key: 'moonQuote', label: 'عبارة الهلال والنجوم الترحيبية', type: 'textarea', defaultValue: '«تلاقت الأرواح تحت سماء كُتبت تفاصيل حبها بنور النجوم»' },
+        { key: 'invitationNote', label: 'نص بطاقة الدعوة الترحيبي', type: 'textarea', defaultValue: 'تحت بريق النجوم وضوء القمر، نتشرف بدعوتكم لمشاركتنا ليلة العمر وبداية رحلتنا الأبدية معاً.' },
+        { key: 'dressCode', label: 'قواعد اللباس (Dress Code)', type: 'text', defaultValue: 'مسائي أنيق / Midnight Blue or Black Formal' },
+        { key: 'timeline1Title', label: 'الفقرة 1 - العنوان', type: 'text', defaultValue: 'استقبال ضوء النجوم' },
+        { key: 'timeline1Time', label: 'الفقرة 1 - التوقيت', type: 'text', defaultValue: '07:00 PM' },
+        { key: 'timeline1Desc', label: 'الفقرة 1 - الوصف', type: 'text', defaultValue: 'استقبال وترحيب وعزف كلاسيكي هادئ تحت الأضواء' },
+        { key: 'timeline2Title', label: 'الفقرة 2 - العنوان', type: 'text', defaultValue: 'مراسم عقد القران والزفة' },
+        { key: 'timeline2Time', label: 'الفقرة 2 - التوقيت', type: 'text', defaultValue: '08:30 PM' },
+        { key: 'timeline2Desc', label: 'الفقرة 2 - الوصف', type: 'text', defaultValue: 'لحظات العهد وتتويج الحب ببركة الجمع الكريم' },
+        { key: 'timeline3Title', label: 'الفقرة 3 - العنوان', type: 'text', defaultValue: 'العشاء والاحتفال' },
+        { key: 'timeline3Time', label: 'الفقرة 3 - التوقيت', type: 'text', defaultValue: '10:00 PM' },
+        { key: 'timeline3Desc', label: 'الفقرة 3 - الوصف', type: 'text', defaultValue: 'مأدبة عشاء واحتفال ساحر حتى منتصف الليل' },
+        { key: 'closingMessage', label: 'العبارة الختامية', type: 'text', defaultValue: 'بوجودكم تسطع ليلتنا وتكتمل سعادتنا بنجوم حضوركم 🌙' }
+      ]
+    }
+  },
+  'pearl-box': {
+    component: PearlBoxTemplate,
+    metadata: {
+      id: 'pearl-box',
+      name: 'Pearl & Jasmine Box 🦪',
+      description: 'صندوق دعوة أبيض لؤلؤي مبطن بالحرير العاجي وأزهار الياسمين وعقدة لؤلؤ رقيقة.',
+      previewImage: '/assets/templates/pearl-box.jpg',
+      version: '1.0.0',
+      supportedFeatures: ['HERO', 'VENUE', 'MAPS', 'MUSIC', 'GALLERY', 'CUSTOM_MESSAGE', 'COUNTDOWN', 'CONTACTS', 'SHARE'],
+      customFields: [
+        { key: 'boxTitle', label: 'العنوان أعلى غطاء الصندوق', type: 'text', defaultValue: 'THE ROYAL WEDDING BOX 🦪' },
+        { key: 'openBoxButtonText', label: 'نص زر فتح الصندوق اللؤلؤي', type: 'text', defaultValue: 'افتح صندوق الدعوة الفاخر ✨' },
+        { key: 'welcomeMessage', label: 'العبارة الترحيبية اللؤلؤية', type: 'textarea', defaultValue: '«وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا»' },
+        { key: 'invitationNote', label: 'نص بطاقة الدعوة', type: 'textarea', defaultValue: 'بكل مشاعر الحب والامتنان، ندعوكم لمشاركتنا فرحة العمر وتتويج مسيرة الحب في ليلتنا المنتظرة.' },
+        { key: 'dressCode', label: 'قواعد اللباس (Dress Code)', type: 'text', defaultValue: 'أناقة بيضاء أو ألوان ناعمة / Elegant & Pastel Formal' },
+        { key: 'timeline1Title', label: 'الفقرة 1 - العنوان', type: 'text', defaultValue: 'استقبال الزهور والياسمين' },
+        { key: 'timeline1Time', label: 'الفقرة 1 - التوقيت', type: 'text', defaultValue: '07:30 PM' },
+        { key: 'timeline1Desc', label: 'الفقرة 1 - الوصف', type: 'text', defaultValue: 'مراسم الترحيب بعبق الياسمين ومشروبات الضيافة الفاخرة' },
+        { key: 'timeline2Title', label: 'الفقرة 2 - العنوان', type: 'text', defaultValue: 'الزفة وعقد القران' },
+        { key: 'timeline2Time', label: 'الفقرة 2 - التوقيت', type: 'text', defaultValue: '08:45 PM' },
+        { key: 'timeline2Desc', label: 'الفقرة 2 - الوصف', type: 'text', defaultValue: 'لحظات مباركة الجمع وبداية مسيرة الحب' },
+        { key: 'timeline3Title', label: 'الفقرة 3 - العنوان', type: 'text', defaultValue: 'العشاء الملكي' },
+        { key: 'timeline3Time', label: 'الفقرة 3 - التوقيت', type: 'text', defaultValue: '10:15 PM' },
+        { key: 'timeline3Desc', label: 'الفقرة 3 - الوصف', type: 'text', defaultValue: 'بوفيه عشاء مفتوح على أنغام الموسيقى الهادئة' },
+        { key: 'closingMessage', label: 'العبارة الختامية', type: 'text', defaultValue: 'فرحتنا لا تكتمل إلا بوجودكم ورؤيتكم بيننا 🤍' }
       ]
     }
   }

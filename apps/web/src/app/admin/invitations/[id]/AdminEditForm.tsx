@@ -12,6 +12,10 @@ const TEMPLATES = [
   { id: '6190bf5e-4910-49f1-86d8-a54ddd250cd6', slug: 'floral-romance', name: '🌸 Floral Romance' },
   { id: '3d4b512f-d07e-4344-b3a8-dfcaac710659', slug: 'botanical-rustic', name: '🌿 Botanical Rustic' },
   { id: '5cf7e077-5f2a-4302-b722-063aeece0f98', slug: 'golden-arabic', name: '⚜️ Golden Arabic' },
+  { id: 'royal-velvet', slug: 'royal-velvet', name: '🎀 Royal Velvet (المخمل الملكي)' },
+  { id: 'palace-gates', slug: 'palace-gates', name: '🏰 Grand Palace Gates (بوابات القصر)' },
+  { id: 'celestial-stardust', slug: 'celestial-stardust', name: '🌌 Celestial Stardust (سماء النجوم)' },
+  { id: 'pearl-box', slug: 'pearl-box', name: '🦪 Pearl & Jasmine Box (الصندوق اللؤلؤي)' },
 ];
 
 export default function AdminEditForm({ invitation, apiToken }: { invitation: any, apiToken: string }) {

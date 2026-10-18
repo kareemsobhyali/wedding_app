@@ -27,42 +27,35 @@ async function main() {
   console.log(`Admin User created: ${adminUser.email}`);
 
   // 2. Templates
-  const template1 = await prisma.template.upsert({
-    where: { slug: 'classic-elegance' },
-    update: {},
-    create: {
-      name: 'Classic Elegance',
-      slug: 'classic-elegance',
-      description: 'A traditional and elegant template for classic weddings.',
-      sortOrder: 1,
-      config: { colors: ['#ffffff', '#000000'], sections: ['cover', 'story', 'gallery', 'rsvp'] },
-    },
-  });
+  const templatesData = [
+    { name: 'Butterfly Elegance 🦋', slug: 'butterfly-elegance', description: 'تصميم ملكي بمظروف ينفتح وفراشة ثلاثية الأبعاد تطير بنعومة.', sortOrder: 1 },
+    { name: 'Heavenly Roses 🌹', slug: 'heavenly-roses', description: 'ورود زهرية ناعمة مع تفاصيل زجاجية فاخرة وجدول الفعاليات.', sortOrder: 2 },
+    { name: 'Golden Arabic ⚜️', slug: 'golden-arabic', description: 'طابع عربي أصيل ببريق الذهب وقصتنا ومحطات الحب والزفاف.', sortOrder: 3 },
+    { name: 'Classic Elegance ✨', slug: 'classic-elegance', description: 'أناقة كلاسيكية فاخرة بالأسود والذهب الملكي والقصاصات الاحتفالية.', sortOrder: 4 },
+    { name: 'Modern Minimalist 🖤', slug: 'modern-minimalist', description: 'تصميم عصري بسيط بخطوط جريئة وتناغم هادئ.', sortOrder: 5 },
+    { name: 'Floral Romance 🌸', slug: 'floral-romance', description: 'درجات الوردي الباستيل الرقيقة مع بتلات متساقطة وقصة التعارف.', sortOrder: 6 },
+    { name: 'Botanical Rustic 🌿', slug: 'botanical-rustic', description: 'طابع الورق الطبيعي المعتق وأغصان الزيتون وختم الشمع الأحمر.', sortOrder: 7 },
+    { name: 'Royal Velvet 🎀', slug: 'royal-velvet', description: 'مخمل ملكي زمردي فاخر مع شريط ساتان ذهبي ينفك بنعومة ومونوغرام مذهب.', sortOrder: 8 },
+    { name: 'Grand Palace Gates 🏰', slug: 'palace-gates', description: 'بوابات قصر ذهبية ثلاثية الأبعاد تنفتح لتكشف عن قاعة ملكية ساحرة.', sortOrder: 9 },
+    { name: 'Celestial Stardust 🌌', slug: 'celestial-stardust', description: 'سماء النجوم والفلك الليلي مع هلال ذهبي متوهج وأبراج فلكية.', sortOrder: 10 },
+    { name: 'Pearl & Jasmine Box 🦪', slug: 'pearl-box', description: 'صندوق دعوة أبيض لؤلؤي مبطن بالحرير العاجي وأزهار الياسمين وعقدة لؤلؤ.', sortOrder: 11 },
+  ];
 
-  const template2 = await prisma.template.upsert({
-    where: { slug: 'modern-minimalist' },
-    update: {},
-    create: {
-      name: 'Modern Minimalist',
-      slug: 'modern-minimalist',
-      description: 'Clean lines and lots of whitespace for a modern look.',
-      sortOrder: 2,
-      config: { colors: ['#f4f4f5', '#18181b'], sections: ['cover', 'gallery'] },
-    },
-  });
-
-  const template3 = await prisma.template.upsert({
-    where: { slug: 'floral-romance' },
-    update: {},
-    create: {
-      name: 'Floral Romance',
-      slug: 'floral-romance',
-      description: 'Beautiful floral patterns and soft colors.',
-      sortOrder: 3,
-      config: { colors: ['#fce7f3', '#831843'], sections: ['cover', 'details', 'gallery'] },
-    },
-  });
-  console.log('Templates created');
+  for (const t of templatesData) {
+    await prisma.template.upsert({
+      where: { slug: t.slug },
+      update: { name: t.name, description: t.description, sortOrder: t.sortOrder },
+      create: {
+        name: t.name,
+        slug: t.slug,
+        description: t.description,
+        sortOrder: t.sortOrder,
+        config: { sections: ['envelope', 'hero', 'timeline', 'venue', 'rsvp'] }
+      }
+    });
+  }
+  const template1 = await prisma.template.findUnique({ where: { slug: 'butterfly-elegance' } });
+  console.log('All 11 Templates seeded successfully');
 
   // 3. App Settings
   await prisma.appSetting.upsert({

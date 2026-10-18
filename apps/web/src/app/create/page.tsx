@@ -3,7 +3,7 @@
 import React, { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { InvitationPreview } from '../../components/invitation-preview/InvitationPreview';
-import { getTemplateImplementation } from '../../templates/registry';
+import { getTemplateImplementation, templateRegistry } from '../../templates/registry';
 
 function CreateInvitationContent() {
   const router = useRouter();
@@ -19,15 +19,11 @@ function CreateInvitationContent() {
   // Mobile tab state
   const [activeTab, setActiveTab] = useState<'FORM' | 'PREVIEW'>('FORM');
 
-  const availableTemplates = [
-    { id: 'butterfly-elegance', name: 'Butterfly Elegance 🦋', desc: 'مظروف ينفتح وفراشة ملكية طائرة (فراشة الأناقة)' },
-    { id: 'heavenly-roses', name: 'Heavenly Roses 🌹', desc: 'ورود زهرية ناعمة مع تفاصيل زجاجية فاخرة (ورود الجنة)' },
-    { id: 'golden-arabic', name: 'Golden Arabic ⚜️', desc: 'طابع عربي أصيل ببريق الذهب وقصتنا (الأناقة العربية الذهبية)' },
-    { id: 'classic-elegance', name: 'Classic Elegance ✨', desc: 'أناقة ملكية كلاسيكية بالأسود والذهب (الفخامة الكلاسيكية)' },
-    { id: 'modern-minimalist', name: 'Modern Minimalist 🖤', desc: 'مودرن هادئ بخطوط عصرية ومساحات واسعة (المودرن البسيط)' },
-    { id: 'floral-romance', name: 'Floral Romance 🌸', desc: 'بتلات متساقطة وقصة التعارف والخطوبة (الرومانسية الزهرية)' },
-    { id: 'botanical-rustic', name: 'Botanical Rustic 🌿', desc: 'ورق طبيعي وأغصان زيتون وختم الشمع (الريفي الطبيعي)' }
-  ];
+  const availableTemplates = Object.values(templateRegistry).map(t => ({
+    id: t.metadata.id,
+    name: t.metadata.name,
+    desc: t.metadata.description
+  }));
 
   const handleMediaLink = async (e: any, url: string, type: 'IMAGE' | 'AUDIO', role: 'COVER' | 'ORIGINAL') => {
     e.preventDefault();
