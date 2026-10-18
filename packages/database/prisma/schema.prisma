@@ -1,0 +1,279 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// -----------------------------------------------------------------------------
+// Enums
+// -----------------------------------------------------------------------------
+
+enum InvitationStatus {
+  DRAFT
+  PENDING_REVIEW
+  ACTIVE
+  DISABLED
+  EXPIRED
+  ARCHIVED
+}
+
+enum MediaType {
+  IMAGE
+  AUDIO
+}
+
+enum MediaRole {
+  COVER
+  GROOM
+  BRIDE
+  GALLERY
+  ORIGINAL
+  CURRENT
+  REPLACEMENT
+}
+
+enum AnalyticsEventType {
+  VIEW
+  MUSIC_PLAY
+  MAP_CLICK
+  GROOM_CONTACT
+  BRIDE_CONTACT
+  SHARE
+}
+
+// -----------------------------------------------------------------------------
+// Models
+// -----------------------------------------------------------------------------
+
+model AdminUser {
+  id           String    @id @default(uuid())
+  email        String    @unique
+  passwordHash String
+  name         String
+  isActive     Boolean   @default(true)
+  lastLoginAt  DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  sessions     AdminSession[]
+  auditLogs    AuditLog[]
+}
+
+model AdminSession {
+  id          String    @id @default(uuid())
+  adminUserId String
+  tokenHash   String    @unique
+  expiresAt   DateTime
+  lastUsedAt  DateTime?
+  revokedAt   DateTime?
+  ipAddress   String?
+  userAgent   String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  adminUser   AdminUser @relation(fields: [adminUserId], references: [id], onDelete: Cascade)
+
+  @@index([adminUserId])
+  @@index([tokenHash])
+  @@index([expiresAt])
+}
+
+model DraftSession {
+  id           String    @id @default(uuid())
+  invitationId String
+  tokenHash    String    @unique
+  expiresAt    DateTime
+  lastUsedAt   DateTime?
+  revokedAt    DateTime?
+  ipAddress    String?
+  userAgent    String?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  invitation   Invitation @relation(fields: [invitationId], references: [id], onDelete: Cascade)
+
+  @@index([invitationId])
+  @@index([tokenHash])
+  @@index([expiresAt])
+}
+
+model Template {
+  id          String   @id @default(uuid())
+  name        String
+  slug        String   @unique
+  description String?
+  thumbnail   String?
+  config      Json?    // Flexible config: sections, features, themes
+  isActive    Boolean  @default(true)
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  invitations Invitation[]
+}
+
+model Invitation {
+  id                  String           @id @default(uuid())
+  
+  // Groom & Bride Info
+  groomName           String
+  brideName           String
+  
+  // Customer Info
+  customerPhone       String
+  customerEmail       String?
+  
+  // Wedding Details
+  weddingDate         DateTime
+  weddingTime         String?
+  venueName           String
+  venueAddress        String?
+  googleMapsUrl       String?
+  
+  // Content
+  caption             String?
+  weddingMessage      String?
+    customData          Json?
+  
+  // Contact
+  groomPhone          String?
+  bridePhone          String?
+  groomWhatsapp       String?
+  brideWhatsapp       String?
+  
+  // Settings
+  countdownEnabled    Boolean          @default(false)
+  contactButtonsEnabled Boolean        @default(true)
+  
+  // Lifecycle
+  status              InvitationStatus @default(PENDING_REVIEW)
+  submittedAt         DateTime?
+  activatedAt         DateTime?
+  disabledAt          DateTime?
+  archivedAt          DateTime?
+  expiresAt           DateTime?
+  
+  // Metadata
+  version             Int              @default(1)
+  createdAt           DateTime         @default(now())
+  updatedAt           DateTime         @updatedAt
+  deletedAt           DateTime?
+
+  // Relations
+  templateId          String
+  template            Template         @relation(fields: [templateId], references: [id])
+  
+  // Optional self-relation for duplication tracking
+  sourceInvitationId  String?
+  sourceInvitation    Invitation?      @relation("InvitationDuplication", fields: [sourceInvitationId], references: [id])
+  duplicatedTo        Invitation[]     @relation("InvitationDuplication")
+
+  slugs               InvitationSlug[]
+  media               Media[]
+  analytics           AnalyticsEvent[]
+  draftSessions       DraftSession[]
+
+  @@index([status])
+  @@index([customerPhone])
+  @@index([createdAt])
+  @@index([weddingDate])
+  @@index([templateId])
+  @@index([expiresAt])
+  @@index([deletedAt])
+}
+
+model InvitationSlug {
+  id           String     @id @default(uuid())
+  invitationId String
+  slug         String     @unique
+  isCurrent    Boolean    @default(true)
+  createdAt    DateTime   @default(now())
+  replacedAt   DateTime?
+
+  invitation   Invitation @relation(fields: [invitationId], references: [id], onDelete: Cascade)
+
+  @@index([slug])
+  @@index([invitationId])
+  @@index([isCurrent])
+}
+
+model Media {
+  id               String     @id @default(uuid())
+  invitationId     String
+  type             MediaType
+  role             MediaRole
+  storageKey       String     // Reference in R2
+  publicUrl        String?
+  originalFilename String?
+  mimeType         String?
+  sizeBytes        Int?
+  width            Int?
+  height           Int?
+  durationSeconds  Int?
+  sortOrder        Int        @default(0)
+  isOriginal       Boolean    @default(true)
+  isCurrent        Boolean    @default(true)
+  createdAt        DateTime   @default(now())
+  updatedAt        DateTime   @updatedAt
+  deletedAt        DateTime?
+
+  invitation       Invitation @relation(fields: [invitationId], references: [id], onDelete: Cascade)
+
+  @@index([invitationId])
+  @@index([type])
+  @@index([role])
+  @@index([isCurrent])
+}
+
+model AnalyticsEvent {
+  id           String             @id @default(uuid())
+  invitationId String
+  eventType    AnalyticsEventType
+  timestamp    DateTime           @default(now())
+  sessionId    String?
+  visitorId    String?
+  userAgent    String?
+  referrer     String?
+  deviceInfo   String?
+  metadata     Json?
+
+  invitation   Invitation         @relation(fields: [invitationId], references: [id], onDelete: Cascade)
+
+  @@index([invitationId])
+  @@index([eventType])
+  @@index([timestamp])
+  @@index([invitationId, timestamp])
+  @@index([invitationId, eventType])
+  @@index([invitationId, visitorId])
+}
+
+model AuditLog {
+  id           String     @id @default(uuid())
+  adminUserId  String?
+  action       String     // e.g. INVITATION_ACTIVATED, MEDIA_REPLACED
+  entityType   String
+  entityId     String
+  timestamp    DateTime   @default(now())
+  metadata     Json?
+  ipAddress    String?
+  userAgent    String?
+
+  adminUser    AdminUser? @relation(fields: [adminUserId], references: [id], onDelete: SetNull)
+
+  @@index([adminUserId])
+  @@index([entityType])
+  @@index([entityId])
+  @@index([timestamp])
+}
+
+model AppSetting {
+  id        String   @id @default(uuid())
+  key       String   @unique
+  value     String
+  type      String   // e.g. STRING, BOOLEAN, NUMBER, JSON
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

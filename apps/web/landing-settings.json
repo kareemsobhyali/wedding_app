@@ -1,0 +1,26 @@
+{
+  "heroTitle": "أجمل دعوات الزفاف الإلكترونية",
+  "heroSubtitle": "صمم دعوتك بأسلوبك الخاص وشاركها مع من تحب بثوانٍ معدودة.",
+  "aboutTitle": "لماذا تختار منصتنا؟",
+  "aboutText": "نوفر لك قوالب عصرية وتجربة مستخدم لا مثيل لها لتصميم دعوة زفافك بكل سهولة، مع إمكانية إدارة الحضور ومعرفة الإحصائيات.",
+  "contactWhatsApp": "+201000000000",
+  "contactEmail": "contact@domain.com",
+  "contactInstagram": "https://www.instagram.com/elsamaky_nour/",
+  "demoLinks": {
+    "heavenly-roses": "/preview?template=heavenly-roses",
+    "classic-elegance": "/preview?template=classic-elegance",
+    "modern-minimalist": "/preview?template=modern-minimalist",
+    "floral-romance": "/preview?template=floral-romance",
+    "botanical-rustic": "/preview?template=botanical-rustic",
+    "butterfly-elegance": "/preview?template=butterfly-elegance"
+  },
+  "previewImages": {
+    "classic-elegance": "https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=1000&auto=format&fit=crop",
+    "modern-minimalist": "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=1000&auto=format&fit=crop",
+    "floral-romance": "https://images.unsplash.com/photo-1522673607200-164d1b6ce486?q=80&w=1000&auto=format&fit=crop",
+    "botanical-rustic": "https://images.unsplash.com/photo-1469334031218-e382a71b716b?q=80&w=1000&auto=format&fit=crop",
+    "golden-arabic": "https://images.unsplash.com/photo-1606216794074-735e91aa2c92?q=80&w=1000&auto=format&fit=crop",
+    "heavenly-roses": "https://images.unsplash.com/photo-1519225421980-715cb0215aed?q=80&w=1000&auto=format&fit=crop",
+    "butterfly-elegance": "https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=1000&auto=format&fit=crop"
+  }
+}

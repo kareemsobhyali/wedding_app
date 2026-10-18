@@ -1,0 +1,211 @@
+import React from 'react';
+import { TemplateRenderContext, TemplateMetadata } from './types';
+import { ClassicEleganceTemplate } from './designs/classic-elegance';
+import { ModernMinimalistTemplate } from './designs/modern-minimalist';
+import { FloralRomanceTemplate } from './designs/floral-romance';
+import { BotanicalRusticTemplate } from './designs/botanical-rustic';
+import { GoldenArabicTemplate } from './designs/golden-arabic';
+import { HeavenlyRosesTemplate } from './designs/heavenly-roses';
+import { ButterflyEleganceTemplate } from './designs/butterfly-elegance';
+
+export interface RegisteredTemplate {
+  component: React.FC<TemplateRenderContext>;
+  metadata: TemplateMetadata;
+}
+
+export const templateRegistry: Record<string, RegisteredTemplate> = {
+  'butterfly-elegance': {
+    component: ButterflyEleganceTemplate,
+    metadata: {
+      id: 'butterfly-elegance',
+      name: 'Butterfly Elegance 🦋',
+      description: 'تصميم ملكي فاخر بمظروف ينفتح وفراشة ثلاثية الأبعاد تطير بنعومة وأناقة.',
+      previewImage: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=1000&auto=format&fit=crop',
+      version: '1.0.0',
+      supportedFeatures: ['HERO', 'VENUE', 'MAPS', 'MUSIC', 'GALLERY', 'CUSTOM_MESSAGE', 'COUNTDOWN', 'CONTACTS', 'SHARE'],
+      customFields: [
+        { key: 'welcomeSubtitle', label: 'العنوان أعلى المظروف (مثال: WEDDING INVITATION)', type: 'text', defaultValue: 'WEDDING INVITATION' },
+        { key: 'envelopeMessage', label: 'الرسالة الترحيبية داخل المظروف', type: 'text', defaultValue: 'يسعدنا حضوركم ومشاركتنا الفرحة' },
+        { key: 'invitationNote', label: 'نص بطاقة الدعوة الترحيبي', type: 'textarea', defaultValue: 'يسرنا دعوتكم لحضور حفل زفافنا ومشاركتنا فرحة هذا اليوم المميز، لتكتمل سعادتنا بوجودكم معنا.' },
+        { key: 'timeline1Title', label: 'الفقرة 1 - العنوان', type: 'text', defaultValue: 'استقبال الضيوف' },
+        { key: 'timeline1Time', label: 'الفقرة 1 - التوقيت', type: 'text', defaultValue: '07:30 PM' },
+        { key: 'timeline1Desc', label: 'الفقرة 1 - الوصف', type: 'text', defaultValue: 'يسعدنا حضوركم ومشاركتنا فرحتنا' },
+        { key: 'timeline2Title', label: 'الفقرة 2 - العنوان', type: 'text', defaultValue: 'عقد القران والزفة' },
+        { key: 'timeline2Time', label: 'الفقرة 2 - التوقيت', type: 'text', defaultValue: '08:30 PM' },
+        { key: 'timeline2Desc', label: 'الفقرة 2 - الوصف', type: 'text', defaultValue: 'لحظات البداية ومباركة الجمع الكريم' },
+        { key: 'timeline3Title', label: 'الفقرة 3 - العنوان', type: 'text', defaultValue: 'العشاء الملكي' },
+        { key: 'timeline3Time', label: 'الفقرة 3 - التوقيت', type: 'text', defaultValue: '10:00 PM' },
+        { key: 'timeline3Desc', label: 'الفقرة 3 - الوصف', type: 'text', defaultValue: 'بوفيه عشاء فاخر احتفاءً بكم' },
+        { key: 'closingMessage', label: 'العبارة الختامية', type: 'text', defaultValue: 'بكم تكتمل فرحتنا وتزداد سعادتنا ✨' }
+      ]
+    }
+  },
+  'heavenly-roses': {
+    component: HeavenlyRosesTemplate,
+    metadata: {
+      id: 'heavenly-roses',
+      name: 'Heavenly Roses 🌹',
+      description: 'ورود زهرية ناعمة تحيط بسماء هادئة مع تفاصيل زجاجية فاخرة.',
+      previewImage: '/assets/templates/heavenly-roses-bg.jpg',
+      version: '1.0.0',
+      supportedFeatures: ['HERO', 'VENUE', 'MAPS', 'MUSIC', 'GALLERY', 'CUSTOM_MESSAGE', 'COUNTDOWN', 'CONTACTS', 'SHARE'],
+      customFields: [
+        { key: 'introMessage', label: 'عبارة الترحيب بالمقدمة', type: 'text', defaultValue: 'إلى توأم الروح.. رفيق الدرب.. ونس الأيام الحلوة' },
+        { key: 'timeline1Title', label: 'الفقرة 1 - العنوان', type: 'text', defaultValue: 'عقد القران' },
+        { key: 'timeline1Time', label: 'الفقرة 1 - التوقيت', type: 'text', defaultValue: '08:00 PM' },
+        { key: 'timeline1Desc', label: 'الفقرة 1 - الوصف', type: 'text', defaultValue: 'يبدأ استقبال الضيوف وعقد القران' },
+        { key: 'timeline2Title', label: 'الفقرة 2 - العنوان', type: 'text', defaultValue: 'الزفة' },
+        { key: 'timeline2Time', label: 'الفقرة 2 - التوقيت', type: 'text', defaultValue: '09:00 PM' },
+        { key: 'timeline2Desc', label: 'الفقرة 2 - الوصف', type: 'text', defaultValue: 'زفة العروسين وبداية الحفل' },
+        { key: 'timeline3Title', label: 'الفقرة 3 - العنوان', type: 'text', defaultValue: 'العشاء' },
+        { key: 'timeline3Time', label: 'الفقرة 3 - التوقيت', type: 'text', defaultValue: '10:30 PM' },
+        { key: 'timeline3Desc', label: 'الفقرة 3 - الوصف', type: 'text', defaultValue: 'بوفيه العشاء المفتوح' },
+        { key: 'dressCode', label: 'قواعد اللباس (Dress Code)', type: 'text', defaultValue: 'رسمي / Formal' },
+        { key: 'closingMessage', label: 'العبارة الختامية', type: 'text', defaultValue: 'بكم تكتمل فرحتنا' },
+        { key: 'bgImage', label: 'رابط صورة الخلفية (اتركه فارغاً للافتراضي)', type: 'text', defaultValue: '' }
+      ]
+    }
+  },
+  'golden-arabic': {
+    component: GoldenArabicTemplate,
+    metadata: {
+      id: 'golden-arabic',
+      name: 'Golden Arabic ⚜️',
+      description: 'طابع عربي أصيل ببريق الذهب وقصص اللقاء والخطوبة والزفاف.',
+      previewImage: 'https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=1000&auto=format&fit=crop',
+      version: '1.0.0',
+      supportedFeatures: ['HERO', 'VENUE', 'MAPS', 'MUSIC', 'GALLERY', 'CUSTOM_MESSAGE', 'COUNTDOWN', 'CONTACTS', 'SHARE'],
+      customFields: [
+        { key: 'envelopeQuote1', label: 'عبارة المظروف (السطر الأول)', type: 'text', defaultValue: 'إلى توأم الروح.. رفيق الدرب' },
+        { key: 'envelopeQuote2', label: 'عبارة المظروف (السطر الثاني)', type: 'text', defaultValue: 'اليوم يكتمل الحلم 🤍' },
+        { key: 'introMessage', label: 'عبارة الترحيب بعد الآية الكريمة', type: 'text', defaultValue: 'إلى توأم الروح.. رفيق الدرب.. ونس الأيام الحلوة' },
+        { key: 'storyTitle', label: 'عنوان قسم القصة', type: 'text', defaultValue: 'قصتنا' },
+        { key: 'story1Title', label: 'المرحلة 1 - العنوان', type: 'text', defaultValue: 'اللقاء الأول' },
+        { key: 'story1Desc', label: 'المرحلة 1 - الوصف', type: 'text', defaultValue: 'يوم التقينا وتلاقت الأرواح' },
+        { key: 'story2Title', label: 'المرحلة 2 - العنوان', type: 'text', defaultValue: 'الخطوبة' },
+        { key: 'story2Desc', label: 'المرحلة 2 - الوصف', type: 'text', defaultValue: 'وعدنا بعضنا على الحب والوفاء' },
+        { key: 'story3Title', label: 'المرحلة 3 - العنوان', type: 'text', defaultValue: 'يوم الفرح' },
+        { key: 'story3Desc', label: 'المرحلة 3 - الوصف', type: 'text', defaultValue: 'نتوج حبنا ببداية حياة جديدة' },
+        { key: 'dressCode', label: 'قواعد اللباس (Dress Code)', type: 'text', defaultValue: 'رسمي / Formal' },
+        { key: 'closingMessage', label: 'العبارة الختامية', type: 'text', defaultValue: 'بحضوركم تكتمل فرحتنا ♥' }
+      ]
+    }
+  },
+  'classic-elegance': {
+    component: ClassicEleganceTemplate,
+    metadata: {
+      id: 'classic-elegance',
+      name: 'Classic Elegance ✨',
+      description: 'أناقة كلاسيكية فاخرة بالخط السيريفي واللونين الأسود والذهبي الملكي.',
+      previewImage: 'https://images.unsplash.com/photo-1519225421980-715cb0215aed?q=80&w=1000&auto=format&fit=crop',
+      version: '1.0.0',
+      supportedFeatures: ['HERO', 'VENUE', 'MAPS', 'MUSIC', 'GALLERY', 'CUSTOM_MESSAGE', 'COUNTDOWN', 'CONTACTS', 'SHARE'],
+      customFields: [
+        { key: 'welcomeTitle', label: 'عنوان المظروف الترحيبي', type: 'text', defaultValue: 'You Are Invited' },
+        { key: 'openButtonText', label: 'نص زر فتح المظروف', type: 'text', defaultValue: 'Open Invitation' },
+        { key: 'heroSubtitle', label: 'العنوان الفرعي للقسم الرئيسي', type: 'text', defaultValue: 'The Wedding Of' },
+        { key: 'ceremonyTitle', label: 'عنوان تفاصيل الحفل والاستقبال', type: 'text', defaultValue: 'Ceremony & Reception' },
+        { key: 'scheduleTitle', label: 'عنوان جدول الفعاليات', type: 'text', defaultValue: 'Schedule of Events' },
+        { key: 'event1Title', label: 'الحدث 1 - العنوان', type: 'text', defaultValue: 'Arrival' },
+        { key: 'event1Time', label: 'الحدث 1 - التوقيت', type: 'text', defaultValue: '15:00' },
+        { key: 'event1Desc', label: 'الحدث 1 - الوصف', type: 'text', defaultValue: 'Welcome drinks' },
+        { key: 'event2Title', label: 'الحدث 2 - العنوان', type: 'text', defaultValue: 'Ceremony' },
+        { key: 'event2Time', label: 'الحدث 2 - التوقيت', type: 'text', defaultValue: '16:00' },
+        { key: 'event2Desc', label: 'الحدث 2 - الوصف', type: 'text', defaultValue: 'Exchange of vows' },
+        { key: 'event3Title', label: 'الحدث 3 - العنوان', type: 'text', defaultValue: 'Reception' },
+        { key: 'event3Time', label: 'الحدث 3 - التوقيت', type: 'text', defaultValue: '18:00' },
+        { key: 'event3Desc', label: 'الحدث 3 - الوصف', type: 'text', defaultValue: 'Dinner & Dancing' },
+        { key: 'closingTitle', label: 'العبارة الختامية', type: 'text', defaultValue: 'We await your presence' }
+      ]
+    }
+  },
+  'modern-minimalist': {
+    component: ModernMinimalistTemplate,
+    metadata: {
+      id: 'modern-minimalist',
+      name: 'Modern Minimalist 🖤',
+      description: 'تصميم عصري بسيط بخطوط جريئة ومساحات بيضاء وتناغم هادئ.',
+      previewImage: 'https://images.unsplash.com/photo-1583939003579-730e3918a45a?q=80&w=1000&auto=format&fit=crop',
+      version: '1.0.0',
+      supportedFeatures: ['HERO', 'VENUE', 'MUSIC'],
+      customFields: [
+        { key: 'welcomeHeader', label: 'عنوان الغلاف', type: 'text', defaultValue: 'The Invitation' },
+        { key: 'enterButtonText', label: 'نص زر الدخول', type: 'text', defaultValue: 'Enter Experience' },
+        { key: 'heroTagline', label: 'النص الترحيبي في البداية', type: 'text', defaultValue: 'The Wedding Day' },
+        { key: 'programTitle', label: 'عنوان جدول البرنامج', type: 'text', defaultValue: 'The Program' },
+        { key: 'event1Title', label: 'الفقرة 1 - العنوان', type: 'text', defaultValue: 'Ceremony' },
+        { key: 'event1Time', label: 'الفقرة 1 - الوقت', type: 'text', defaultValue: '4:00 PM' },
+        { key: 'event2Title', label: 'الفقرة 2 - العنوان', type: 'text', defaultValue: 'Cocktails' },
+        { key: 'event2Time', label: 'الفقرة 2 - الوقت', type: 'text', defaultValue: '5:30 PM' },
+        { key: 'event3Title', label: 'الفقرة 3 - العنوان', type: 'text', defaultValue: 'Reception' },
+        { key: 'event3Time', label: 'الفقرة 3 - الوقت', type: 'text', defaultValue: '7:00 PM' },
+        { key: 'closingTitle', label: 'عنوان قسم الختام', type: 'text', defaultValue: 'Join Us' },
+        { key: 'closingSubtitle', label: 'الرسالة الختامية', type: 'text', defaultValue: 'Please let us know if you can make it.' }
+      ]
+    }
+  },
+  'floral-romance': {
+    component: FloralRomanceTemplate,
+    metadata: {
+      id: 'floral-romance',
+      name: 'Floral Romance 🌸',
+      description: 'درجات الوردي الباستيل الرقيقة مع بتلات متساقطة وقصة التعارف.',
+      previewImage: 'https://images.unsplash.com/photo-1522673607200-164d1b6ce486?q=80&w=1000&auto=format&fit=crop',
+      version: '1.0.0',
+      supportedFeatures: ['HERO', 'VENUE', 'MAPS', 'MUSIC', 'GALLERY', 'CUSTOM_MESSAGE', 'COUNTDOWN', 'CONTACTS', 'SHARE'],
+      customFields: [
+        { key: 'welcomeSubtitle', label: 'النص الترحيبي بالغلاف', type: 'text', defaultValue: 'Together with their families' },
+        { key: 'storyTitle', label: 'عنوان قسم قصة اللقاء', type: 'text', defaultValue: 'Our Journey' },
+        { key: 'story1Title', label: 'المرحلة 1 - العنوان', type: 'text', defaultValue: 'First Met' },
+        { key: 'story1Subtitle', label: 'المرحلة 1 - العنوان الفرعي', type: 'text', defaultValue: 'A beautiful beginning' },
+        { key: 'story1Desc', label: 'المرحلة 1 - التفاصيل', type: 'textarea', defaultValue: 'It started with a simple hello, and little did we know it was the start of something forever.' },
+        { key: 'story2Title', label: 'المرحلة 2 - العنوان', type: 'text', defaultValue: 'The Proposal' },
+        { key: 'story2Subtitle', label: 'المرحلة 2 - العنوان الفرعي', type: 'text', defaultValue: 'A moment to remember' },
+        { key: 'story2Desc', label: 'المرحلة 2 - التفاصيل', type: 'textarea', defaultValue: 'Under the stars, a promise was made to share a lifetime of love and happiness together.' },
+        { key: 'venueTitle', label: 'عنوان تفاصيل المكان والزمان', type: 'text', defaultValue: 'When & Where' },
+        { key: 'closingTitle', label: 'العبارة الختامية', type: 'text', defaultValue: "We Can't Wait to Celebrate!" }
+      ]
+    }
+  },
+  'botanical-rustic': {
+    component: BotanicalRusticTemplate,
+    metadata: {
+      id: 'botanical-rustic',
+      name: 'Botanical Rustic 🌿',
+      description: 'طابع الورق الطبيعي المعتق وأغصان الزيتون وختم الشمع الأحمر.',
+      previewImage: 'https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?q=80&w=1000&auto=format&fit=crop',
+      version: '1.0.0',
+      supportedFeatures: ['HERO', 'VENUE', 'MAPS', 'MUSIC', 'GALLERY', 'CUSTOM_MESSAGE', 'COUNTDOWN', 'CONTACTS', 'SHARE'],
+      customFields: [
+        { key: 'welcomeHeader', label: 'عنوان الغلاف', type: 'text', defaultValue: 'You Are Invited' },
+        { key: 'welcomeSubtitle', label: 'العنوان الفرعي', type: 'text', defaultValue: 'Together with their families' },
+        { key: 'dressCodeTitle', label: 'عنوان قواعد اللباس', type: 'text', defaultValue: 'Dress Code' },
+        { key: 'giftNote', label: 'ملاحظة الهدايا والحضور', type: 'textarea', defaultValue: 'Our most important gift is your presence. However, if you wish to honour us with a gift, a contribution towards our honeymoon would be appreciated.' },
+        { key: 'quoteText', label: 'مقولة الزفاف', type: 'textarea', defaultValue: 'A successful marriage requires falling in love many times, always with the same person.' },
+        { key: 'timeline1Title', label: 'الفقرة 1 - العنوان', type: 'text', defaultValue: 'Guest Arrival' },
+        { key: 'timeline1Time', label: 'الفقرة 1 - الوقت', type: 'text', defaultValue: '15:00' },
+        { key: 'timeline2Title', label: 'الفقرة 2 - العنوان', type: 'text', defaultValue: 'Ceremony' },
+        { key: 'timeline2Time', label: 'الفقرة 2 - الوقت', type: 'text', defaultValue: '16:00' },
+        { key: 'timeline3Title', label: 'الفقرة 3 - العنوان', type: 'text', defaultValue: 'Banquet' },
+        { key: 'timeline3Time', label: 'الفقرة 3 - الوقت', type: 'text', defaultValue: '18:00' },
+        { key: 'timeline4Title', label: 'الفقرة 4 - العنوان', type: 'text', defaultValue: 'Dinner & Speeches' },
+        { key: 'timeline4Time', label: 'الفقرة 4 - الوقت', type: 'text', defaultValue: '20:30' },
+        { key: 'closingTitle', label: 'عنوان الختام', type: 'text', defaultValue: 'Thank You!' },
+        { key: 'closingSubtitle', label: 'الرسالة الختامية', type: 'text', defaultValue: "We can't wait to celebrate with you!" }
+      ]
+    }
+  }
+};
+
+/**
+ * Safely fetches a registered template.
+ * If the database declares an active template that is missing from the registry, this fails safely.
+ */
+export function getTemplateImplementation(id: string): RegisteredTemplate | null {
+  const template = templateRegistry[id];
+  if (!template) {
+    console.warn(`[TemplateEngine] Template implementation for ID "${id}" is missing in the registry.`);
+    return null;
+  }
+  return template;
+}

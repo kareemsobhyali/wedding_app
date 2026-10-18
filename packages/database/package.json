@@ -1,0 +1,27 @@
+{
+  "name": "database",
+  "version": "0.0.0",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "generate": "prisma generate",
+    "push": "prisma db push",
+    "studio": "prisma studio",
+    "lint": "eslint \"**/*.ts\"",
+    "provision-admin": "tsx provision-admin.ts"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.0.0",
+    "argon2": "^0.45.1"
+  },
+  "devDependencies": {
+    "config": "*",
+    "prisma": "^5.0.0",
+    "tsx": "^4.23.15",
+    "typescript": "^5.2.2"
+  },
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
+  }
+}
