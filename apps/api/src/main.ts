@@ -21,13 +21,21 @@ async function bootstrap() {
     transform: true,
   }));
 
+  const corsEnv = process.env.CORS_ORIGIN || '';
+  const configuredOrigins = corsEnv.split(',').map(o => o.trim()).filter(Boolean);
+
   app.enableCors({
     origin: (origin, callback) => {
-      // Allow localhost, local IPs (192.168.*), or undefined (server-to-server)
-      if (!origin || /^http:\/\/(localhost|127\.0\.0\.1|192\.168\.\d+\.\d+)(:\d+)?$/.test(origin)) {
+      // Allow localhost, local IPs, .onrender.com, custom domains, or server-to-server (undefined)
+      if (
+        !origin || 
+        /^http:\/\/(localhost|127\.0\.0\.1|192\.168\.\d+\.\d+)(:\d+)?$/.test(origin) ||
+        origin.endsWith('.onrender.com') ||
+        configuredOrigins.includes(origin)
+      ) {
         callback(null, true);
       } else {
-        callback(new Error('Not allowed by CORS'));
+        callback(new Error(`Origin ${origin} not allowed by CORS`));
       }
     },
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
