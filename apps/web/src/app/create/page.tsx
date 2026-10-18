@@ -78,7 +78,11 @@ function CreateInvitationContent() {
       setDraft(responseData.data || responseData);
     } catch (err: any) {
       console.error(err);
-      setErrorMsg(err.message || 'An unexpected error occurred.');
+      if (err.message === 'Failed to fetch' || err.name === 'TypeError') {
+        setErrorMsg(`تعذر الاتصال بخادم الـ API (${apiUrl}). يرجى التأكد من أن خدمة wedding-api تعمل وتعيين رابطها في متغيرات البيئة NEXT_PUBLIC_API_URL.`);
+      } else {
+        setErrorMsg(err.message || 'حدث خطأ غير متوقع أثناء بدء الدعوة.');
+      }
     } finally {
       setLoading(false);
     }
