@@ -4,7 +4,7 @@ services:
     name: wedding-api
     env: node
     plan: free
-    buildCommand: npm install && npx prisma generate --schema=packages/database/prisma/schema.prisma && npm run build --workspace=api
+    buildCommand: npm install --include=dev && npx prisma generate --schema=packages/database/prisma/schema.prisma && npm run build --workspace=api
     startCommand: npm run start:prod --workspace=api
     envVars:
       - key: NODE_ENV
@@ -25,7 +25,7 @@ services:
     name: wedding-web
     env: node
     plan: free
-    buildCommand: npm install && npm run build --workspace=web
+    buildCommand: npm install --include=dev && npm run build --workspace=web
     startCommand: npm run start --workspace=web
     envVars:
       - key: NODE_ENV
