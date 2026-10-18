@@ -19,6 +19,14 @@ services:
         value: https://wedding-web.onrender.com
       - key: JWT_SECRET
         generateValue: true
+      - key: R2_ACCOUNT_ID
+        value: dummy_account_id
+      - key: R2_ACCESS_KEY_ID
+        value: dummy_access_key
+      - key: R2_SECRET_ACCESS_KEY
+        value: dummy_secret_key
+      - key: R2_BUCKET_NAME
+        value: wedding-media
 
   # 2. Next.js Frontend Web Service
   - type: web
