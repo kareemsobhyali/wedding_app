@@ -93,7 +93,7 @@ export const CathedralGrandArchTemplate: React.FC<TemplateRenderContext> = ({ da
 
   return (
     <div 
-      className="min-h-screen w-full flex flex-col items-center justify-start sm:justify-center p-0 sm:p-6 md:p-10 font-serif bg-[#181512] selection:bg-[#D4AF37]/40 text-[#43331C] overflow-x-hidden relative pb-28 sm:pb-32"
+      className="h-[100dvh] w-full flex flex-col items-center justify-center p-0 sm:p-4 md:p-6 font-serif bg-[#181512] selection:bg-[#D4AF37]/40 text-[#43331C] overflow-hidden relative"
       style={{
         backgroundImage: 'radial-gradient(circle at 50% 40%, #2A231A 0%, #120F0C 100%)'
       }}
@@ -129,7 +129,7 @@ export const CathedralGrandArchTemplate: React.FC<TemplateRenderContext> = ({ da
         initial={{ opacity: 0, scale: 0.98 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.8 }}
-        className="w-full sm:max-w-[480px] aspect-[9/16] min-h-[780px] sm:min-h-[880px] relative sm:rounded-[32px] rounded-none overflow-hidden shadow-none sm:shadow-[0_30px_90px_rgba(0,0,0,0.6),0_10px_30px_rgba(212,175,55,0.2)] cursor-pointer select-none group border-0 sm:border border-[#D4AF37]/30"
+        className="w-full h-full sm:w-auto sm:h-full sm:max-h-[92vh] sm:aspect-[9/16] sm:max-w-[480px] relative sm:rounded-[32px] rounded-none overflow-hidden shadow-none sm:shadow-[0_30px_90px_rgba(0,0,0,0.6),0_10px_30px_rgba(212,175,55,0.2)] cursor-pointer select-none group border-0 sm:border border-[#D4AF37]/30"
       >
         {/* Background Archway Image with Chandeliers & Cathedral */}
         <div 
