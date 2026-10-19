@@ -32,6 +32,11 @@ const TEMPLATES = [
   { id: 'vintage-vinyl-player', slug: 'vintage-vinyl-player', name: '🎶 Vintage Vinyl Player (مشغل الفونوغراف الكلاسيكي مع أسطوانة الفينيل)' },
   { id: 'polaroid-photo-reel', slug: 'polaroid-photo-reel', name: '📸 Hanging Polaroid Reel (معرض صور البولارويد المعلقة بمشابك خشبية)' },
   { id: 'celestial-constellations', slug: 'celestial-constellations', name: '🌌 Celestial Constellations (سماء النجوم والأبراج الفلكية التفاعلية)' },
+  { id: 'classic-lined-envelope', slug: 'classic-lined-envelope', name: '💌 Classic Lined Envelope (مظروف كتان فاخر ببطانة منقوشة وبطاقة منزلقة)' },
+  { id: 'deckle-edge-cotton', slug: 'deckle-edge-cotton', name: '📜 Deckle-Edge Cotton Paper (ورق قطن إيطالي بأطراف مشرشرة وبريق ذهب حي)' },
+  { id: 'vellum-silk-wrap', slug: 'vellum-silk-wrap', name: '🎀 Translucent Vellum & Silk (غلاف ورق كلك شفاف مع شريط حريري معقود)' },
+  { id: 'acrylic-glass-card', slug: 'acrylic-glass-card', name: '💎 Beveled Acrylic Glass (لوح زجاجي أكريليك نقي بحواف مشطوفة عاكسة)' },
+  { id: 'trifold-pocket-folio', slug: 'trifold-pocket-folio', name: '📑 Tri-Fold Pocket Folio (حافظة الفوليو الملكية ثلاثية الطيات مع كروت الجيب)' },
 ];
 
 export default function AdminEditForm({ invitation, apiToken }: { invitation: any, apiToken: string }) {

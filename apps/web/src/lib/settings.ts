@@ -37,7 +37,12 @@ export const defaultSettings = {
     'velvet-jewelry-box': '/preview?template=velvet-jewelry-box',
     'vintage-vinyl-player': '/preview?template=vintage-vinyl-player',
     'polaroid-photo-reel': '/preview?template=polaroid-photo-reel',
-    'celestial-constellations': '/preview?template=celestial-constellations'
+    'celestial-constellations': '/preview?template=celestial-constellations',
+    'classic-lined-envelope': '/preview?template=classic-lined-envelope',
+    'deckle-edge-cotton': '/preview?template=deckle-edge-cotton',
+    'vellum-silk-wrap': '/preview?template=vellum-silk-wrap',
+    'acrylic-glass-card': '/preview?template=acrylic-glass-card',
+    'trifold-pocket-folio': '/preview?template=trifold-pocket-folio'
   },
   previewImages: {}
 };

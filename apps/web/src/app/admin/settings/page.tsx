@@ -82,7 +82,12 @@ export default function AdminSettingsPage() {
     'velvet-jewelry-box',
     'vintage-vinyl-player',
     'polaroid-photo-reel',
-    'celestial-constellations'
+    'celestial-constellations',
+    'classic-lined-envelope',
+    'deckle-edge-cotton',
+    'vellum-silk-wrap',
+    'acrylic-glass-card',
+    'trifold-pocket-folio'
   ];
 
   return (

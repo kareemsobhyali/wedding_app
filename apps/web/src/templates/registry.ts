@@ -27,6 +27,11 @@ import { VelvetJewelryBoxTemplate } from './designs/velvet-jewelry-box';
 import { VintageVinylPlayerTemplate } from './designs/vintage-vinyl-player';
 import { PolaroidPhotoReelTemplate } from './designs/polaroid-photo-reel';
 import { CelestialConstellationsTemplate } from './designs/celestial-constellations';
+import { ClassicLinedEnvelopeTemplate } from './designs/classic-lined-envelope';
+import { DeckleEdgeCottonTemplate } from './designs/deckle-edge-cotton';
+import { VellumSilkWrapTemplate } from './designs/vellum-silk-wrap';
+import { AcrylicGlassCardTemplate } from './designs/acrylic-glass-card';
+import { TrifoldPocketFolioTemplate } from './designs/trifold-pocket-folio';
 
 export interface RegisteredTemplate {
   component: React.FC<TemplateRenderContext>;
@@ -683,6 +688,90 @@ export const templateRegistry: Record<string, RegisteredTemplate> = {
         { key: 'celestialSubtitle', label: 'ترويسة الخريطة الفلكية', type: 'text', defaultValue: 'CELESTIAL CONSTELLATION MAP' },
         { key: 'celestialVerse', label: 'الآية الكريمة في سماء النجوم', type: 'textarea', defaultValue: '«وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا وَجَعَلَ بَيْنَكُم مَّوَدَّةً وَرَحْمَةً»' },
         { key: 'celestialNote', label: 'رسالة بطاقة القمر السماوية', type: 'textarea', defaultValue: 'تحت ضياء النجوم وبريق السماء، يسعدنا أن تشاركونا فرحة العمر في ليلتنا السماوية.' }
+      ]
+    }
+  },
+  'classic-lined-envelope': {
+    component: ClassicLinedEnvelopeTemplate,
+    metadata: {
+      id: 'classic-lined-envelope',
+      name: 'Classic Lined Envelope 💌',
+      description: 'مظروف كتان فاخر ببطانة منقوشة وختم شمعي، ينفتح بنعومة مع انزلاق بطاقة الزفاف الملكية من داخل الجيب.',
+      previewImage: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=1000&auto=format&fit=crop',
+      version: '1.0.0',
+      supportedFeatures: ['HERO', 'VENUE', 'MAPS', 'MUSIC', 'CONTACTS', 'SHARE'],
+      customFields: [
+        { key: 'monogram', label: 'أحرف المونوغرام (مثال: M & K)', type: 'text', defaultValue: '' },
+        { key: 'holyVerse', label: 'الآية الكريمة المباركة', type: 'textarea', defaultValue: '«وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا وَجَعَلَ بَيْنَكُم مَّوَدَّةً وَرَحْمَةً»' },
+        { key: 'invitationIntro', label: 'مقدمة بطاقة الدعوة', type: 'text', defaultValue: 'نتشرف بدعوتكم لحضور حفل زفاف' },
+        { key: 'invitationNote', label: 'نص بطاقة الدعوة الترحيبي', type: 'textarea', defaultValue: 'يسعدنا ويشرفنا حضوركم ومشاركتنا أبهى ليالي العمر، لتكتمل سعادتنا برؤيتكم بيننا.' }
+      ]
+    }
+  },
+  'deckle-edge-cotton': {
+    component: DeckleEdgeCottonTemplate,
+    metadata: {
+      id: 'deckle-edge-cotton',
+      name: 'Deckle-Edge Cotton Paper 📜',
+      description: 'ورق قطن إيطالي طبيعي بأطراف يدوية مشرشرة وبريق ذهب نافر يتفاعل مع حركة اللمس والماوس.',
+      previewImage: 'https://images.unsplash.com/photo-1522673607200-164d1b6ce486?q=80&w=1000&auto=format&fit=crop',
+      version: '1.0.0',
+      supportedFeatures: ['HERO', 'VENUE', 'MAPS', 'MUSIC', 'CONTACTS', 'SHARE'],
+      customFields: [
+        { key: 'holyVerse', label: 'الآية الكريمة المباركة', type: 'textarea', defaultValue: '«وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا وَجَعَلَ بَيْنَكُم مَّوَدَّةً وَرَحْمَةً»' },
+        { key: 'invitationIntro', label: 'مقدمة بطاقة الدعوة', type: 'text', defaultValue: 'يسرنا ويشرفنا دعوتكم لحضور حفل زفاف' },
+        { key: 'invitationNote', label: 'نص بطاقة الدعوة الترحيبي', type: 'textarea', defaultValue: 'بحضوركم تكتمل بهجتنا، وتزداد ليلتنا نوراً وسعادة بحضور الأهل والأحباب.' },
+        { key: 'closingNote', label: 'العبارة الختامية', type: 'text', defaultValue: '«فرحتنا تكتمل بوجودكم بيننا في ليلتنا المنتظرة 🤍»' }
+      ]
+    }
+  },
+  'vellum-silk-wrap': {
+    component: VellumSilkWrapTemplate,
+    metadata: {
+      id: 'vellum-silk-wrap',
+      name: 'Translucent Vellum & Silk 🎀',
+      description: 'غلاف من ورق الكلك الشفاف والضبابي مع شريط حريري ينفك لتنفتح أجنحة الغلاف كالستائر.',
+      previewImage: 'https://images.unsplash.com/photo-1519225421980-715cb0215aed?q=80&w=1000&auto=format&fit=crop',
+      version: '1.0.0',
+      supportedFeatures: ['HERO', 'VENUE', 'MAPS', 'MUSIC', 'CONTACTS', 'SHARE'],
+      customFields: [
+        { key: 'holyVerse', label: 'الآية الكريمة', type: 'textarea', defaultValue: '«وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا وَجَعَلَ بَيْنَكُم مَّوَدَّةً وَرَحْمَةً»' },
+        { key: 'invitationIntro', label: 'مقدمة بطاقة الدعوة', type: 'text', defaultValue: 'معاً نبدأ أجمل حكايات العمر' },
+        { key: 'invitationNote', label: 'نص بطاقة الدعوة الترحيبي', type: 'textarea', defaultValue: 'يسعدنا ويشرفنا حضوركم ومشاركتنا فرحة العمر وتتويج مسيرة الحب في ليلتنا، لتكتمل سعادتنا برؤيتكم بيننا.' }
+      ]
+    }
+  },
+  'acrylic-glass-card': {
+    component: AcrylicGlassCardTemplate,
+    metadata: {
+      id: 'acrylic-glass-card',
+      name: 'Beveled Acrylic Glass 💎',
+      description: 'لوح زجاجي أكريليك نقي بحواف مشطوفة عاكسة وخطوط مذهبة محفورة بالليزر مع حركة تفاعلية 3D.',
+      previewImage: 'https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=1000&auto=format&fit=crop',
+      version: '1.0.0',
+      supportedFeatures: ['HERO', 'VENUE', 'MAPS', 'MUSIC', 'CONTACTS', 'SHARE'],
+      customFields: [
+        { key: 'monogram', label: 'أحرف المونوغرام (مثال: M & K)', type: 'text', defaultValue: '' },
+        { key: 'holyVerse', label: 'الآية الكريمة', type: 'textarea', defaultValue: '«وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا وَجَعَلَ بَيْنَكُم مَّوَدَّةً وَرَحْمَةً»' },
+        { key: 'invitationIntro', label: 'مقدمة بطاقة الدعوة', type: 'text', defaultValue: 'نتشرف بدعوتكم لمشاركتنا فرحة العمر' },
+        { key: 'invitationNote', label: 'نص بطاقة الدعوة الترحيبي', type: 'textarea', defaultValue: 'يسعدنا ويشرفنا حضوركم ومشاركتنا أبهى ليالي العمر، لتكتمل سعادتنا برؤيتكم بيننا.' },
+        { key: 'closingNote', label: 'العبارة الختامية', type: 'text', defaultValue: '«فرحتنا لا تكتمل إلا برؤيتكم بيننا في ليلتنا المنتظرة 🤍»' }
+      ]
+    }
+  },
+  'trifold-pocket-folio': {
+    component: TrifoldPocketFolioTemplate,
+    metadata: {
+      id: 'trifold-pocket-folio',
+      name: 'Tri-Fold Pocket Folio 📑',
+      description: 'حافظة فوليو ملكية ثلاثية الطيات تنفتح أجنحتها ليكشف كرت الدعوة الرئيسي مع جيب مائل لكروت الخريطة وتأكيد الحضور.',
+      previewImage: 'https://images.unsplash.com/photo-1519225421980-715cb0215aed?q=80&w=1000&auto=format&fit=crop',
+      version: '1.0.0',
+      supportedFeatures: ['HERO', 'VENUE', 'MAPS', 'MUSIC', 'CONTACTS', 'SHARE'],
+      customFields: [
+        { key: 'holyVerse', label: 'الآية الكريمة', type: 'textarea', defaultValue: '«وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا وَجَعَلَ بَيْنَكُم مَّوَدَّةً وَرَحْمَةً»' },
+        { key: 'invitationIntro', label: 'مقدمة بطاقة الدعوة', type: 'text', defaultValue: 'نتشرف بدعوتكم لحضور حفل زفاف' },
+        { key: 'invitationNote', label: 'نص بطاقة الدعوة الترحيبي', type: 'textarea', defaultValue: 'يسعدنا ويشرفنا حضوركم ومشاركتنا أبهى ليالي العمر، لتكتمل سعادتنا برؤيتكم بيننا.' }
       ]
     }
   }
