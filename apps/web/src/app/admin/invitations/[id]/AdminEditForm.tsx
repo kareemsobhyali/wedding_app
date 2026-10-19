@@ -6,12 +6,11 @@ import { getTemplateImplementation } from '../../../../templates/registry';
 
 const TEMPLATES = [
   { id: 'c74c4c9e-f366-4fdf-92a1-12811853537d', slug: 'butterfly-elegance', name: '🦋 Butterfly Elegance (فراشة الأناقة)' },
-  { id: 'f69bd5fb-f983-4204-a437-ede28e7b1737', slug: 'heavenly-roses', name: '🌹 Heavenly Roses' },
+  { id: '5cf7e077-5f2a-4302-b722-063aeece0f98', slug: 'golden-arabic', name: '⚜️ Golden Arabic (الطابع العربي الذهبي)' },
   { id: 'c82fe0bb-703c-406b-a58b-2780ae744f1d', slug: 'classic-elegance', name: '✨ Classic Elegance' },
   { id: 'c523c967-3019-4ec9-942b-5db2cfafbc4c', slug: 'modern-minimalist', name: '🖤 Modern Minimalist' },
   { id: '6190bf5e-4910-49f1-86d8-a54ddd250cd6', slug: 'floral-romance', name: '🌸 Floral Romance' },
   { id: '3d4b512f-d07e-4344-b3a8-dfcaac710659', slug: 'botanical-rustic', name: '🌿 Botanical Rustic' },
-  { id: '5cf7e077-5f2a-4302-b722-063aeece0f98', slug: 'golden-arabic', name: '⚜️ Golden Arabic' },
   { id: 'royal-velvet', slug: 'royal-velvet', name: '🎀 Royal Velvet (المخمل الملكي)' },
   { id: 'palace-gates', slug: 'palace-gates', name: '🏰 Grand Palace Gates (بوابات القصر)' },
   { id: 'celestial-stardust', slug: 'celestial-stardust', name: '🌌 Celestial Stardust (سماء النجوم)' },

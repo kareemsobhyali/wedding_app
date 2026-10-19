@@ -11,11 +11,16 @@ export const defaultSettings = {
   contactEmail: 'contact@domain.com',
   contactInstagram: '',
   demoLinks: {
-    'heavenly-roses': '/preview?template=heavenly-roses',
+    'butterfly-elegance': '/preview?template=butterfly-elegance',
+    'golden-arabic': '/preview?template=golden-arabic',
     'classic-elegance': '/preview?template=classic-elegance',
     'modern-minimalist': '/preview?template=modern-minimalist',
     'floral-romance': '/preview?template=floral-romance',
-    'botanical-rustic': '/preview?template=botanical-rustic'
+    'botanical-rustic': '/preview?template=botanical-rustic',
+    'royal-velvet': '/preview?template=royal-velvet',
+    'palace-gates': '/preview?template=palace-gates',
+    'celestial-stardust': '/preview?template=celestial-stardust',
+    'pearl-box': '/preview?template=pearl-box'
   },
   previewImages: {}
 };

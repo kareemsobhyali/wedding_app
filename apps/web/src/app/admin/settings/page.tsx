@@ -55,7 +55,18 @@ export default function AdminSettingsPage() {
 
   if (loading) return <div className="p-8">Loading settings...</div>;
 
-  const templateIds = ['butterfly-elegance', 'classic-elegance', 'modern-minimalist', 'floral-romance', 'botanical-rustic', 'golden-arabic', 'heavenly-roses'];
+  const templateIds = [
+    'butterfly-elegance',
+    'golden-arabic',
+    'classic-elegance',
+    'modern-minimalist',
+    'floral-romance',
+    'botanical-rustic',
+    'royal-velvet',
+    'palace-gates',
+    'celestial-stardust',
+    'pearl-box'
+  ];
 
   return (
     <div className="p-4 sm:p-8 max-w-4xl mx-auto font-cairo">

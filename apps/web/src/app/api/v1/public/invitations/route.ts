@@ -13,22 +13,61 @@ export async function POST(req: Request) {
       return NextResponse.json({ message: 'Template ID is required' }, { status: 400 });
     }
 
-    // 1. Find or auto-upsert template in DB
-    let template = await prisma.template.findFirst({
-      where: {
-        OR: [
-          { id: templateId },
-          { slug: templateId }
-        ]
+    const actualTemplateId = templateId === 'heavenly-roses' ? 'golden-arabic' : templateId;
+
+    // 1. Find or auto-upsert template in DB (with auto-recovery if tables don't exist yet)
+    let template: any = null;
+    try {
+      template = await prisma.template.findFirst({
+        where: {
+          OR: [
+            { id: actualTemplateId },
+            { slug: actualTemplateId }
+          ]
+        }
+      });
+    } catch (dbErr: any) {
+      if (dbErr.message?.includes('does not exist') || dbErr.code === 'P2021') {
+        console.warn('⚠️ Tables missing in database. Running auto-sync...');
+        try {
+          const { execSync } = await import('child_process');
+          const path = await import('path');
+          const fs = await import('fs');
+          const candidates = [
+            path.resolve(process.cwd(), '../../packages/database/prisma/schema.prisma'),
+            path.resolve(process.cwd(), 'packages/database/prisma/schema.prisma')
+          ];
+          const schemaPath = candidates.find(p => fs.existsSync(p));
+          if (schemaPath) {
+            execSync(`npx --yes prisma db push --schema="${schemaPath}" --accept-data-loss`, {
+              timeout: 45000,
+              env: { ...process.env }
+            });
+            console.log('✅ Auto-sync completed!');
+          }
+        } catch (syncErr: any) {
+          console.error('Failed auto-sync:', syncErr.message);
+        }
+        // Retry template fetch
+        template = await prisma.template.findFirst({
+          where: {
+            OR: [
+              { id: actualTemplateId },
+              { slug: actualTemplateId }
+            ]
+          }
+        });
+      } else {
+        throw dbErr;
       }
-    });
+    }
 
     if (!template) {
       // Auto-create template entry so user never gets blocked by empty DB
       template = await prisma.template.create({
         data: {
-          name: templateId,
-          slug: templateId,
+          name: actualTemplateId,
+          slug: actualTemplateId,
           description: 'Wedding Invitation Template',
           sortOrder: 0
         }

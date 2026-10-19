@@ -5,7 +5,6 @@ import { ModernMinimalistTemplate } from './designs/modern-minimalist';
 import { FloralRomanceTemplate } from './designs/floral-romance';
 import { BotanicalRusticTemplate } from './designs/botanical-rustic';
 import { GoldenArabicTemplate } from './designs/golden-arabic';
-import { HeavenlyRosesTemplate } from './designs/heavenly-roses';
 import { ButterflyEleganceTemplate } from './designs/butterfly-elegance';
 import { RoyalVelvetTemplate } from './designs/royal-velvet';
 import { PalaceGatesTemplate } from './designs/palace-gates';
@@ -41,32 +40,6 @@ export const templateRegistry: Record<string, RegisteredTemplate> = {
         { key: 'timeline3Time', label: 'الفقرة 3 - التوقيت', type: 'text', defaultValue: '10:00 PM' },
         { key: 'timeline3Desc', label: 'الفقرة 3 - الوصف', type: 'text', defaultValue: 'بوفيه عشاء فاخر احتفاءً بكم' },
         { key: 'closingMessage', label: 'العبارة الختامية', type: 'text', defaultValue: 'بكم تكتمل فرحتنا وتزداد سعادتنا ✨' }
-      ]
-    }
-  },
-  'heavenly-roses': {
-    component: HeavenlyRosesTemplate,
-    metadata: {
-      id: 'heavenly-roses',
-      name: 'Heavenly Roses 🌹',
-      description: 'ورود زهرية ناعمة تحيط بسماء هادئة مع تفاصيل زجاجية فاخرة.',
-      previewImage: '/assets/templates/heavenly-roses-bg.jpg',
-      version: '1.0.0',
-      supportedFeatures: ['HERO', 'VENUE', 'MAPS', 'MUSIC', 'GALLERY', 'CUSTOM_MESSAGE', 'COUNTDOWN', 'CONTACTS', 'SHARE'],
-      customFields: [
-        { key: 'introMessage', label: 'عبارة الترحيب بالمقدمة', type: 'text', defaultValue: 'إلى توأم الروح.. رفيق الدرب.. ونس الأيام الحلوة' },
-        { key: 'timeline1Title', label: 'الفقرة 1 - العنوان', type: 'text', defaultValue: 'عقد القران' },
-        { key: 'timeline1Time', label: 'الفقرة 1 - التوقيت', type: 'text', defaultValue: '08:00 PM' },
-        { key: 'timeline1Desc', label: 'الفقرة 1 - الوصف', type: 'text', defaultValue: 'يبدأ استقبال الضيوف وعقد القران' },
-        { key: 'timeline2Title', label: 'الفقرة 2 - العنوان', type: 'text', defaultValue: 'الزفة' },
-        { key: 'timeline2Time', label: 'الفقرة 2 - التوقيت', type: 'text', defaultValue: '09:00 PM' },
-        { key: 'timeline2Desc', label: 'الفقرة 2 - الوصف', type: 'text', defaultValue: 'زفة العروسين وبداية الحفل' },
-        { key: 'timeline3Title', label: 'الفقرة 3 - العنوان', type: 'text', defaultValue: 'العشاء' },
-        { key: 'timeline3Time', label: 'الفقرة 3 - التوقيت', type: 'text', defaultValue: '10:30 PM' },
-        { key: 'timeline3Desc', label: 'الفقرة 3 - الوصف', type: 'text', defaultValue: 'بوفيه العشاء المفتوح' },
-        { key: 'dressCode', label: 'قواعد اللباس (Dress Code)', type: 'text', defaultValue: 'رسمي / Formal' },
-        { key: 'closingMessage', label: 'العبارة الختامية', type: 'text', defaultValue: 'بكم تكتمل فرحتنا' },
-        { key: 'bgImage', label: 'رابط صورة الخلفية (اتركه فارغاً للافتراضي)', type: 'text', defaultValue: '' }
       ]
     }
   },
@@ -317,7 +290,8 @@ export const templateRegistry: Record<string, RegisteredTemplate> = {
  * If the database declares an active template that is missing from the registry, this fails safely.
  */
 export function getTemplateImplementation(id: string): RegisteredTemplate | null {
-  const template = templateRegistry[id];
+  const normalizedId = id === 'heavenly-roses' ? 'golden-arabic' : id;
+  const template = templateRegistry[normalizedId];
   if (!template) {
     console.warn(`[TemplateEngine] Template implementation for ID "${id}" is missing in the registry.`);
     return null;

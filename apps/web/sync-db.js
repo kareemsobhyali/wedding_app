@@ -1,16 +1,23 @@
 const { execSync } = require('child_process');
 const path = require('path');
+const fs = require('fs');
 
 console.log('==============================================');
 console.log('🚀 Running Automatic Database Synchronization');
 console.log('==============================================');
 
-const schemaPath = path.resolve(__dirname, '../../packages/database/prisma/schema.prisma');
+const candidates = [
+  path.resolve(__dirname, '../../packages/database/prisma/schema.prisma'),
+  path.resolve(process.cwd(), 'packages/database/prisma/schema.prisma'),
+  path.resolve(process.cwd(), '../../packages/database/prisma/schema.prisma')
+];
+const schemaPath = candidates.find(p => fs.existsSync(p)) || candidates[0];
+console.log(`Using Prisma Schema at: ${schemaPath}`);
 
 // 1. Generate Prisma Client
 try {
   console.log('📦 Generating Prisma Client...');
-  execSync(`npx prisma generate --schema="${schemaPath}"`, { stdio: 'inherit' });
+  execSync(`npx --yes prisma generate --schema="${schemaPath}"`, { stdio: 'inherit' });
 } catch (e) {
   console.warn('⚠️ Prisma generate warning:', e.message);
 }
@@ -21,18 +28,18 @@ const dbUrl = process.env.DATABASE_URL;
 if (dbUrl && !dbUrl.includes('localhost:5432')) {
   try {
     console.log('🗄️ DATABASE_URL detected! Syncing database tables...');
-    execSync(`npx prisma db push --schema="${schemaPath}" --accept-data-loss`, { 
+    execSync(`npx --yes prisma db push --schema="${schemaPath}" --accept-data-loss`, { 
       stdio: 'inherit',
-      timeout: 30000 
+      timeout: 45000 
     });
     console.log('✅ Database tables created and synchronized successfully!');
   } catch (err) {
-    console.error('⚠️ Database sync warning (will continue startup):', err.message);
+    console.error('⚠️ Database sync warning:', err.message);
   }
 } else if (dbUrl) {
   try {
     console.log('🗄️ Local DATABASE_URL detected, attempting sync...');
-    execSync(`npx prisma db push --schema="${schemaPath}" --accept-data-loss`, { 
+    execSync(`npx --yes prisma db push --schema="${schemaPath}" --accept-data-loss`, { 
       stdio: 'inherit',
       timeout: 10000 
     });
