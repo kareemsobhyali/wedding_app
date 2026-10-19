@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev -H 0.0.0.0",
-    "build": "next build",
+    "build": "prisma generate --schema=../../packages/database/prisma/schema.prisma && next build",
+    "postinstall": "prisma generate --schema=../../packages/database/prisma/schema.prisma",
     "start": "next start -H 0.0.0.0",
     "lint": "next lint",
     "test": "jest"
@@ -35,6 +36,7 @@
     "eslint": "^8",
     "eslint-config-next": "14.2.3",
     "jest": "^30.5.2",
+    "prisma": "^5.22.0",
     "ts-jest": "^29.4.14"
   },
   "jest": {

@@ -11,12 +11,14 @@
     "dev": "turbo run dev",
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "postinstall": "npx prisma generate --schema=packages/database/prisma/schema.prisma",
     "db:generate": "npm run generate --workspace=database",
     "db:push": "npm run push --workspace=database",
     "db:studio": "npm run studio --workspace=database"
   },
   "devDependencies": {
     "prettier": "^3.0.0",
+    "prisma": "^5.22.0",
     "turbo": "^2.0.0",
     "typescript": "^5.2.2"
   }
