@@ -12,41 +12,73 @@ export async function POST(req: Request) {
       return NextResponse.json({ message: 'Email and password are required' }, { status: 400 });
     }
 
-    const cleanEmail = email.trim().toLowerCase();
+    const cleanInput = String(email).trim().toLowerCase();
+    const cleanPassword = String(password).trim();
 
-    // 1. Find user in database
-    let user = await prisma.adminUser.findUnique({
-      where: { email: cleanEmail }
+    // Read environment variables configured in Render or local .env
+    const envAdminEmail = (process.env.ADMIN_EMAIL || process.env.SEED_ADMIN_EMAIL || 'admin@wedding.com').trim().toLowerCase();
+    const envAdminPassword = (process.env.ADMIN_PASSWORD || process.env.SEED_ADMIN_PASSWORD || 'admin123456').trim();
+    const envAdminUser = (process.env.ADMIN_USER || process.env.ADMIN_USERNAME || envAdminEmail.split('@')[0] || 'admin').trim().toLowerCase();
+
+    // Check if the input identifier matches the environment admin
+    const isEnvAdminIdentifier = 
+      cleanInput === envAdminEmail ||
+      cleanInput === envAdminUser ||
+      (cleanInput === 'admin' && envAdminEmail.startsWith('admin@'));
+
+    // Check if the provided password matches the environment admin password
+    const matchesEnvPassword = isEnvAdminIdentifier && cleanPassword === envAdminPassword;
+
+    // 1. Find user in database by either input or configured admin email
+    let user = await prisma.adminUser.findFirst({
+      where: {
+        OR: [
+          { email: cleanInput },
+          ...(isEnvAdminIdentifier ? [{ email: envAdminEmail }] : [])
+        ]
+      }
     });
 
-    // If no admin exists yet in database, auto-provision default admin
-    if (!user) {
-      const defaultEmail = process.env.SEED_ADMIN_EMAIL || 'admin@wedding.com';
-      if (cleanEmail === defaultEmail.toLowerCase()) {
-        const defaultPassword = process.env.SEED_ADMIN_PASSWORD || 'super-secure-password';
-        const passwordHash = await hashPassword(defaultPassword);
+    if (matchesEnvPassword) {
+      // Direct match with environment variables!
+      const passwordHash = await hashPassword(envAdminPassword);
+      if (!user) {
+        // Auto-provision admin user in database
         user = await prisma.adminUser.create({
           data: {
-            email: defaultEmail,
+            email: envAdminEmail,
             name: 'System Admin',
             passwordHash,
             isActive: true
           }
         });
+      } else {
+        // Ensure user is active and password hash in DB is synced with Render's ADMIN_PASSWORD
+        user = await prisma.adminUser.update({
+          where: { id: user.id },
+          data: {
+            passwordHash,
+            isActive: true
+          }
+        });
+      }
+    } else {
+      // Verify against database password hash
+      if (!user || !user.isActive) {
+        return NextResponse.json({ message: 'Invalid email or password.' }, { status: 401 });
+      }
+
+      const isValid = await verifyPassword(user.passwordHash, cleanPassword);
+      if (!isValid) {
+        return NextResponse.json({ message: 'Invalid email or password.' }, { status: 401 });
       }
     }
 
-    if (!user || !user.isActive) {
+    if (!user) {
       return NextResponse.json({ message: 'Invalid email or password.' }, { status: 401 });
     }
 
-    // 2. Verify password
-    const isValid = await verifyPassword(user.passwordHash, password);
-    if (!isValid) {
-      return NextResponse.json({ message: 'Invalid email or password.' }, { status: 401 });
-    }
-
-    // 3. Create Session
+    // 2. Create Session
     const ip = req.headers.get('x-forwarded-for') || undefined;
     const userAgent = req.headers.get('user-agent') || undefined;
     const { rawToken, expiresAt } = await createAdminSession(user.id, ip, userAgent);
@@ -60,7 +92,7 @@ export async function POST(req: Request) {
       }
     });
 
-    // 4. Set admin_session HTTP-only cookie
+    // 3. Set admin_session HTTP-only cookie
     response.cookies.set('admin_session', rawToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',

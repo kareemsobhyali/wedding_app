@@ -53,14 +53,15 @@ export default function AdminLogin() {
           
           <div className="space-y-4 rounded-md shadow-sm">
             <div>
-              <label htmlFor="email" className="sr-only">Email address</label>
+              <label htmlFor="email" className="sr-only">Email or Username</label>
               <input
                 id="email"
                 name="email"
-                type="email"
+                type="text"
+                autoComplete="username"
                 required
                 className="relative block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-                placeholder="Email address"
+                placeholder="Email or Username (البريد أو اسم المستخدم)"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
