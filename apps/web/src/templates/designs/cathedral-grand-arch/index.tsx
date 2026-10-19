@@ -213,9 +213,9 @@ export const CathedralGrandArchTemplate: React.FC<TemplateRenderContext> = ({ da
         <div 
           className="absolute max-w-[215px] backdrop-blur-[0.5px] bg-white/20 border border-[#D4AF37]/50 shadow-[0_4px_20px_rgba(0,0,0,0.08),inset_0_1px_2px_rgba(255,255,255,0.4)] rounded-t-full rounded-b-2xl pt-3.5 pb-2 px-1.5 sm:px-2 flex flex-col items-center justify-between text-center z-10 pointer-events-none"
           style={{
-            top: '40%',     // لرفعها لفوق: قلل الرقم (مثلاً 38% أو 37%)
+            top: '39.5%',     // لرفعها لفوق: قلل الرقم (مثلاً 38% أو 37%)
             bottom: '17%',  // للحفاظ على نفس الطول: زوّد الرقم بنفس المقدار (مثلاً 19%)
-            left: '32%',    // لتحريكها يميناً: زوّد الرقم (مثلاً 33% أو 33.5%)
+            left: '33%',    // لتحريكها يميناً: زوّد الرقم (مثلاً 33% أو 33.5%)
             width: '33.5%', // عرض البطاقة
           }}
         >
