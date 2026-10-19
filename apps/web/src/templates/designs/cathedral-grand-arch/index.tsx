@@ -209,35 +209,35 @@ export const CathedralGrandArchTemplate: React.FC<TemplateRenderContext> = ({ da
           </motion.div>
         </div>
 
-        {/* Central Arch Data Card (Image 2 - Exactly Between the Two Inner Columns, Low Blur so Castle is Visible) */}
-        <div className="absolute top-[38%] bottom-[12%] left-[45.5%] -translate-x-1/2 w-[43%] max-w-[215px] backdrop-blur-[2px] bg-white/45 border border-[#D4AF37]/40 shadow-[0_8px_25px_rgba(0,0,0,0.12)] rounded-2xl p-2 sm:p-2.5 flex flex-col items-center justify-between text-center z-10 pointer-events-none">
+        {/* Central Arch Data Card (Image 2 - Curved Arch Dome Matching Cathedral Architecture, Ultra-Low Blur Crystal Look) */}
+        <div className="absolute top-[40%] bottom-[17%] left-[32%] w-[33.5%] max-w-[215px] backdrop-blur-[0.5px] bg-white/20 border border-[#D4AF37]/50 shadow-[0_4px_20px_rgba(0,0,0,0.08),inset_0_1px_2px_rgba(255,255,255,0.4)] rounded-t-full rounded-b-2xl pt-3.5 pb-2 px-1.5 sm:px-2 flex flex-col items-center justify-between text-center z-10 pointer-events-none">
           
           {/* 1. Invitation Note */}
-          <div className="space-y-0.5 w-full">
+          <div className="space-y-0.5 w-full px-0.5">
             <p 
-              className="text-[10px] sm:text-[11px] font-bold text-[#4A2F08] tracking-normal font-amiri leading-tight drop-shadow-[0_1px_1px_rgba(255,255,255,0.8)]"
+              className="text-[9.5px] sm:text-[10px] font-bold text-[#3D2504] tracking-normal font-amiri leading-tight drop-shadow-[0_1px_2px_rgba(255,255,255,0.95)]"
               style={{ fontFamily: isArabicContent ? "'Amiri', serif" : "'Cinzel', serif" }}
             >
               {custom.invitationNote1 || (isArabicContent ? 'يسعدنا ويشرفنا دعوتكم لحضور حفل زفافنا' : 'JOYFULLY INVITE YOU TO CELEBRATE')}
             </p>
             <div className="flex items-center justify-center my-0.5">
-              <div className="w-10 h-[0.6px] bg-[#967431]/45" />
+              <div className="w-8 h-[0.6px] bg-[#967431]/50" />
               <div className="w-1.5 h-1.5 rotate-45 bg-[#967431] mx-1" />
-              <div className="w-10 h-[0.6px] bg-[#967431]/45" />
+              <div className="w-8 h-[0.6px] bg-[#967431]/50" />
             </div>
           </div>
 
           {/* 2. Ceremony & Date Section */}
           <div className="space-y-0.5 w-full">
             <p 
-              className="text-[10px] sm:text-[10.5px] font-bold text-[#7D5A1E] tracking-normal font-amiri leading-tight"
+              className="text-[9.5px] sm:text-[10px] font-bold text-[#6B4B18] tracking-normal font-amiri leading-tight drop-shadow-[0_1px_1px_rgba(255,255,255,0.9)]"
               style={{ fontFamily: isArabicContent ? "'Amiri', serif" : "'Cinzel', serif" }}
             >
               {custom.ceremonyTitle || (isArabicContent ? 'مراسم الزفاف المبارك' : 'WEDDING CEREMONY')}
             </p>
 
             <p 
-              className="text-[10.5px] sm:text-[11.5px] font-bold text-[#5E3F12] font-amiri leading-tight"
+              className="text-[10px] sm:text-[11px] font-bold text-[#3D2504] font-amiri leading-tight drop-shadow-[0_1px_1px_rgba(255,255,255,0.9)]"
               style={{ fontFamily: isArabicContent ? "'Amiri', serif" : "'Cinzel', serif" }}
             >
               {dayName}
@@ -246,18 +246,18 @@ export const CathedralGrandArchTemplate: React.FC<TemplateRenderContext> = ({ da
             {/* Date Row */}
             <div className="flex items-center justify-center gap-1.5 py-0.5">
               <span 
-                className="text-2xl sm:text-3xl font-extrabold text-[#5E3F12] leading-none"
+                className="text-2xl sm:text-3xl font-extrabold text-[#3D2504] leading-none drop-shadow-[0_1px_2px_rgba(255,255,255,0.95)]"
                 style={{ fontFamily: "'Cormorant Garamond', serif" }}
               >
                 {dayNumber}
               </span>
               <div className="flex flex-col text-center leading-none">
-                <span className="text-[10.5px] sm:text-[11.5px] font-bold text-[#5E3F12]">{monthName}</span>
-                <span className="text-[9px] sm:text-[9.5px] font-semibold text-[#8C682A]">{yearNumber}</span>
+                <span className="text-[10px] sm:text-[11px] font-bold text-[#3D2504] drop-shadow-[0_1px_1px_rgba(255,255,255,0.9)]">{monthName}</span>
+                <span className="text-[8.5px] sm:text-[9px] font-bold text-[#7D5A1E] drop-shadow-[0_1px_1px_rgba(255,255,255,0.9)]">{yearNumber}</span>
               </div>
             </div>
 
-            <p className="text-[10.5px] font-bold text-[#5E3F12]">
+            <p className="text-[10px] font-bold text-[#3D2504] drop-shadow-[0_1px_1px_rgba(255,255,255,0.9)]">
               {timeFormatted}
             </p>
           </div>
@@ -266,12 +266,12 @@ export const CathedralGrandArchTemplate: React.FC<TemplateRenderContext> = ({ da
           <div className="space-y-0.5 w-full">
             <div className="w-full border-t border-[#8C682A]/30 my-0.5" />
             <p 
-              className="text-[10.5px] font-bold text-[#5E3F12]"
+              className="text-[10px] font-bold text-[#3D2504] drop-shadow-[0_1px_1px_rgba(255,255,255,0.9)]"
               style={{ fontFamily: isArabicContent ? "'Amiri', serif" : "'Cinzel', serif" }}
             >
               {custom.receptionTitle || (isArabicContent ? 'حفل الاستقبال والعشاء' : 'RECEPTION')}
             </p>
-            <p className="text-[10px] text-[#5E3F12] font-semibold">
+            <p className="text-[9.5px] text-[#3D2504] font-semibold drop-shadow-[0_1px_1px_rgba(255,255,255,0.9)]">
               {custom.receptionTime || (isArabicContent ? '٠٧:٣٠ م' : '07:30 PM')}
             </p>
             <div className="w-full border-b border-[#8C682A]/30 my-0.5" />
@@ -280,18 +280,18 @@ export const CathedralGrandArchTemplate: React.FC<TemplateRenderContext> = ({ da
           {/* 4. Venue Section */}
           <div className="space-y-0.5 w-full">
             <p 
-              className="text-[9.5px] font-bold text-[#8C682A]"
+              className="text-[9px] font-bold text-[#7D5A1E] drop-shadow-[0_1px_1px_rgba(255,255,255,0.9)]"
               style={{ fontFamily: isArabicContent ? "'Amiri', serif" : "'Cinzel', serif" }}
             >
               {isArabicContent ? 'المكان' : 'LOCATION'}
             </p>
             <p 
-              className="text-xs sm:text-sm font-bold text-[#5E3F12] leading-tight font-amiri"
+              className="text-xs sm:text-sm font-bold text-[#3D2504] leading-tight font-amiri drop-shadow-[0_1px_1px_rgba(255,255,255,0.9)]"
             >
               {data.venueName || (isArabicContent ? 'قاعة اللؤلؤة' : 'ST. MARY\'S CATHEDRAL')}
             </p>
             {(data.venueAddress || custom.venueAddressSub) && (
-              <p className="text-[9px] text-[#5E3F12] leading-tight line-clamp-1">
+              <p className="text-[8.5px] text-[#3D2504] leading-tight line-clamp-1 drop-shadow-[0_1px_1px_rgba(255,255,255,0.9)]">
                 {data.venueAddress || custom.venueAddressSub}
               </p>
             )}
@@ -300,7 +300,7 @@ export const CathedralGrandArchTemplate: React.FC<TemplateRenderContext> = ({ da
           {/* 5. Closing Footnote */}
           <div className="pt-0.5">
             <p 
-              className="text-[10px] sm:text-[11px] text-[#5E3F12] italic font-normal"
+              className="text-[9.5px] sm:text-[10px] text-[#4D320B] italic font-bold drop-shadow-[0_1px_1px_rgba(255,255,255,0.9)]"
               style={{ fontFamily: isArabicContent ? "'Amiri', serif" : "'Alex Brush', 'Great Vibes', cursive" }}
             >
               {custom.receptionBallroomNote || (isArabicContent ? 'حضوركم يكتمل به فرحنا ومسرتنا' : 'Reception to follow at The Grand Ballroom')}
@@ -309,23 +309,24 @@ export const CathedralGrandArchTemplate: React.FC<TemplateRenderContext> = ({ da
 
         </div>
 
-        {/* Right Parchment Scroll (Image 3 - Utilizing the Painted Parchment for the Ayah Written Horizontally) */}
-        <div className="absolute top-[44%] bottom-[18%] right-[6%] sm:right-[7%] w-[27%] max-w-[125px] flex flex-col items-center justify-evenly text-center z-10 pointer-events-none px-1">
+        {/* Right Parchment Scroll (Image 3 - Strictly Confined Inside the Parchment Boundaries) */}
+        <div className="absolute top-[44%] bottom-[22%] left-[67%] w-[17%] max-w-[95px] flex flex-col items-center justify-evenly text-center z-10 pointer-events-none px-0.5">
           {/* 1. Basmala Header */}
           <div className="space-y-0.5 w-full">
             <p 
-              className="text-[10px] sm:text-[11px] font-bold text-[#4D320B] tracking-normal font-amiri leading-tight"
+              className="text-[8.5px] sm:text-[9.5px] font-bold text-[#4D3008] tracking-normal font-amiri leading-tight drop-shadow-[0_1px_1px_rgba(255,255,255,0.8)]"
               style={{ fontFamily: "'Amiri', serif" }}
             >
               بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
             </p>
-            <div className="w-10 h-[0.5px] bg-[#967431]/40 mx-auto my-0.5" />
+            <div className="w-7 h-[0.5px] bg-[#967431]/40 mx-auto my-0.5" />
           </div>
 
-          {/* 2. Holy Quranic Ayah (Written Horizontally Across the Parchment) */}
+          {/* 2. Holy Quranic Ayah (Strictly Inside the Parchment Written Horizontally) */}
           <div className="w-full px-0.5">
             <p 
-              className="text-[8.5px] sm:text-[9.5px] font-bold text-[#5A3B0F] tracking-normal font-amiri leading-relaxed"
+              className="text-[7.5px] sm:text-[8px] font-bold text-[#4D3008] tracking-normal font-amiri leading-[1.35] drop-shadow-[0_1px_1px_rgba(255,255,255,0.8)] break-words"
+              dir={isArabic(custom.sacredQuote) || isArabicContent ? "rtl" : "ltr"}
               style={{ fontFamily: isArabic(custom.sacredQuote) || isArabicContent ? "'Amiri', serif" : "'Cinzel', serif" }}
             >
               {custom.sacredQuote || (isArabicContent 
@@ -336,16 +337,16 @@ export const CathedralGrandArchTemplate: React.FC<TemplateRenderContext> = ({ da
 
           {/* 3. Host Families Blessing */}
           <div className="space-y-0.5 w-full">
-            <div className="w-10 h-[0.5px] bg-[#967431]/40 mx-auto my-0.5" />
+            <div className="w-7 h-[0.5px] bg-[#967431]/40 mx-auto my-0.5" />
             <p 
-              className="text-[8.5px] sm:text-[9.5px] font-bold text-[#7A541D] tracking-normal font-amiri leading-tight"
+              className="text-[7.5px] sm:text-[8px] font-bold text-[#7A541D] tracking-normal font-amiri leading-tight drop-shadow-[0_1px_1px_rgba(255,255,255,0.8)]"
               style={{ fontFamily: isArabicContent ? "'Amiri', serif" : "'Cinzel', serif" }}
             >
               {custom.familiesHeader || (isArabicContent ? 'بمباركة الأهل والأحباب' : 'TOGETHER WITH THEIR FAMILIES')}
             </p>
             {/* Small Gold Flourish */}
             <div className="flex items-center justify-center pt-0.5">
-              <svg width="24" height="6" viewBox="0 0 50 8" fill="none" className="text-[#8C682A]">
+              <svg width="20" height="5" viewBox="0 0 50 8" fill="none" className="text-[#8C682A]">
                 <path d="M0 4H20M30 4H50" stroke="currentColor" strokeWidth="0.8"/>
                 <path d="M25 6C25 6 22 4 22 2.8C22 2 22.6 1.5 23.2 1.5C23.7 1.5 25 2.2 25 2.2C25 2.2 26.3 1.5 26.8 1.5C27.4 1.5 28 2 28 2.8C28 4 25 6 25 6Z" fill="currentColor"/>
               </svg>
