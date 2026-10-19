@@ -19,6 +19,9 @@ import { LaserGoldGatefoldTemplate } from './designs/laser-gold-gatefold';
 import { VintageCallaBloomsTemplate } from './designs/vintage-calla-blooms';
 import { BloomingGarden3DTemplate } from './designs/blooming-garden-3d';
 import { PearlSilkMinimalistTemplate } from './designs/pearl-silk-minimalist';
+import { LuxuryFlipCardTemplate } from './designs/luxury-flip-card';
+import { BoardingPassVipTemplate } from './designs/boarding-pass-vip';
+import { LuxuryBookletEditorialTemplate } from './designs/luxury-booklet-editorial';
 
 export interface RegisteredTemplate {
   component: React.FC<TemplateRenderContext>;
@@ -522,6 +525,68 @@ export const templateRegistry: Record<string, RegisteredTemplate> = {
         { key: 'timeline3Time', label: 'الفقرة 3 - التوقيت', type: 'text', defaultValue: '10:15 PM' },
         { key: 'timeline3Desc', label: 'الفقرة 3 - الوصف', type: 'text', defaultValue: 'بوفيه عشاء فاخر احتفاءً بضيوفنا الأعزاء' },
         { key: 'closingMessage', label: 'العبارة الختامية', type: 'text', defaultValue: 'حضوركم يضفي على ليلتنا رونقاً وسعادة لا تُنسى 🤍' }
+      ]
+    }
+  },
+  'luxury-flip-card': {
+    component: LuxuryFlipCardTemplate,
+    metadata: {
+      id: 'luxury-flip-card',
+      name: '3D Luxury Flip Card 🎴',
+      description: 'بطاقة ذهبية ملكية ثلاثية الأبعاد تنقلب 180 درجة بين يديك لشاشة واحدة بدون سكرول مع باليتة ألوان اللباس.',
+      previewImage: 'https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=1000&auto=format&fit=crop',
+      version: '1.0.0',
+      supportedFeatures: ['HERO', 'VENUE', 'MAPS', 'MUSIC', 'CONTACTS', 'SHARE'],
+      customFields: [
+        { key: 'monogram', label: 'أحرف المونوغرام (مثال: M & K)', type: 'text', defaultValue: '' },
+        { key: 'frontSubtitle', label: 'العنوان أعلى الوجه الأمامي', type: 'text', defaultValue: 'THE WEDDING CELEBRATION OF' },
+        { key: 'invitationQuote', label: 'الآية الكريمة أو عبارة التهنئة', type: 'textarea', defaultValue: '«وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا وَجَعَلَ بَيْنَكُم مَّوَدَّةً وَرَحْمَةً»' },
+        { key: 'dressColors', label: 'باليتة ألوان اللباس مفصولة بفاصلة (Hex)', type: 'text', defaultValue: '#D4AF37,#1E3A2F,#FFFFFF,#2C2C2C' },
+        { key: 'dressCodeDesc', label: 'وصف قواعد اللباس (Dress Code)', type: 'text', defaultValue: 'أزياء سهرة رسمية راقية' },
+        { key: 'etiquetteNote', label: 'ملاحظات وإتيكيت الحفل (مثال: جنة الأطفال منازلهم)', type: 'text', defaultValue: 'ملاحظة: نعتذر عن قبول حضور الأطفال مع كامل المحبة والتقدير' }
+      ]
+    }
+  },
+  'boarding-pass-vip': {
+    component: BoardingPassVipTemplate,
+    metadata: {
+      id: 'boarding-pass-vip',
+      name: 'VIP Wedding Boarding Pass ✈️',
+      description: 'تذكرة طيران وبوردينج باس مذهب VIP برحلة إلى عش الزوجية مع كعب التذكرة القابل للقص لتأكيد الحضور واختيار وجبة العشاء.',
+      previewImage: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=1000&auto=format&fit=crop',
+      version: '1.0.0',
+      supportedFeatures: ['HERO', 'VENUE', 'MAPS', 'MUSIC', 'CONTACTS', 'SHARE'],
+      customFields: [
+        { key: 'boardingHeader', label: 'شريط أعلى التذكرة', type: 'text', defaultValue: 'ROYAL AIRLINES • FIRST CLASS WEDDING PASS' },
+        { key: 'flightNumber', label: 'رقم الرحلة (مثال: LOVE-2026)', type: 'text', defaultValue: 'LOVE-2026' },
+        { key: 'originCity', label: 'محطة الإقلاع', type: 'text', defaultValue: 'حياة العزوبية' },
+        { key: 'destinationCity', label: 'الوجهة والهدف', type: 'text', defaultValue: 'عش الزوجية الأبدي' },
+        { key: 'ticketSubtitle', label: 'عنوان فرعي للتذكرة', type: 'text', defaultValue: 'رحلة القفص الذهبي والسعادة الأبدية' },
+        { key: 'flightBarcode', label: 'كود الباركود السفلي', type: 'text', defaultValue: '8839201948201928371940' }
+      ]
+    }
+  },
+  'luxury-booklet-editorial': {
+    component: LuxuryBookletEditorialTemplate,
+    metadata: {
+      id: 'luxury-booklet-editorial',
+      name: 'Luxury Wedding Booklet 📖',
+      description: 'كتيب ومجلة زفاف فاخرة متعددة الصفحات بنظام تقليب الصفحات وغلاف سينمائي وباليتة ألوان وإتيكيت الحفل.',
+      previewImage: 'https://images.unsplash.com/photo-1522673607200-164d1b6ce486?q=80&w=1000&auto=format&fit=crop',
+      version: '1.0.0',
+      supportedFeatures: ['HERO', 'VENUE', 'MAPS', 'MUSIC', 'CONTACTS', 'SHARE'],
+      customFields: [
+        { key: 'magazineHeader', label: 'عنوان الترويسة أعلى الكتيب', type: 'text', defaultValue: 'THE WEDDING CHRONICLE • LUXURY EDITION' },
+        { key: 'magazineTitle', label: 'اسم المجلة / الكتيب', type: 'text', defaultValue: 'THE WEDDING' },
+        { key: 'coverTeaser', label: 'عبارة الغلاف التشويقية', type: 'text', defaultValue: '«في مساء يُسطر بالحب والأناقة، نحتفل معاً بأجمل بدايات العمر»' },
+        { key: 'holyVerse', label: 'الآية الكريمة', type: 'textarea', defaultValue: '«وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا وَجَعَلَ بَيْنَكُم مَّوَدَّةً وَرَحْمَةً»' },
+        { key: 'letterHeadline', label: 'عنوان رسالة الدعوة', type: 'text', defaultValue: 'أهلاً بكم في ليلتنا المنتظرة' },
+        { key: 'letterBody', label: 'نص رسالة الدعوة والترحيب', type: 'textarea', defaultValue: 'يسعدنا ويشرفنا دعوتكم لمشاركتنا فرحة العمر وتتويج مسيرة الحب في ليلتنا، فحضوركم بيننا هو السر الأكبر لاكتمال بهجتنا وسعادتنا.' },
+        { key: 'dressColors', label: 'باليتة ألوان ملابس الحفل مفصولة بفاصلة (Hex)', type: 'text', defaultValue: '#1A1A1A,#D4AF37,#E5D9C5,#FFFFFF' },
+        { key: 'dressCodeText', label: 'نص إرشادات أزياء الحفل', type: 'text', defaultValue: 'ملابس سهرة رسمية تناسب ألوان الليلة' },
+        { key: 'unpluggedText', label: 'ملاحظة التصوير والكاميرات', type: 'text', defaultValue: 'رجاءً الاستمتاع باللحظة والتقليل من التصوير بالهواتف أثناء الزفة 📵' },
+        { key: 'kidsText', label: 'ملاحظة الأطفال', type: 'text', defaultValue: 'جنة الأطفال منازلهم.. نعتذر عن قبول حضور الأطفال مع كامل المحبة 👶' },
+        { key: 'closingNote', label: 'العبارة الختامية في الصفحة الأخيرة', type: 'text', defaultValue: 'بكم تكتمل فرحتنا وتزداد ليلتنا نوراً وبهاءً 🤍' }
       ]
     }
   }

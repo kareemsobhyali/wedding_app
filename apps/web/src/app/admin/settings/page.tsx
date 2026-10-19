@@ -74,7 +74,10 @@ export default function AdminSettingsPage() {
     'laser-gold-gatefold',
     'vintage-calla-blooms',
     'blooming-garden-3d',
-    'pearl-silk-minimalist'
+    'pearl-silk-minimalist',
+    'luxury-flip-card',
+    'boarding-pass-vip',
+    'luxury-booklet-editorial'
   ];
 
   return (

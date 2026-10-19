@@ -24,6 +24,9 @@ const TEMPLATES = [
   { id: 'vintage-calla-blooms', slug: 'vintage-calla-blooms', name: '🕊️ Vintage Calla Blooms (الرومانسية الكلاسيكية وزهور الكالا)' },
   { id: 'blooming-garden-3d', slug: 'blooming-garden-3d', name: '🌸 3D Blooming Garden (بستان الزهور وتفتح البتلات ثلاثي الأبعاد)' },
   { id: 'pearl-silk-minimalist', slug: 'pearl-silk-minimalist', name: '🪞 Pearl Silk Minimalist (أناقة الحرير الإيفواري وخاتم اللؤلؤ)' },
+  { id: 'luxury-flip-card', slug: 'luxury-flip-card', name: '🎴 3D Luxury Flip Card (بطاقة ذهبية تفاعلية بوجهين شاشة واحدة)' },
+  { id: 'boarding-pass-vip', slug: 'boarding-pass-vip', name: '✈️ VIP Wedding Boarding Pass (تذكرة طيران مع كعب قص لتأكيد الحضور)' },
+  { id: 'luxury-booklet-editorial', slug: 'luxury-booklet-editorial', name: '📖 Luxury Wedding Booklet (كتيب ومجلة زفاف فاخرة متعددة الصفحات)' },
 ];
 
 export default function AdminEditForm({ invitation, apiToken }: { invitation: any, apiToken: string }) {

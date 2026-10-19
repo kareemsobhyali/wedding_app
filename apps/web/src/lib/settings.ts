@@ -29,7 +29,10 @@ export const defaultSettings = {
     'laser-gold-gatefold': '/preview?template=laser-gold-gatefold',
     'vintage-calla-blooms': '/preview?template=vintage-calla-blooms',
     'blooming-garden-3d': '/preview?template=blooming-garden-3d',
-    'pearl-silk-minimalist': '/preview?template=pearl-silk-minimalist'
+    'pearl-silk-minimalist': '/preview?template=pearl-silk-minimalist',
+    'luxury-flip-card': '/preview?template=luxury-flip-card',
+    'boarding-pass-vip': '/preview?template=boarding-pass-vip',
+    'luxury-booklet-editorial': '/preview?template=luxury-booklet-editorial'
   },
   previewImages: {}
 };
