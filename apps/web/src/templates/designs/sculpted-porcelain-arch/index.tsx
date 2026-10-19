@@ -304,7 +304,7 @@ export const SculptedPorcelainArchTemplate: React.FC<TemplateRenderContext> = ({
           </div>
 
           {/* 4. Signature Calendar Date Section (Rich Gold Engraving Style) */}
-          <div className="w-full max-w-[240px] sm:max-w-[260px] flex flex-col items-center py-1">
+          <div className="w-full max-w-[210px] sm:max-w-[260px] flex flex-col items-center py-1">
             <div className="w-full border-t border-[#8C6D38]/50 my-1" />
             
             <div className="w-full flex items-center justify-between px-2 py-0.5">
