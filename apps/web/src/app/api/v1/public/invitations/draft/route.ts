@@ -84,9 +84,19 @@ export async function PATCH(req: Request) {
 
     // Handle template switch if provided
     if (body.templateId) {
-      const template = await prisma.template.findFirst({
+      let template = await prisma.template.findFirst({
         where: { OR: [{ id: body.templateId }, { slug: body.templateId }] }
       });
+      if (!template) {
+        template = await prisma.template.create({
+          data: {
+            name: body.templateId,
+            slug: body.templateId,
+            description: 'Wedding Invitation Template',
+            sortOrder: 0
+          }
+        });
+      }
       if (template) {
         updateData.template = { connect: { id: template.id } };
       }
