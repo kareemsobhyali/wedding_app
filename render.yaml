@@ -1,5 +1,5 @@
 services:
-  # Single Unified Full-Stack Next.js Web Service (Frontend + API Routes)
+  # Single Unified Full-Stack Next.js Web Service
   - type: web
     name: wedding-web
     env: node
@@ -14,18 +14,10 @@ services:
       - key: HOSTNAME
         value: 0.0.0.0
       - key: DATABASE_URL
-        fromDatabase:
-          name: wedding-db
-          property: connectionString
+        sync: false
       - key: NEXT_PUBLIC_API_URL
         value: /api/v1
       - key: ADMIN_EMAIL
         value: admin@wedding.com
       - key: ADMIN_PASSWORD
         value: admin123456
-
-databases:
-  - name: wedding-db
-    databaseName: wedding
-    user: wedding_user
-    plan: free
