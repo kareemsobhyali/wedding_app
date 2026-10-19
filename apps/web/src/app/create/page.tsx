@@ -29,7 +29,7 @@ function CreateInvitationContent() {
     e.preventDefault();
     if (!url) return;
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api/v1';
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || '/api/v1';
       await fetch(`${apiUrl}/public/media/link`, {
         method: 'POST',
         headers: { 
@@ -53,7 +53,7 @@ function CreateInvitationContent() {
   const startDraft = async (templateId: string) => {
     setLoading(true);
     setErrorMsg('');
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api/v1';
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || '/api/v1';
     try {
       const res = await fetch(`${apiUrl}/public/invitations`, {
         method: 'POST',
@@ -79,7 +79,7 @@ function CreateInvitationContent() {
     } catch (err: any) {
       console.error(err);
       if (err.message === 'Failed to fetch' || err.name === 'TypeError') {
-        setErrorMsg(`تعذر الاتصال بخادم الـ API (${apiUrl}). يرجى التأكد من أن خدمة wedding-api تعمل وتعيين رابطها في متغيرات البيئة NEXT_PUBLIC_API_URL.`);
+        setErrorMsg('تعذر الاتصال بالخادم. يرجى التحقق من اتصال الإنترنت وإعادة المحاولة.');
       } else {
         setErrorMsg(err.message || 'حدث خطأ غير متوقع أثناء بدء الدعوة.');
       }
@@ -122,7 +122,7 @@ function CreateInvitationContent() {
     if (!draft || saveState !== 'saving') return;
 
     const handler = setTimeout(async () => {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api/v1';
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || '/api/v1';
       try {
         const res = await fetch(`${apiUrl}/public/invitations/draft`, {
           method: 'PATCH',
@@ -176,7 +176,7 @@ function CreateInvitationContent() {
 
     setSubmitError('');
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api/v1';
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || '/api/v1';
       const res = await fetch(`${apiUrl}/public/invitations/submit`, {
         method: 'POST',
         credentials: 'include',

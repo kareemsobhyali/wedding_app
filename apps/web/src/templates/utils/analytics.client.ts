@@ -10,7 +10,7 @@ export class AnalyticsClient {
   constructor(slug: string, isPublic: boolean) {
     this.slug = slug;
     this.isPublic = isPublic;
-    this.apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api/v1';
+    this.apiUrl = process.env.NEXT_PUBLIC_API_URL || '/api/v1';
   }
 
   track(eventType: string) {

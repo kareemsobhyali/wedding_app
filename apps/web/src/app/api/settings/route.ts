@@ -24,6 +24,8 @@ const defaultSettings = {
   previewImages: {}
 };
 
+export const dynamic = 'force-dynamic';
+
 export async function GET() {
   try {
     if (fs.existsSync(settingsFile)) {

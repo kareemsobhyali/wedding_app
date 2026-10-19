@@ -17,7 +17,7 @@ export default function AdminLogin() {
     setError('');
 
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api/v1';
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || '/api/v1';
       const res = await fetch(`${apiUrl}/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

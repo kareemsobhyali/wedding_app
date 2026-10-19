@@ -3,34 +3,77 @@ import AdminActionButtons from './AdminActionButtons';
 import SlugEditor from './SlugEditor';
 import React from 'react';
 import { cookies } from 'next/headers';
+import { notFound } from 'next/navigation';
+import { prisma } from '@/lib/prisma';
 import { getTemplateImplementation } from '../../../../templates/registry';
 
+export const dynamic = 'force-dynamic';
+
 async function fetchInvitation(id: string) {
-  const cookieStore = cookies();
-  const sessionCookie = cookieStore.get('admin_session');
-  
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000/api/v1"}/admin/invitations/${id}`, {
-    headers: {
-      Cookie: sessionCookie ? `${sessionCookie.name}=${sessionCookie.value}` : '',
-    },
-    cache: 'no-store'
-  });
-  
-  if (!res.ok) throw new Error('Failed to fetch invitation details');
-  const raw = await res.json();
-  return raw.data || raw;
+  try {
+    const inv = await prisma.invitation.findUnique({
+      where: { id },
+      include: {
+        slugs: { orderBy: { createdAt: 'desc' } },
+        template: true,
+        media: { where: { deletedAt: null }, orderBy: { sortOrder: 'asc' } }
+      }
+    });
+
+    if (!inv) notFound();
+    return inv;
+  } catch (err) {
+    console.error('Error fetching invitation:', err);
+    notFound();
+  }
 }
 
 async function fetchAnalytics(id: string) {
-  const cookieStore = cookies();
-  const sessionCookie = cookieStore.get('admin_session');
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000/api/v1"}/admin/invitations/${id}/analytics`, {
-    headers: { Cookie: sessionCookie ? `${sessionCookie.name}=${sessionCookie.value}` : '' },
-    cache: 'no-store'
-  });
-  if (!res.ok) return null;
-  const raw = await res.json();
-  return raw.data || raw;
+  try {
+    const events = await prisma.analyticsEvent.groupBy({
+      by: ['eventType'],
+      where: { invitationId: id },
+      _count: true
+    });
+
+    const uniqueVisitorsResult = await prisma.analyticsEvent.findMany({
+      where: { invitationId: id },
+      select: { visitorId: true },
+      distinct: ['visitorId']
+    });
+
+    const lastVisitEvent = await prisma.analyticsEvent.findFirst({
+      where: { invitationId: id, eventType: 'VIEW' },
+      orderBy: { timestamp: 'desc' },
+      select: { timestamp: true }
+    });
+
+    const metrics = {
+      totalViews: 0,
+      uniqueVisitors: uniqueVisitorsResult.length,
+      musicPlays: 0,
+      mapClicks: 0,
+      groomContactClicks: 0,
+      brideContactClicks: 0,
+      shares: 0,
+      lastVisit: lastVisitEvent?.timestamp || null
+    };
+
+    events.forEach((e) => {
+      switch (e.eventType) {
+        case 'VIEW': metrics.totalViews = e._count; break;
+        case 'MUSIC_PLAY': metrics.musicPlays = e._count; break;
+        case 'MAP_CLICK': metrics.mapClicks = e._count; break;
+        case 'GROOM_CONTACT': metrics.groomContactClicks = e._count; break;
+        case 'BRIDE_CONTACT': metrics.brideContactClicks = e._count; break;
+        case 'SHARE': metrics.shares = e._count; break;
+      }
+    });
+
+    return metrics;
+  } catch {
+    return null;
+  }
 }
 
 export default async function AdminInvitationDetail({ params }: { params: { id: string } }) {
@@ -41,14 +84,11 @@ export default async function AdminInvitationDetail({ params }: { params: { id: 
     fetchAnalytics(params.id)
   ]);
   
-  // We can render the Template UI directly inline or in an iframe. Inline is easier for Phase 10 context.
   const registeredTemplate = inv.template ? getTemplateImplementation(inv.template.slug) : null;
   const TemplateComponent = registeredTemplate?.component;
   const metadata = registeredTemplate?.metadata;
 
   return (
-
-
     <div className="p-4 md:p-8 max-w-7xl mx-auto flex flex-col lg:flex-row gap-8 overflow-hidden">
       {/* Admin Controls Panel */}
       <div className="w-full lg:w-1/2 space-y-6 max-w-full overflow-hidden">
@@ -98,13 +138,11 @@ export default async function AdminInvitationDetail({ params }: { params: { id: 
           <p><strong>Created:</strong> {new Date(inv.createdAt).toLocaleString()}</p>
         </div>
 
-        
         <SlugEditor 
           invitationId={inv.id} 
           currentSlug={inv.slugs?.find((s: any) => s.isCurrent)?.slug || inv.slugs?.[0]?.slug || ''} 
           apiToken={cookieStore.get("admin_session")?.value || ''} 
         />
-
 
         <div className="bg-white p-6 shadow rounded border">
           <h2 className="font-bold text-lg border-b pb-2 mb-4">State Transitions</h2>
@@ -129,20 +167,31 @@ export default async function AdminInvitationDetail({ params }: { params: { id: 
               data={{
                 groomName: inv.groomName,
                 brideName: inv.brideName,
-                weddingDate: inv.weddingDate,
-                weddingTime: inv.weddingTime,
+                weddingDate: inv.weddingDate || new Date(),
+                weddingTime: (inv.customData as any)?.weddingTime || '',
                 venueName: inv.venueName,
-                venueAddress: inv.venueAddress,
-                googleMapsUrl: inv.googleMapsUrl,
-                caption: inv.caption,
-                weddingMessage: inv.weddingMessage,
-                groomPhone: inv.groomPhone,
-                bridePhone: inv.bridePhone,
+                venueAddress: inv.venueAddress || '',
+                googleMapsUrl: inv.googleMapsUrl || '',
+                caption: inv.caption || '',
+                weddingMessage: inv.weddingMessage || '',
+                groomPhone: inv.groomPhone || '',
+                bridePhone: inv.bridePhone || '',
                 countdownEnabled: inv.countdownEnabled,
                 contactButtonsEnabled: true,
-                galleryImages: inv.media.filter((m: any) => m.role === 'GALLERY').map((m: any) => ({ url: m.publicUrl || m.storageKey, alt: 'Gallery Image' })),
-                music: inv.media.find((m: any) => m.type === 'AUDIO') ? { url: inv.media.find((m: any) => m.type === 'AUDIO').publicUrl } : undefined,
-                coverImage: inv.media.find((m: any) => m.role === 'COVER') ? { url: inv.media.find((m: any) => m.role === 'COVER').publicUrl, alt: 'Cover Image' } : undefined,
+                customData: (inv.customData as Record<string, any>) || {},
+                galleryImages: inv.media
+                  .filter((m: any) => m.role === 'GALLERY' && (m.publicUrl || m.storageKey))
+                  .map((m: any) => ({ url: (m.publicUrl || m.storageKey) as string, alt: 'Gallery Image' })),
+                music: (() => {
+                  const item = inv.media.find((m: any) => m.type === 'AUDIO');
+                  const url = item?.publicUrl || item?.storageKey;
+                  return url ? { url } : undefined;
+                })(),
+                coverImage: (() => {
+                  const item = inv.media.find((m: any) => m.role === 'COVER');
+                  const url = item?.publicUrl || item?.storageKey;
+                  return url ? { url, alt: 'Cover Image' } : undefined;
+                })(),
               }}
             />
           ) : (

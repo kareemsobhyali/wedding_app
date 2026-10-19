@@ -1,27 +1,22 @@
-import { cookies } from 'next/headers';
+import { getAdminFromCookies } from '@/lib/auth';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
+
+export const dynamic = 'force-dynamic';
 
 export default async function AdminLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const cookieStore = cookies();
-  const sessionCookie = cookieStore.get('admin_session');
-
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL || process.env.API_URL || 'http://localhost:4000/api/v1';
-  
+  let admin = null;
   try {
-    const res = await fetch(`${apiUrl}/auth/me`, {
-      headers: {
-        Cookie: sessionCookie ? `${sessionCookie.name}=${sessionCookie.value}` : '',
-      },
-      cache: 'no-store',
-    });
+    admin = await getAdminFromCookies();
+  } catch {
+    // If DB is offline during build
+  }
 
-    if (!res.ok) throw new Error('Unauthorized');
-  } catch (error) {
+  if (!admin) {
     redirect('/admin-login');
   }
 

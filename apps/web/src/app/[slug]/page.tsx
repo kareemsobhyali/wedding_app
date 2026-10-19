@@ -4,6 +4,7 @@ import { TemplateRenderContext } from '../../templates/types';
 import { getTemplateImplementation } from '../../templates/registry';
 import { formatEventDate } from '../../templates/utils/date';
 import { AnalyticsProvider } from '../../templates/utils/AnalyticsProvider';
+import { getPublicInvitation } from '../../lib/invitations';
 
 interface PageProps {
   params: { slug: string };
@@ -13,21 +14,7 @@ interface PageProps {
 export const revalidate = 60;
 
 async function fetchInvitation(slug: string) {
-  try {
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000/api/v1";
-    const res = await fetch(`${apiUrl}/public/invitations/${slug}`, {
-      next: { 
-        revalidate: 60,
-        tags: [`public-invitation-${slug}`]
-      }
-    });
-    
-    if (!res.ok) return null;
-    const body = await res.json();
-    return body.data || body;
-  } catch {
-    return null;
-  }
+  return await getPublicInvitation(slug);
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
@@ -41,10 +28,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 
   const { data } = result;
+  const formattedDate = data.weddingDate ? formatEventDate(data.weddingDate, 'LTR') : '';
   
   return {
     title: `${data.groomName} & ${data.brideName} | You're Invited!`,
-    description: `Join us for our wedding on ${formatEventDate(data.weddingDate, 'LTR')} at ${data.venueName}.`,
+    description: `Join us for our wedding on ${formattedDate} at ${data.venueName}.`,
     openGraph: {
       title: `${data.groomName} & ${data.brideName} | Wedding Invitation`,
       description: `Join us for our wedding at ${data.venueName}.`,
@@ -57,11 +45,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 export default async function PublicInvitationPage({ params }: PageProps) {
   const result = await fetchInvitation(params.slug);
 
-  if (!result) {
-    notFound();
-  }
-
-  if (result.type === 'NOT_FOUND') {
+  if (!result || result.type === 'NOT_FOUND') {
     notFound();
   }
 
@@ -74,7 +58,7 @@ export default async function PublicInvitationPage({ params }: PageProps) {
   const registeredTemplate = getTemplateImplementation(data.template.slug);
 
   if (!registeredTemplate) {
-    notFound(); // Fallback if template implementation is missing
+    notFound();
   }
 
   const { component: TemplateComponent, metadata } = registeredTemplate;
@@ -82,7 +66,7 @@ export default async function PublicInvitationPage({ params }: PageProps) {
   const renderContext: TemplateRenderContext = {
     mode: 'PUBLIC',
     direction: 'LTR',
-    data,
+    data: data as any,
     metadata
   };
 

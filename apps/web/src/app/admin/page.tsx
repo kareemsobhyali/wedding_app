@@ -1,29 +1,82 @@
-import React from 'react';
-import { cookies } from 'next/headers';
+import { prisma } from '@/lib/prisma';
 import Link from 'next/link';
 import { formatEventDate } from '../../templates/utils/date';
 
+export const dynamic = 'force-dynamic';
+
 async function getDashboardSummary() {
-  const cookieStore = cookies();
-  const sessionCookie = cookieStore.get('admin_session');
-  
-  const headers = { Cookie: sessionCookie ? `${sessionCookie.name}=${sessionCookie.value}` : '' };
-  
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL || process.env.API_URL || 'http://localhost:4000/api/v1';
-  
-  const [summaryRes, analyticsRes] = await Promise.all([
-    fetch(`${apiUrl}/admin/dashboard/summary`, { headers, cache: 'no-store' }),
-    fetch(`${apiUrl}/admin/analytics/global`, { headers, cache: 'no-store' })
-  ]);
-  
-  if (!summaryRes.ok) throw new Error('Failed to fetch summary');
-  const summaryRaw = await summaryRes.json();
-  const analyticsRaw = analyticsRes.ok ? await analyticsRes.json() : null;
+  const fallback = {
+    summary: { TOTAL: 0, DRAFT: 0, PENDING_REVIEW: 0, ACTIVE: 0, DISABLED: 0, EXPIRED: 0, ARCHIVED: 0 },
+    recentSubmissions: [],
+    analytics: { TOTAL_VIEWS: 0, UNIQUE_VISITORS: 0, MUSIC_PLAYS: 0, MAP_CLICKS: 0, CONTACT_CLICKS: 0, SHARES: 0 }
+  };
 
-  const summary = summaryRaw.data || summaryRaw;
-  const analytics = analyticsRaw?.data || analyticsRaw;
+  try {
+    const counts = await prisma.invitation.groupBy({
+      by: ['status'],
+      _count: true,
+      where: { deletedAt: null }
+    });
 
-  return { ...summary, analytics };
+  const summary: Record<string, number> = {
+    TOTAL: 0,
+    DRAFT: 0,
+    PENDING_REVIEW: 0,
+    ACTIVE: 0,
+    DISABLED: 0,
+    EXPIRED: 0,
+    ARCHIVED: 0,
+  };
+
+  counts.forEach(c => {
+    summary[c.status] = c._count;
+    summary.TOTAL += c._count;
+  });
+
+  const recentSubmissions = await prisma.invitation.findMany({
+    where: { status: 'PENDING_REVIEW', deletedAt: null },
+    orderBy: { updatedAt: 'desc' },
+    take: 5,
+    select: { id: true, groomName: true, brideName: true, customerPhone: true, updatedAt: true }
+  });
+
+  const events = await prisma.analyticsEvent.groupBy({
+    by: ['eventType'],
+    _count: true
+  });
+
+  const uniqueVisitorsResult = await prisma.analyticsEvent.findMany({
+    select: { visitorId: true },
+    distinct: ['visitorId']
+  });
+
+  const analytics = {
+    TOTAL_VIEWS: 0,
+    UNIQUE_VISITORS: uniqueVisitorsResult.length,
+    MUSIC_PLAYS: 0,
+    MAP_CLICKS: 0,
+    CONTACT_CLICKS: 0,
+    SHARES: 0
+  };
+
+  events.forEach(e => {
+    switch (e.eventType) {
+      case 'VIEW': analytics.TOTAL_VIEWS = e._count; break;
+      case 'MUSIC_PLAY': analytics.MUSIC_PLAYS = e._count; break;
+      case 'MAP_CLICK': analytics.MAP_CLICKS = e._count; break;
+      case 'GROOM_CONTACT':
+      case 'BRIDE_CONTACT':
+        analytics.CONTACT_CLICKS += e._count;
+        break;
+      case 'SHARE': analytics.SHARES = e._count; break;
+    }
+  });
+
+    return { summary, recentSubmissions, analytics };
+  } catch (error) {
+    console.error('Error fetching dashboard summary:', error);
+    return fallback;
+  }
 }
 
 export default async function AdminDashboardPage() {

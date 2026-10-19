@@ -3,22 +3,68 @@ import { cookies } from 'next/headers';
 import Link from 'next/link';
 import QuickCreateModal from './QuickCreateModal';
 
+import { prisma } from '@/lib/prisma';
+import { InvitationStatus, Prisma } from '@prisma/client';
+
+export const dynamic = 'force-dynamic';
+
 async function fetchInvitations(searchParams: any) {
-  const cookieStore = cookies();
-  const sessionCookie = cookieStore.get('admin_session');
-  
-  const q = new URLSearchParams(searchParams).toString();
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL || process.env.API_URL || 'http://localhost:4000/api/v1';
-  const res = await fetch(`${apiUrl}/admin/invitations?${q}`, {
-    headers: {
-      Cookie: sessionCookie ? `${sessionCookie.name}=${sessionCookie.value}` : '',
-    },
-    cache: 'no-store'
-  });
-  
-  if (!res.ok) throw new Error('Failed to fetch invitations');
-  const responseRaw = await res.json();
-  return responseRaw.data || responseRaw;
+  const fallback = { items: [], pagination: { page: 1, limit: 20, total: 0, totalPages: 0 } };
+
+  try {
+    const page = Math.max(1, parseInt(searchParams?.page || '1', 10));
+    const limit = Math.min(100, Math.max(1, parseInt(searchParams?.limit || '20', 10)));
+    const search = searchParams?.search || undefined;
+    const status = searchParams?.status || undefined;
+    const sort = searchParams?.sort || 'createdAt';
+    const sortOrder = searchParams?.sortOrder?.toLowerCase() === 'asc' ? 'asc' : 'desc';
+
+    const skip = (page - 1) * limit;
+    const where: Prisma.InvitationWhereInput = { deletedAt: null };
+
+    if (status && Object.values(InvitationStatus).includes(status as InvitationStatus)) {
+      where.status = status as InvitationStatus;
+    }
+
+    if (search) {
+      where.OR = [
+        { groomName: { contains: search, mode: 'insensitive' } },
+        { brideName: { contains: search, mode: 'insensitive' } },
+        { customerPhone: { contains: search } },
+        { slugs: { some: { slug: { contains: search, mode: 'insensitive' }, isCurrent: true } } }
+      ];
+    }
+
+    const validSortFields = ['createdAt', 'updatedAt', 'weddingDate', 'groomName', 'brideName', 'status'];
+    const orderByField = validSortFields.includes(sort) ? sort : 'createdAt';
+
+    const [items, total] = await Promise.all([
+      prisma.invitation.findMany({
+        where,
+        skip,
+        take: limit,
+        orderBy: { [orderByField]: sortOrder },
+        include: {
+          slugs: { where: { isCurrent: true }, select: { slug: true } },
+          template: { select: { id: true, name: true, slug: true } }
+        }
+      }),
+      prisma.invitation.count({ where })
+    ]);
+
+    return {
+      items,
+      pagination: {
+        page,
+        limit,
+        total,
+        totalPages: Math.ceil(total / limit)
+      }
+    };
+  } catch (error) {
+    console.error('Error fetching invitations:', error);
+    return fallback;
+  }
 }
 
 export default async function AdminInvitationsListPage({ searchParams }: { searchParams: any }) {

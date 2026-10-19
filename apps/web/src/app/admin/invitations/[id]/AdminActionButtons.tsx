@@ -10,7 +10,7 @@ export default function AdminActionButtons({ invitationId, apiToken }: { invitat
 
   const performAction = async (action: string) => {
     setLoading(true);
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api/v1';
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || '/api/v1';
     
     try {
       const res = await fetch(`${apiUrl}/admin/invitations/${invitationId}/${action}`, {
