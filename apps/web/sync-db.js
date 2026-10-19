@@ -21,15 +21,21 @@ const dbUrl = process.env.DATABASE_URL;
 if (dbUrl && !dbUrl.includes('localhost:5432')) {
   try {
     console.log('🗄️ DATABASE_URL detected! Syncing database tables...');
-    execSync(`npx prisma db push --schema="${schemaPath}" --accept-data-loss`, { stdio: 'inherit' });
+    execSync(`npx prisma db push --schema="${schemaPath}" --accept-data-loss`, { 
+      stdio: 'inherit',
+      timeout: 30000 
+    });
     console.log('✅ Database tables created and synchronized successfully!');
   } catch (err) {
-    console.error('⚠️ Database sync failed (check connection/credentials):', err.message);
+    console.error('⚠️ Database sync warning (will continue startup):', err.message);
   }
 } else if (dbUrl) {
   try {
     console.log('🗄️ Local DATABASE_URL detected, attempting sync...');
-    execSync(`npx prisma db push --schema="${schemaPath}" --accept-data-loss`, { stdio: 'inherit' });
+    execSync(`npx prisma db push --schema="${schemaPath}" --accept-data-loss`, { 
+      stdio: 'inherit',
+      timeout: 10000 
+    });
     console.log('✅ Local database synchronized!');
   } catch (e) {
     console.log('ℹ️ Local database offline, skipping sync.');

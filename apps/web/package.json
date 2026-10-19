@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev -H 0.0.0.0",
-    "build": "node sync-db.js && next build",
-    "postinstall": "node sync-db.js",
+    "build": "npx prisma generate --schema=../../packages/database/prisma/schema.prisma && next build",
+    "postinstall": "npx prisma generate --schema=../../packages/database/prisma/schema.prisma",
     "start": "node sync-db.js && next start -H 0.0.0.0",
     "lint": "next lint",
     "test": "jest"
