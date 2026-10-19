@@ -136,228 +136,54 @@ const FallingRosePetals = () => {
   );
 };
 
-// Animated Royal Dancing Couple (Slow Waltz & Romantic Sway)
-const DancingCouple = () => {
-  const handleCoupleClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    confetti({
-      particleCount: 30,
-      spread: 60,
-      origin: { y: 0.88, x: 0.5 },
-      colors: ['#D4AF37', '#FCE7F3', '#FFFBF0']
-    });
-  };
+// Romantic Couple Video Component (Pinterest Video with Background Seamlessly Blended)
+const RomanticCoupleVideo = () => {
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.playbackRate = 0.95; // Romantic, graceful motion speed
+      videoRef.current.play().catch(() => {});
+    }
+  }, []);
 
   return (
     <div 
-      onClick={handleCoupleClick}
-      className="absolute bottom-[5.8%] left-1/2 -translate-x-1/2 z-20 pointer-events-auto cursor-pointer flex flex-col items-center justify-end w-[96px] h-[115px] select-none group"
-      title="مباركة للعروسين"
+      className="absolute bottom-[3.5%] left-1/2 -translate-x-1/2 z-20 pointer-events-none flex flex-col items-center justify-end w-[280px] sm:w-[320px] h-[210px] sm:h-[235px] overflow-hidden select-none"
     >
-      {/* Background Mask to cleanly conceal the static drawing underneath */}
+      {/* Background Mask to cleanly conceal the static drawing in the palace wallpaper underneath */}
       <div 
-        className="absolute inset-x-[-14px] bottom-[-4px] h-[116px] pointer-events-none rounded-full"
+        className="absolute inset-x-[-10px] bottom-[-4px] h-[140px] pointer-events-none rounded-full"
         style={{
-          background: 'radial-gradient(ellipse at 50% 55%, #FBF8F2 70%, rgba(251,248,242,0.85) 85%, transparent 100%)'
+          background: 'radial-gradient(ellipse at 50% 60%, #FAF5ED 68%, rgba(250,245,237,0.85) 85%, transparent 100%)'
         }}
       />
 
-      {/* Romantic Golden Halo Beneath Couple */}
-      <motion.div
-        className="absolute bottom-1 w-20 h-5 rounded-full pointer-events-none"
+      {/* Romantic Golden Glow Beneath Couple */}
+      <div 
+        className="absolute bottom-1 w-28 h-6 rounded-full pointer-events-none"
         style={{
-          background: 'radial-gradient(ellipse at center, rgba(212,175,55,0.3) 0%, transparent 75%)'
-        }}
-        animate={{
-          scale: [0.92, 1.12, 0.92],
-          opacity: [0.35, 0.7, 0.35]
-        }}
-        transition={{
-          duration: 3.6,
-          repeat: Infinity,
-          ease: "easeInOut"
+          background: 'radial-gradient(ellipse at center, rgba(212,175,55,0.25) 0%, transparent 75%)'
         }}
       />
 
-      {/* Floating Sparkles Rising from Dance */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        {[
-          { x: 22, delay: 0, dur: 2.6 },
-          { x: 50, delay: 0.9, dur: 2.2 },
-          { x: 74, delay: 1.8, dur: 2.8 },
-        ].map((spark, idx) => (
-          <motion.div
-            key={idx}
-            className="absolute bottom-4 text-[#C5A059] pointer-events-none text-[10px]"
-            style={{ left: `${spark.x}%` }}
-            animate={{
-              y: [0, -42],
-              opacity: [0, 1, 0],
-              scale: [0.4, 1.1, 0.2]
-            }}
-            transition={{
-              duration: spark.dur,
-              repeat: Infinity,
-              delay: spark.delay,
-              ease: "easeOut"
-            }}
-          >
-            ✦
-          </motion.div>
-        ))}
-      </div>
-
-      {/* Animated Dancing Couple (Waltz Sway) */}
-      <motion.div
-        className="relative w-full h-full flex items-end justify-center"
-        animate={{
-          rotate: [-2.2, 2.2, -2.2],
-          x: [-2.5, 2.5, -2.5],
-          y: [0, -1.8, 0]
+      {/* The Couple Video with Background Removed via Multiply Blend Mode & Feathered Mask */}
+      <video
+        ref={videoRef}
+        src="/assets/templates/romantic-couple-video.mp4"
+        autoPlay
+        loop
+        muted
+        playsInline
+        preload="auto"
+        className="w-full h-full object-cover object-bottom"
+        style={{
+          mixBlendMode: 'multiply',
+          filter: 'contrast(1.12) brightness(1.02) saturate(1.1)',
+          maskImage: 'linear-gradient(to top, black 80%, rgba(0,0,0,0.5) 92%, transparent 100%)',
+          WebkitMaskImage: 'linear-gradient(to top, black 80%, rgba(0,0,0,0.5) 92%, transparent 100%)',
         }}
-        transition={{
-          duration: 3.8,
-          repeat: Infinity,
-          ease: "easeInOut"
-        }}
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
-      >
-        <svg
-          viewBox="0 0 100 120"
-          className="w-[84px] h-[106px] filter drop-shadow-[0_2px_4px_rgba(80,50,20,0.18)]"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <defs>
-            <linearGradient id="royalCoupleGold" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#9E793B" />
-              <stop offset="45%" stopColor="#7B5826" />
-              <stop offset="100%" stopColor="#543A14" />
-            </linearGradient>
-            <linearGradient id="veilGradiant" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stopColor="#FAF5EE" stopOpacity="0.85" />
-              <stop offset="100%" stopColor="#E0C99E" stopOpacity="0.35" />
-            </linearGradient>
-          </defs>
-
-          {/* Bride's Flowing Cathedral Veil (Breeze / Sway Wave) */}
-          <motion.path
-            d="M 55 18 C 65 24, 76 45, 82 72 C 86 90, 84 108, 80 114 C 74 115, 68 112, 65 106 C 72 88, 70 56, 56 26 Z"
-            fill="url(#veilGradiant)"
-            stroke="#C5A059"
-            strokeWidth="0.5"
-            strokeDasharray="1.5 1"
-            animate={{
-              scaleX: [1, 1.04, 0.98, 1],
-              skewX: [-1.5, 1.5, -1.5]
-            }}
-            transition={{
-              duration: 2.8,
-              repeat: Infinity,
-              ease: "easeInOut"
-            }}
-          />
-
-          {/* Groom Silhouette */}
-          {/* Groom Head & Neck */}
-          <path
-            d="M 37 14 C 37 10.5, 41 8, 44.5 8 C 47.5 8, 50 10.5, 50 14 C 50 17, 47.5 19.5, 44.5 19.5 C 41 19.5, 37 17, 37 14 Z"
-            fill="url(#royalCoupleGold)"
-          />
-          {/* Groom Sherwani Coat & Trousers */}
-          <path
-            d="M 42 20 L 46 20 L 48 24 L 50 36 L 47 48 L 48 76 L 40 76 L 41 48 L 38 36 L 39 24 Z"
-            fill="url(#royalCoupleGold)"
-          />
-          {/* Groom Left Leg & Shoe */}
-          <path
-            d="M 41 76 L 40 108 L 36 114 L 33 114 L 38 108 L 39 76 Z"
-            fill="url(#royalCoupleGold)"
-          />
-          {/* Groom Right Leg & Shoe */}
-          <path
-            d="M 46 76 L 46 108 L 47 113 L 43 113 L 43 76 Z"
-            fill="url(#royalCoupleGold)"
-          />
-          {/* Groom Left Arm (Holding bride's hand) */}
-          <path
-            d="M 48 24 C 52 26, 56 30, 55 35 C 54 36, 51 34, 48 30 Z"
-            fill="url(#royalCoupleGold)"
-          />
-
-          {/* Bride Silhouette */}
-          {/* Bride Head & Hair Updo */}
-          <path
-            d="M 54 13 C 54 10, 57 8, 60 8 C 63 8, 65 10, 65 13 C 65 16, 62.5 18, 59.5 18 C 56.5 18, 54 16, 54 13 Z"
-            fill="url(#royalCoupleGold)"
-          />
-          {/* Bride Hair Bun / Chignon */}
-          <circle cx="63.5" cy="11.5" r="3" fill="url(#royalCoupleGold)" />
-          {/* Tiara Accent */}
-          <path d="M 58 7.5 L 59.5 5.5 L 61 7.5 Z" fill="#D4AF37" />
-
-          {/* Bride Bodice & Raised Arm */}
-          <path
-            d="M 57 19 L 61 19 L 62 26 C 62 30, 60 38, 59 44 L 53 44 C 54 38, 55 30, 56 26 Z"
-            fill="url(#royalCoupleGold)"
-          />
-          {/* Bride Arms (Embracing groom & raised hand) */}
-          <path
-            d="M 56 25 C 51 28, 47 32, 45 36 C 47 37, 51 32, 55 30 Z"
-            fill="url(#royalCoupleGold)"
-          />
-          <path
-            d="M 60 25 C 57 28, 53 32, 53 36 C 55 36, 58 32, 61 28 Z"
-            fill="url(#royalCoupleGold)"
-          />
-
-          {/* Bride Royal Flared Wedding Gown (Flowing Ballgown) */}
-          <motion.path
-            d="M 53 44 C 56 44, 59 44, 60 44 C 64 56, 70 78, 77 114 C 70 115, 58 114, 46 114 C 47 88, 50 62, 53 44 Z"
-            fill="url(#royalCoupleGold)"
-            animate={{
-              scaleX: [1, 1.02, 0.99, 1]
-            }}
-            transition={{
-              duration: 3.2,
-              repeat: Infinity,
-              ease: "easeInOut"
-            }}
-          />
-
-          {/* Delicate Lace Filigree Details on Gown */}
-          <path
-            d="M 56 54 Q 63 80 69 111"
-            stroke="#C5A059"
-            strokeWidth="0.75"
-            strokeDasharray="2 2"
-            opacity="0.8"
-          />
-          <path
-            d="M 54 62 Q 58 84 60 112"
-            stroke="#C5A059"
-            strokeWidth="0.75"
-            strokeDasharray="2 2"
-            opacity="0.8"
-          />
-          <path
-            d="M 58 68 Q 66 90 73 112"
-            stroke="#C5A059"
-            strokeWidth="0.75"
-            strokeDasharray="2 2"
-            opacity="0.8"
-          />
-
-          {/* Scalloped Lace Hemline */}
-          <path
-            d="M 46 114 Q 50 112 54 114 Q 58 112 62 114 Q 66 112 70 114 Q 74 112 77 114"
-            stroke="#D4AF37"
-            strokeWidth="0.8"
-            fill="none"
-          />
-        </svg>
-      </motion.div>
+      />
     </div>
   );
 };
@@ -470,21 +296,22 @@ export const MughalPalacePortalTemplate: React.FC<TemplateRenderContext> = ({ da
       }}
     >
       {/* Background Audio */}
-      {data.music && (
-        <audio ref={audioRef} src={data.music.url} loop preload="auto" />
-      )}
+      <audio 
+        ref={audioRef} 
+        src={data.music?.url || '/assets/templates/romantic-couple-video.mp4'} 
+        loop 
+        preload="auto" 
+      />
 
       {/* Floating Controls */}
       <div className="fixed top-3 right-3 sm:top-4 sm:right-4 z-40 flex items-center gap-2">
-        {data.music && (
-          <button
-            onClick={toggleAudio}
-            className="w-10 h-10 rounded-full bg-white/90 backdrop-blur-md shadow-md border border-[#D4AF37]/50 flex items-center justify-center text-[#8C6D38] hover:bg-[#8C6D38] hover:text-white transition-all transform hover:scale-105 active:scale-95"
-            title={isPlayingAudio ? 'كتم الموسيقى' : 'تشغيل الموسيقى'}
-          >
-            {isPlayingAudio ? <Volume2 className="w-4 h-4 animate-pulse" /> : <VolumeX className="w-4 h-4" />}
-          </button>
-        )}
+        <button
+          onClick={toggleAudio}
+          className="w-10 h-10 rounded-full bg-white/90 backdrop-blur-md shadow-md border border-[#D4AF37]/50 flex items-center justify-center text-[#8C6D38] hover:bg-[#8C6D38] hover:text-white transition-all transform hover:scale-105 active:scale-95"
+          title={isPlayingAudio ? 'كتم الموسيقى' : 'تشغيل الموسيقى'}
+        >
+          {isPlayingAudio ? <Volume2 className="w-4 h-4 animate-pulse" /> : <VolumeX className="w-4 h-4" />}
+        </button>
         <button
           onClick={handleShare}
           className="w-10 h-10 rounded-full bg-white/90 backdrop-blur-md shadow-md border border-[#D4AF37]/50 flex items-center justify-center text-[#8C6D38] hover:bg-[#8C6D38] hover:text-white transition-all transform hover:scale-105 active:scale-95"
@@ -522,7 +349,7 @@ export const MughalPalacePortalTemplate: React.FC<TemplateRenderContext> = ({ da
         />
 
         {/* Inside Portal Content: Typography & Layout (Harmonious Royal Gold & Bronze Colors) */}
-        <div className="absolute top-[28.5%] bottom-[13.5%] left-[18%] right-[18%] flex flex-col items-center justify-between text-center z-10 pointer-events-none py-1 px-1.5">
+        <div className="absolute top-[28.5%] bottom-[21%] left-[18%] right-[18%] flex flex-col items-center justify-between text-center z-10 pointer-events-none py-1 px-1.5">
           
           {/* 1. Header & Couple Names */}
           <motion.div
@@ -686,8 +513,8 @@ export const MughalPalacePortalTemplate: React.FC<TemplateRenderContext> = ({ da
 
         </div>
 
-        {/* Animated Royal Dancing Couple (Conceals static background drawing and sways in romantic waltz) */}
-        <DancingCouple />
+        {/* Romantic Couple Video (Seamless Background Removal) */}
+        <RomanticCoupleVideo />
 
       </motion.div>
 
