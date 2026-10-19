@@ -70,7 +70,9 @@ export default function AdminSettingsPage() {
     'story-royal-emerald',
     'story-boho-terracotta',
     'wax-silk-reveal',
-    'arabian-crescent-lantern'
+    'arabian-crescent-lantern',
+    'laser-gold-gatefold',
+    'vintage-calla-blooms'
   ];
 
   return (

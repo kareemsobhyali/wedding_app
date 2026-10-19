@@ -20,6 +20,8 @@ const TEMPLATES = [
   { id: 'story-boho-terracotta', slug: 'story-boho-terracotta', name: '📱 Boho Terracotta Story (ستوري بوهو دافئ ورومانسي)' },
   { id: 'wax-silk-reveal', slug: 'wax-silk-reveal', name: '💌 Wax Seal & Silk (كسر الختم الشمعي والمظروف الحريري)' },
   { id: 'arabian-crescent-lantern', slug: 'arabian-crescent-lantern', name: '🌙 Arabian Crescent & Lanterns (الهلال المذهب والفوانيس الملكية)' },
+  { id: 'laser-gold-gatefold', slug: 'laser-gold-gatefold', name: '🎀 Laser-Cut Gold Gatefold (الأبواب الذهبية المخرمة بالليزر)' },
+  { id: 'vintage-calla-blooms', slug: 'vintage-calla-blooms', name: '🕊️ Vintage Calla Blooms (الرومانسية الكلاسيكية وزهور الكالا)' },
 ];
 
 export default function AdminEditForm({ invitation, apiToken }: { invitation: any, apiToken: string }) {

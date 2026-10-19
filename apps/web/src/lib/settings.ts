@@ -25,7 +25,9 @@ export const defaultSettings = {
     'story-royal-emerald': '/preview?template=story-royal-emerald',
     'story-boho-terracotta': '/preview?template=story-boho-terracotta',
     'wax-silk-reveal': '/preview?template=wax-silk-reveal',
-    'arabian-crescent-lantern': '/preview?template=arabian-crescent-lantern'
+    'arabian-crescent-lantern': '/preview?template=arabian-crescent-lantern',
+    'laser-gold-gatefold': '/preview?template=laser-gold-gatefold',
+    'vintage-calla-blooms': '/preview?template=vintage-calla-blooms'
   },
   previewImages: {}
 };

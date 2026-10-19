@@ -15,6 +15,8 @@ import { StoryRoyalEmeraldTemplate } from './designs/story-royal-emerald';
 import { StoryBohoTerracottaTemplate } from './designs/story-boho-terracotta';
 import { WaxSilkRevealTemplate } from './designs/wax-silk-reveal';
 import { ArabianCrescentLanternTemplate } from './designs/arabian-crescent-lantern';
+import { LaserGoldGatefoldTemplate } from './designs/laser-gold-gatefold';
+import { VintageCallaBloomsTemplate } from './designs/vintage-calla-blooms';
 
 export interface RegisteredTemplate {
   component: React.FC<TemplateRenderContext>;
@@ -396,6 +398,70 @@ export const templateRegistry: Record<string, RegisteredTemplate> = {
         { key: 'timeline3Time', label: 'الفقرة 3 - التوقيت', type: 'text', defaultValue: '10:15 PM' },
         { key: 'timeline3Desc', label: 'الفقرة 3 - الوصف', type: 'text', defaultValue: 'بوفيه عشاء فاخر احتفاءً بكم واحتفال حتى النهاية' },
         { key: 'closingDuaa', label: 'دعاء الختام المبارك', type: 'text', defaultValue: '«بَارَكَ اللَّهُ لَكُمَا وَبَارَكَ عَلَيْكُمَا وَجَمَعَ بَيْنَكُمَا فِي خَيْرٍ» ✨' }
+      ]
+    }
+  },
+  'laser-gold-gatefold': {
+    component: LaserGoldGatefoldTemplate,
+    metadata: {
+      id: 'laser-gold-gatefold',
+      name: 'Laser-Cut Gold Gatefold 🎀',
+      description: 'أبواب ذهبية مقصوصة بالليزر ومزخرفة بأناقة، تنفتح بنعومة مع فك شريط الساتان الملكي.',
+      previewImage: 'https://images.unsplash.com/photo-1519225421980-715cb0215aed?q=80&w=1000&auto=format&fit=crop',
+      version: '1.0.0',
+      supportedFeatures: ['HERO', 'VENUE', 'MAPS', 'MUSIC', 'COUNTDOWN', 'CONTACTS', 'SHARE'],
+      customFields: [
+        { key: 'monogramCrest', label: 'أحرف المونوغرام على الشريط (مثال: A & F)', type: 'text', defaultValue: '' },
+        { key: 'ribbonColor', label: 'لون شريط الساتان (burgundy / emerald / gold)', type: 'text', defaultValue: 'burgundy' },
+        { key: 'ribbonHint', label: 'نص تلميح فك الشريط', type: 'text', defaultValue: 'انقر على شريط الساتان لفك عقدة البوابة الذهبية' },
+        { key: 'introVerse', label: 'الآية الكريمة أو عبارة الترحيب', type: 'textarea', defaultValue: '«وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا وَجَعَلَ بَيْنَكُم مَّوَدَّةً وَرَحْمَةً»' },
+        { key: 'invitationIntro', label: 'مقدمة بطاقة الدعوة', type: 'text', defaultValue: 'يتشرف العروسان بدعوتكم لحضور حفل زفافهما الملكي' },
+        { key: 'invitationNote', label: 'نص بطاقة الدعوة الملكية', type: 'textarea', defaultValue: 'يسعدنا ويشرفنا حضوركم ومشاركتنا فرحة العمر في هذا اليوم المبارك، لتكتمل سعادتنا برؤيتكم بيننا.' },
+        { key: 'dressCode', label: 'قواعد اللباس (Dress Code)', type: 'text', defaultValue: 'ملابس سهرة ملكية راقية / Formal Wear' },
+        { key: 'timeline1Title', label: 'الفقرة 1 - العنوان', type: 'text', defaultValue: 'استقبال الضيوف الكرام' },
+        { key: 'timeline1Time', label: 'الفقرة 1 - التوقيت', type: 'text', defaultValue: '07:30 PM' },
+        { key: 'timeline1Desc', label: 'الفقرة 1 - الوصف', type: 'text', defaultValue: 'مراسم الترحيب وبداية توافد الأهل والأحباب' },
+        { key: 'timeline2Title', label: 'الفقرة 2 - العنوان', type: 'text', defaultValue: 'الزفة وعقد القران' },
+        { key: 'timeline2Time', label: 'الفقرة 2 - التوقيت', type: 'text', defaultValue: '08:45 PM' },
+        { key: 'timeline2Desc', label: 'الفقرة 2 - الوصف', type: 'text', defaultValue: 'لحظات مباركة البداية وبدء مراسم الاحتفال الملكي' },
+        { key: 'timeline3Title', label: 'الفقرة 3 - العنوان', type: 'text', defaultValue: 'العشاء الملكي' },
+        { key: 'timeline3Time', label: 'الفقرة 3 - التوقيت', type: 'text', defaultValue: '10:15 PM' },
+        { key: 'timeline3Desc', label: 'الفقرة 3 - الوصف', type: 'text', defaultValue: 'بوفيه عشاء فاخر احتفاءً بضيوفنا الكرام' },
+        { key: 'closingMessage', label: 'العبارة الختامية', type: 'text', defaultValue: 'بكم تدوم الأفراح وتكتمل سعادتنا في هذه الليلة الملكية 🤍' }
+      ]
+    }
+  },
+  'vintage-calla-blooms': {
+    component: VintageCallaBloomsTemplate,
+    metadata: {
+      id: 'vintage-calla-blooms',
+      name: 'Vintage Calla Blooms 🕊️',
+      description: 'رومانسية كلاسيكية مع الدانتيل الفرنسي وزهور الكالا البيضاء المتفتحة وقصة حب العروسين.',
+      previewImage: 'https://images.unsplash.com/photo-1522673607200-164d1b6ce486?q=80&w=1000&auto=format&fit=crop',
+      version: '1.0.0',
+      supportedFeatures: ['HERO', 'VENUE', 'MAPS', 'MUSIC', 'COUNTDOWN', 'CONTACTS', 'SHARE'],
+      customFields: [
+        { key: 'coverHint', label: 'نص تلميح الغلاف والفتح', type: 'text', defaultValue: 'انقر على باقة زهور الكالا لتفتح الدعوة وتتفتح البتلات' },
+        { key: 'introVerse', label: 'الآية الكريمة أو عبارة الترحيب', type: 'textarea', defaultValue: '«وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا وَجَعَلَ بَيْنَكُم مَّوَدَّةً وَرَحْمَةً»' },
+        { key: 'invitationIntro', label: 'مقدمة بطاقة الدعوة', type: 'text', defaultValue: 'معاً نكتب فصلاً جديداً من الحكاية، ويسرنا حضوركم' },
+        { key: 'invitationNote', label: 'نص بطاقة الدعوة الترحيبي', type: 'textarea', defaultValue: 'يسعدنا ويشرفنا حضوركم ومشاركتنا فرحة العمر وتتويج مسيرة الحب في ليلتنا المنتظرة، لتكتمل سعادتنا برؤيتكم بيننا.' },
+        { key: 'story1Title', label: 'قصتنا - المحطة الأولى (العنوان)', type: 'text', defaultValue: 'اللقاء الأول' },
+        { key: 'story1Date', label: 'قصتنا - المحطة الأولى (التاريخ/التسمية)', type: 'text', defaultValue: 'المحطة الأولى' },
+        { key: 'story1Desc', label: 'قصتنا - المحطة الأولى (الوصف)', type: 'textarea', defaultValue: 'حيث تلاقت الأرواح وبدأت أجمل حكايات العمر.' },
+        { key: 'story2Title', label: 'قصتنا - المحطة الثانية (العنوان)', type: 'text', defaultValue: 'الخطوبة والعهد' },
+        { key: 'story2Date', label: 'قصتنا - المحطة الثانية (التاريخ/التسمية)', type: 'text', defaultValue: 'المحطة الثانية' },
+        { key: 'story2Desc', label: 'قصتنا - المحطة الثانية (الوصف)', type: 'textarea', defaultValue: 'وعدنا بعضنا على الحب والوفاء ومواصلة الدرب معاً.' },
+        { key: 'dressCode', label: 'قواعد اللباس (Dress Code)', type: 'text', defaultValue: 'أناقة ناعمة وكلاسيكية / Pastel & Formal' },
+        { key: 'timeline1Title', label: 'الفقرة 1 - العنوان', type: 'text', defaultValue: 'استقبال الضيوف الكرام' },
+        { key: 'timeline1Time', label: 'الفقرة 1 - التوقيت', type: 'text', defaultValue: '07:30 PM' },
+        { key: 'timeline1Desc', label: 'الفقرة 1 - الوصف', type: 'text', defaultValue: 'مراسم الترحيب وبداية توافد الأهل والأحباب' },
+        { key: 'timeline2Title', label: 'الفقرة 2 - العنوان', type: 'text', defaultValue: 'الزفة وعقد القران' },
+        { key: 'timeline2Time', label: 'الفقرة 2 - التوقيت', type: 'text', defaultValue: '08:45 PM' },
+        { key: 'timeline2Desc', label: 'الفقرة 2 - الوصف', type: 'text', defaultValue: 'لحظات مباركة البداية وتبادل التهاني' },
+        { key: 'timeline3Title', label: 'الفقرة 3 - العنوان', type: 'text', defaultValue: 'العشاء واحتفال الزفاف' },
+        { key: 'timeline3Time', label: 'الفقرة 3 - التوقيت', type: 'text', defaultValue: '10:15 PM' },
+        { key: 'timeline3Desc', label: 'الفقرة 3 - الوصف', type: 'text', defaultValue: 'بوفيه عشاء فاخر احتفاءً بضيوفنا الكرام' },
+        { key: 'closingMessage', label: 'العبارة الختامية', type: 'text', defaultValue: 'فرحتنا لا تكتمل إلا بوجودكم ورؤيتكم بيننا في ليلتنا المنتظرة 🤍' }
       ]
     }
   }
