@@ -93,7 +93,7 @@ export const CathedralGrandArchTemplate: React.FC<TemplateRenderContext> = ({ da
 
   return (
     <div 
-      className="min-h-screen w-full flex flex-col items-center justify-center p-2 sm:p-6 md:p-10 font-serif bg-[#181512] selection:bg-[#D4AF37]/40 text-[#43331C] overflow-x-hidden relative"
+      className="min-h-screen w-full flex flex-col items-center justify-start sm:justify-center p-0 sm:p-6 md:p-10 font-serif bg-[#181512] selection:bg-[#D4AF37]/40 text-[#43331C] overflow-x-hidden relative pb-28 sm:pb-32"
       style={{
         backgroundImage: 'radial-gradient(circle at 50% 40%, #2A231A 0%, #120F0C 100%)'
       }}
@@ -104,22 +104,22 @@ export const CathedralGrandArchTemplate: React.FC<TemplateRenderContext> = ({ da
       )}
 
       {/* Floating Controls */}
-      <div className="fixed top-4 right-4 z-40 flex items-center gap-2">
+      <div className="fixed top-3 right-3 sm:top-4 sm:right-4 z-40 flex items-center gap-2">
         {data.music && (
           <button
             onClick={toggleAudio}
-            className="w-11 h-11 rounded-full bg-black/60 backdrop-blur-md shadow-lg border border-[#D4AF37]/50 flex items-center justify-center text-[#E6C687] hover:bg-[#8C6D38] hover:text-white transition-all transform hover:scale-105 active:scale-95"
+            className="w-10 h-10 rounded-full bg-black/60 backdrop-blur-md shadow-lg border border-[#D4AF37]/50 flex items-center justify-center text-[#E6C687] hover:bg-[#8C6D38] hover:text-white transition-all transform hover:scale-105 active:scale-95"
             title={isPlayingAudio ? 'كتم الموسيقى' : 'تشغيل الموسيقى'}
           >
-            {isPlayingAudio ? <Volume2 className="w-5 h-5 animate-pulse" /> : <VolumeX className="w-5 h-5" />}
+            {isPlayingAudio ? <Volume2 className="w-4 h-4 animate-pulse" /> : <VolumeX className="w-4 h-4" />}
           </button>
         )}
         <button
           onClick={handleShare}
-          className="w-11 h-11 rounded-full bg-black/60 backdrop-blur-md shadow-lg border border-[#D4AF37]/50 flex items-center justify-center text-[#E6C687] hover:bg-[#8C6D38] hover:text-white transition-all transform hover:scale-105 active:scale-95"
+          className="w-10 h-10 rounded-full bg-black/60 backdrop-blur-md shadow-lg border border-[#D4AF37]/50 flex items-center justify-center text-[#E6C687] hover:bg-[#8C6D38] hover:text-white transition-all transform hover:scale-105 active:scale-95"
           title="مشاركة الدعوة"
         >
-          <Share2 className="w-5 h-5" />
+          <Share2 className="w-4 h-4" />
         </button>
       </div>
 
@@ -129,7 +129,7 @@ export const CathedralGrandArchTemplate: React.FC<TemplateRenderContext> = ({ da
         initial={{ opacity: 0, scale: 0.98 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.8 }}
-        className="w-full max-w-[480px] aspect-[9/16] min-h-[820px] sm:min-h-[880px] relative rounded-[32px] overflow-hidden shadow-[0_30px_90px_rgba(0,0,0,0.6),0_10px_30px_rgba(212,175,55,0.2)] cursor-pointer select-none group"
+        className="w-full sm:max-w-[480px] aspect-[9/16] min-h-[780px] sm:min-h-[880px] relative sm:rounded-[32px] rounded-none overflow-hidden shadow-none sm:shadow-[0_30px_90px_rgba(0,0,0,0.6),0_10px_30px_rgba(212,175,55,0.2)] cursor-pointer select-none group border-0 sm:border border-[#D4AF37]/30"
       >
         {/* Background Archway Image with Chandeliers & Cathedral */}
         <div 
@@ -387,41 +387,47 @@ export const CathedralGrandArchTemplate: React.FC<TemplateRenderContext> = ({ da
       </motion.div>
 
       {/* Action Controls Bar */}
+      {/* Luxury Glassmorphism Floating Action Dock */}
       <motion.div 
-        initial={{ y: 20, opacity: 0 }}
+        initial={{ y: 30, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ delay: 0.8 }}
-        className="mt-6 flex items-center justify-center gap-3 flex-wrap max-w-md w-full px-4"
+        transition={{ delay: 0.5, duration: 0.6 }}
+        className="fixed bottom-4 sm:bottom-6 left-1/2 -translate-x-1/2 z-40 w-[94%] max-w-[440px]"
       >
-        <button
-          onClick={() => setShowRsvpModal(true)}
-          className="flex-1 min-w-[130px] py-3 px-5 rounded-full bg-gradient-to-r from-[#967431] via-[#B8860B] to-[#967431] text-white shadow-lg shadow-[#967431]/40 font-medium text-xs sm:text-sm tracking-wide flex items-center justify-center gap-2 hover:brightness-110 active:scale-95 transition-all"
-        >
-          <Heart className="w-4 h-4 fill-white/80" />
-          <span>تأكيد الحضور (RSVP)</span>
-        </button>
+        <div className="backdrop-blur-xl bg-black/80 border border-[#D4AF37]/50 shadow-[0_12px_36px_rgba(0,0,0,0.5)] rounded-full p-1.5 flex items-center justify-between gap-1.5">
+          {/* Google Maps Button */}
+          {data.googleMapsUrl && (
+            <a
+              href={data.googleMapsUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="py-2.5 px-3 sm:px-4 rounded-full bg-stone-900/90 hover:bg-stone-800 border border-[#D4AF37]/40 text-[#E6C687] font-medium text-xs flex items-center justify-center gap-1.5 active:scale-95 transition-all shadow-xs"
+            >
+              <MapPin className="w-3.5 h-3.5 text-[#D4AF37]" />
+              <span className="font-cairo">الموقع</span>
+            </a>
+          )}
 
-        {data.googleMapsUrl && (
+          {/* Add to Calendar Button */}
           <a
-            href={data.googleMapsUrl}
+            href={gcalUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="py-3 px-4 rounded-full bg-black/70 text-[#E6C687] border border-[#D4AF37]/40 shadow-md font-medium text-xs sm:text-sm flex items-center gap-1.5 hover:bg-black/90 active:scale-95 transition-all"
+            className="py-2.5 px-3 sm:px-4 rounded-full bg-stone-900/90 hover:bg-stone-800 border border-[#D4AF37]/40 text-[#E6C687] font-medium text-xs flex items-center justify-center gap-1.5 active:scale-95 transition-all shadow-xs"
           >
-            <MapPin className="w-4 h-4" />
-            <span>الموقع</span>
+            <Calendar className="w-3.5 h-3.5 text-[#D4AF37]" />
+            <span className="font-cairo">حفظ الموعد</span>
           </a>
-        )}
 
-        <a
-          href={gcalUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="py-3 px-4 rounded-full bg-black/70 text-[#E6C687] border border-[#D4AF37]/40 shadow-md font-medium text-xs sm:text-sm flex items-center gap-1.5 hover:bg-black/90 active:scale-95 transition-all"
-        >
-          <Calendar className="w-4 h-4" />
-          <span>حفظ الموعد</span>
-        </a>
+          {/* Primary RSVP Button */}
+          <button
+            onClick={() => setShowRsvpModal(true)}
+            className="flex-1 min-w-[125px] py-2.5 px-3 sm:px-4 rounded-full bg-gradient-to-r from-[#967431] via-[#D4AF37] to-[#8C6D38] text-white shadow-md text-xs sm:text-sm font-semibold flex items-center justify-center gap-1.5 hover:brightness-110 active:scale-95 transition-all"
+          >
+            <Heart className="w-3.5 h-3.5 fill-white" />
+            <span className="font-cairo font-bold">تأكيد الحضور (RSVP)</span>
+          </button>
+        </div>
       </motion.div>
 
       {/* RSVP Modal Dialog */}
