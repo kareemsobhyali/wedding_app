@@ -27,7 +27,9 @@ export const defaultSettings = {
     'wax-silk-reveal': '/preview?template=wax-silk-reveal',
     'arabian-crescent-lantern': '/preview?template=arabian-crescent-lantern',
     'laser-gold-gatefold': '/preview?template=laser-gold-gatefold',
-    'vintage-calla-blooms': '/preview?template=vintage-calla-blooms'
+    'vintage-calla-blooms': '/preview?template=vintage-calla-blooms',
+    'blooming-garden-3d': '/preview?template=blooming-garden-3d',
+    'pearl-silk-minimalist': '/preview?template=pearl-silk-minimalist'
   },
   previewImages: {}
 };

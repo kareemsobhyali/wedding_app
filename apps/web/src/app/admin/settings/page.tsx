@@ -72,7 +72,9 @@ export default function AdminSettingsPage() {
     'wax-silk-reveal',
     'arabian-crescent-lantern',
     'laser-gold-gatefold',
-    'vintage-calla-blooms'
+    'vintage-calla-blooms',
+    'blooming-garden-3d',
+    'pearl-silk-minimalist'
   ];
 
   return (

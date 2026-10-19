@@ -22,6 +22,8 @@ const TEMPLATES = [
   { id: 'arabian-crescent-lantern', slug: 'arabian-crescent-lantern', name: '🌙 Arabian Crescent & Lanterns (الهلال المذهب والفوانيس الملكية)' },
   { id: 'laser-gold-gatefold', slug: 'laser-gold-gatefold', name: '🎀 Laser-Cut Gold Gatefold (الأبواب الذهبية المخرمة بالليزر)' },
   { id: 'vintage-calla-blooms', slug: 'vintage-calla-blooms', name: '🕊️ Vintage Calla Blooms (الرومانسية الكلاسيكية وزهور الكالا)' },
+  { id: 'blooming-garden-3d', slug: 'blooming-garden-3d', name: '🌸 3D Blooming Garden (بستان الزهور وتفتح البتلات ثلاثي الأبعاد)' },
+  { id: 'pearl-silk-minimalist', slug: 'pearl-silk-minimalist', name: '🪞 Pearl Silk Minimalist (أناقة الحرير الإيفواري وخاتم اللؤلؤ)' },
 ];
 
 export default function AdminEditForm({ invitation, apiToken }: { invitation: any, apiToken: string }) {

@@ -17,6 +17,8 @@ import { WaxSilkRevealTemplate } from './designs/wax-silk-reveal';
 import { ArabianCrescentLanternTemplate } from './designs/arabian-crescent-lantern';
 import { LaserGoldGatefoldTemplate } from './designs/laser-gold-gatefold';
 import { VintageCallaBloomsTemplate } from './designs/vintage-calla-blooms';
+import { BloomingGarden3DTemplate } from './designs/blooming-garden-3d';
+import { PearlSilkMinimalistTemplate } from './designs/pearl-silk-minimalist';
 
 export interface RegisteredTemplate {
   component: React.FC<TemplateRenderContext>;
@@ -462,6 +464,64 @@ export const templateRegistry: Record<string, RegisteredTemplate> = {
         { key: 'timeline3Time', label: 'الفقرة 3 - التوقيت', type: 'text', defaultValue: '10:15 PM' },
         { key: 'timeline3Desc', label: 'الفقرة 3 - الوصف', type: 'text', defaultValue: 'بوفيه عشاء فاخر احتفاءً بضيوفنا الكرام' },
         { key: 'closingMessage', label: 'العبارة الختامية', type: 'text', defaultValue: 'فرحتنا لا تكتمل إلا بوجودكم ورؤيتكم بيننا في ليلتنا المنتظرة 🤍' }
+      ]
+    }
+  },
+  'blooming-garden-3d': {
+    component: BloomingGarden3DTemplate,
+    metadata: {
+      id: 'blooming-garden-3d',
+      name: '3D Blooming Garden 🌸',
+      description: 'بستان زهور ربيعي ثلاثي الأبعاد تتفتح بتلاته بنعومة مع زجاج مصقول وبطاقة رومانسية ساحرة.',
+      previewImage: 'https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=1000&auto=format&fit=crop',
+      version: '1.0.0',
+      supportedFeatures: ['HERO', 'VENUE', 'MAPS', 'MUSIC', 'COUNTDOWN', 'CONTACTS', 'SHARE'],
+      customFields: [
+        { key: 'flowerGreeting', label: 'العنوان أعلى البستان (مثال: بستان الحب والفرح)', type: 'text', defaultValue: 'بستان الحب والفرح' },
+        { key: 'bloomingHint', label: 'نص تلميح تفتح البتلات', type: 'text', defaultValue: 'انقر على باقة الزهور لتتفتح البتلات وتبدأ الدعوة' },
+        { key: 'introVerse', label: 'الآية الكريمة أو عبارة الترحيب', type: 'textarea', defaultValue: '«وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا وَجَعَلَ بَيْنَكُم مَّوَدَّةً وَرَحْمَةً»' },
+        { key: 'invitationIntro', label: 'مقدمة بطاقة الدعوة', type: 'text', defaultValue: 'يسعدنا ويشرفنا دعوتكم لحضور حفل زفافنا الميمون' },
+        { key: 'invitationNote', label: 'نص بطاقة الدعوة الترحيبي', type: 'textarea', defaultValue: 'بين عبق الزهور ونسمات الفرح، يسعدنا أن تشاركونا أجمل لحظات العمر لتكتمل سعادتنا بوجودكم معنا في ليلتنا المنتظرة.' },
+        { key: 'dressCode', label: 'قواعد اللباس (Dress Code)', type: 'text', defaultValue: 'أزياء ربيعية راقية / Floral & Formal' },
+        { key: 'timeline1Title', label: 'الفقرة 1 - العنوان', type: 'text', defaultValue: 'استقبال الضيوف الكرام' },
+        { key: 'timeline1Time', label: 'الفقرة 1 - التوقيت', type: 'text', defaultValue: '07:30 PM' },
+        { key: 'timeline1Desc', label: 'الفقرة 1 - الوصف', type: 'text', defaultValue: 'مراسم الترحيب بعبق الزهور وبداية توافد الأهل والأحباب' },
+        { key: 'timeline2Title', label: 'الفقرة 2 - العنوان', type: 'text', defaultValue: 'الزفة وعقد القران' },
+        { key: 'timeline2Time', label: 'الفقرة 2 - التوقيت', type: 'text', defaultValue: '08:45 PM' },
+        { key: 'timeline2Desc', label: 'الفقرة 2 - الوصف', type: 'text', defaultValue: 'لحظات مباركة البداية وإطلالة العروسين الكريمة' },
+        { key: 'timeline3Title', label: 'الفقرة 3 - العنوان', type: 'text', defaultValue: 'العشاء الملكي' },
+        { key: 'timeline3Time', label: 'الفقرة 3 - التوقيت', type: 'text', defaultValue: '10:15 PM' },
+        { key: 'timeline3Desc', label: 'الفقرة 3 - الوصف', type: 'text', defaultValue: 'بوفيه عشاء فاخر احتفاءً بضيوفنا الكرام' },
+        { key: 'closingMessage', label: 'العبارة الختامية', type: 'text', defaultValue: 'بوجودكم تكتمل فرحتنا وتزهر أوقاتنا بأجمل الذكريات 🤍' }
+      ]
+    }
+  },
+  'pearl-silk-minimalist': {
+    component: PearlSilkMinimalistTemplate,
+    metadata: {
+      id: 'pearl-silk-minimalist',
+      name: 'Pearl Silk Minimalist 🪞',
+      description: 'أناقة الحرير الإيفواري المنسدل مع خاتم الزفاف اللؤلؤي البراق والتصميم المينيمالي الفاخر.',
+      previewImage: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=1000&auto=format&fit=crop',
+      version: '1.0.0',
+      supportedFeatures: ['HERO', 'VENUE', 'MAPS', 'MUSIC', 'COUNTDOWN', 'CONTACTS', 'SHARE'],
+      customFields: [
+        { key: 'silkHint', label: 'نص تلميح طيات الحرير والخاتم', type: 'text', defaultValue: 'المس خاتم اللؤلؤ لفتح طيات الحرير وبدء الدعوة' },
+        { key: 'monogramText', label: 'أحرف المونوغرام (مثال: M & K)', type: 'text', defaultValue: '' },
+        { key: 'introVerse', label: 'الآية الكريمة أو عبارة الترحيب', type: 'textarea', defaultValue: '«وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا وَجَعَلَ بَيْنَكُم مَّوَدَّةً وَرَحْمَةً»' },
+        { key: 'invitationIntro', label: 'مقدمة بطاقة الدعوة', type: 'text', defaultValue: 'في ليلة من ليالي العمر ينسجها الحرير ويزينها اللؤلؤ' },
+        { key: 'invitationNote', label: 'نص بطاقة الدعوة الترحيبي', type: 'textarea', defaultValue: 'نتشرف بدعوتكم لمشاركتنا فرحة العمر والاحتفال بزفافنا الميمون، لتكتمل سعادتنا بحضوركم الكريم ومشاركتنا أبهى لحظات البداية.' },
+        { key: 'dressCode', label: 'قواعد اللباس (Dress Code)', type: 'text', defaultValue: 'أزياء سهرة راقية بألوان الباستيل واللؤلؤ / Pearl & Formal Elegance' },
+        { key: 'timeline1Title', label: 'الفقرة 1 - العنوان', type: 'text', defaultValue: 'استقبال الضيوف الكرام' },
+        { key: 'timeline1Time', label: 'الفقرة 1 - التوقيت', type: 'text', defaultValue: '07:30 PM' },
+        { key: 'timeline1Desc', label: 'الفقرة 1 - الوصف', type: 'text', defaultValue: 'الترحيب بنسمات الورد وقهوة الضيافة وتوافد الأهل والأحباب' },
+        { key: 'timeline2Title', label: 'الفقرة 2 - العنوان', type: 'text', defaultValue: 'زفة العروسين وعقد القران' },
+        { key: 'timeline2Time', label: 'الفقرة 2 - التوقيت', type: 'text', defaultValue: '08:45 PM' },
+        { key: 'timeline2Desc', label: 'الفقرة 2 - الوصف', type: 'text', defaultValue: 'إطلالة العروسين الكريمة وتوثيق أجمل لحظات العمر ومباركة البداية' },
+        { key: 'timeline3Title', label: 'الفقرة 3 - العنوان', type: 'text', defaultValue: 'مأدبة العشاء الملكي' },
+        { key: 'timeline3Time', label: 'الفقرة 3 - التوقيت', type: 'text', defaultValue: '10:15 PM' },
+        { key: 'timeline3Desc', label: 'الفقرة 3 - الوصف', type: 'text', defaultValue: 'بوفيه عشاء فاخر احتفاءً بضيوفنا الأعزاء' },
+        { key: 'closingMessage', label: 'العبارة الختامية', type: 'text', defaultValue: 'حضوركم يضفي على ليلتنا رونقاً وسعادة لا تُنسى 🤍' }
       ]
     }
   }
