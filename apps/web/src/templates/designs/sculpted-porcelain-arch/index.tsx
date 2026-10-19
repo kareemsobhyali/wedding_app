@@ -180,15 +180,15 @@ export const SculptedPorcelainArchTemplate: React.FC<TemplateRenderContext> = ({
 
         {/* Central Cartouche Typography & Layout (STRICTLY INSIDE THE IVORY OVAL) */}
         <div 
-          className="absolute top-[27%] bottom-[25%] left-[14%] right-[14%] flex flex-col items-center justify-evenly z-10 text-center pointer-events-none select-none max-w-[310px] mx-auto overflow-hidden py-1"
+          className="absolute top-[23%] bottom-[22%] left-[8%] right-[8%] flex flex-col items-center justify-evenly z-10 text-center pointer-events-none select-none max-w-[330px] mx-auto py-1"
         >
-          {/* 1. Top Opening Blessing / Verses */}
-          <div className="space-y-1 max-w-[280px]">
+          {/* 1. Top Opening Blessing / Verses (Circled Area - Prominent Heading) */}
+          <div className="space-y-1 sm:space-y-1.5 max-w-[300px] w-full">
             {custom.welcomeSubtitle1 && (
               <p 
                 className={isArabic(custom.welcomeSubtitle1) 
-                  ? "text-xs sm:text-sm text-[#7D5A1E] font-bold tracking-normal leading-relaxed font-amiri" 
-                  : "text-[10px] sm:text-xs uppercase tracking-[0.16em] text-[#8C6D38] font-semibold leading-relaxed font-cinzel"}
+                  ? "text-lg sm:text-xl md:text-2xl text-[#7D5A1E] font-bold tracking-normal leading-normal font-amiri" 
+                  : "text-xs sm:text-sm uppercase tracking-[0.18em] text-[#8C6D38] font-semibold leading-relaxed font-cinzel"}
                 style={{ fontFamily: isArabic(custom.welcomeSubtitle1) ? "'Amiri', 'Aref Ruqaa', serif" : "'Cinzel', serif" }}
               >
                 {custom.welcomeSubtitle1}
@@ -197,8 +197,8 @@ export const SculptedPorcelainArchTemplate: React.FC<TemplateRenderContext> = ({
             {custom.welcomeSubtitle2 && (
               <p 
                 className={isArabic(custom.welcomeSubtitle2) 
-                  ? "text-[11px] sm:text-xs text-[#8C6D38] font-semibold tracking-normal leading-normal font-amiri" 
-                  : "text-[9.5px] sm:text-[10.5px] uppercase tracking-[0.14em] text-[#8C6D38] font-medium leading-normal font-cinzel"}
+                  ? "text-base sm:text-lg md:text-xl text-[#7D5A1E] font-bold tracking-normal leading-snug font-amiri" 
+                  : "text-[11px] sm:text-xs uppercase tracking-[0.14em] text-[#8C6D38] font-medium leading-normal font-cinzel"}
                 style={{ fontFamily: isArabic(custom.welcomeSubtitle2) ? "'Amiri', serif" : "'Cinzel', serif" }}
               >
                 {custom.welcomeSubtitle2}
@@ -207,8 +207,8 @@ export const SculptedPorcelainArchTemplate: React.FC<TemplateRenderContext> = ({
             {custom.welcomeSubtitle3 && (
               <p 
                 className={isArabic(custom.welcomeSubtitle3) 
-                  ? "text-[11px] sm:text-xs text-[#8C6D38] font-medium tracking-normal leading-normal font-amiri" 
-                  : "text-[9px] sm:text-[10px] uppercase tracking-[0.12em] text-[#8C6D38] font-medium leading-normal font-cinzel"}
+                  ? "text-base sm:text-lg md:text-xl text-[#8C6D38] font-semibold tracking-normal leading-snug font-amiri" 
+                  : "text-[11px] sm:text-xs uppercase tracking-[0.12em] text-[#8C6D38] font-medium leading-normal font-cinzel"}
                 style={{ fontFamily: isArabic(custom.welcomeSubtitle3) ? "'Amiri', serif" : "'Cinzel', serif" }}
               >
                 {custom.welcomeSubtitle3}
@@ -216,32 +216,32 @@ export const SculptedPorcelainArchTemplate: React.FC<TemplateRenderContext> = ({
             )}
           </div>
 
-          {/* 2. Couple Names (Centerpiece Calligraphy) */}
-          <div className="my-1 max-w-[290px] w-full">
+          {/* 2. Couple Names (Centerpiece Grand Calligraphy - Truly Royal & Bold) */}
+          <div className="my-1.5 max-w-[320px] w-full">
             <div 
-              className="flex items-center justify-center gap-1.5 sm:gap-2.5 flex-wrap"
+              className="flex items-center justify-center gap-2 sm:gap-3 flex-wrap"
               dir={isArabic(data.groomName || data.brideName) ? "rtl" : "ltr"}
             >
               <span 
-                className="text-2xl sm:text-3xl md:text-4xl text-[#6B4B18] font-normal leading-tight"
+                className="text-4xl sm:text-5xl md:text-6xl text-[#6B4B18] font-normal leading-none py-1"
                 style={{ 
                   fontFamily: isArabic(data.groomName) ? "'Aref Ruqaa', 'Amiri', serif" : "'Alex Brush', 'Great Vibes', cursive",
-                  textShadow: '0 1px 2px rgba(255,255,255,0.9), 0 0 1px rgba(107,75,24,0.1)'
+                  textShadow: '0 1px 2px rgba(255,255,255,0.95), 0 0 1px rgba(107,75,24,0.15)'
                 }}
               >
                 {data.groomName}
               </span>
               <span 
-                className="text-sm sm:text-base text-[#9E7B3A] italic font-serif px-1 font-semibold"
+                className="text-xl sm:text-2xl md:text-3xl text-[#9E7B3A] italic font-serif px-1.5 font-bold"
                 style={{ fontFamily: "'Cormorant Garamond', serif" }}
               >
                 {custom.connectorText || (isArabic(data.groomName) ? 'و' : 'Ve')}
               </span>
               <span 
-                className="text-2xl sm:text-3xl md:text-4xl text-[#6B4B18] font-normal leading-tight"
+                className="text-4xl sm:text-5xl md:text-6xl text-[#6B4B18] font-normal leading-none py-1"
                 style={{ 
                   fontFamily: isArabic(data.brideName) ? "'Aref Ruqaa', 'Amiri', serif" : "'Alex Brush', 'Great Vibes', cursive",
-                  textShadow: '0 1px 2px rgba(255,255,255,0.9), 0 0 1px rgba(107,75,24,0.1)'
+                  textShadow: '0 1px 2px rgba(255,255,255,0.95), 0 0 1px rgba(107,75,24,0.15)'
                 }}
               >
                 {data.brideName}
@@ -249,9 +249,9 @@ export const SculptedPorcelainArchTemplate: React.FC<TemplateRenderContext> = ({
             </div>
 
             {/* Gold Heart Filigree Flourish SVG */}
-            <div className="flex items-center justify-center my-1">
-              <svg width="100" height="12" viewBox="0 0 120 14" fill="none" className="text-[#8C6D38]">
-                <path d="M0 7H46M74 7H120" stroke="currentColor" strokeWidth="0.9" strokeOpacity="0.75"/>
+            <div className="flex items-center justify-center my-1.5">
+              <svg width="130" height="14" viewBox="0 0 120 14" fill="none" className="text-[#8C6D38]">
+                <path d="M0 7H46M74 7H120" stroke="currentColor" strokeWidth="1" strokeOpacity="0.8"/>
                 <circle cx="48" cy="7" r="1.5" fill="currentColor"/>
                 <circle cx="72" cy="7" r="1.5" fill="currentColor"/>
                 <path d="M60 11C60 11 54 7 54 4.5C54 3 55.5 2 57 2C58.5 2 60 3.5 60 3.5C60 3.5 61.5 2 63 2C64.5 2 66 3 66 4.5C66 7 60 11 60 11Z" fill="currentColor"/>
@@ -259,12 +259,12 @@ export const SculptedPorcelainArchTemplate: React.FC<TemplateRenderContext> = ({
             </div>
           </div>
 
-          {/* 3. Host Families Section */}
-          <div className="space-y-1 max-w-[260px] w-full">
+          {/* 3. Host Families Section (Circled Area - Dignified & Clear) */}
+          <div className="space-y-1.5 max-w-[300px] w-full">
             <p 
               className={isArabic(custom.hostFamiliesTitle) 
-                ? "text-xs sm:text-sm text-[#7D5A1E] font-bold tracking-normal font-amiri" 
-                : "text-[10px] sm:text-[11px] uppercase tracking-[0.16em] text-[#7D5A1E] font-bold font-cinzel"}
+                ? "text-base sm:text-lg md:text-xl text-[#7D5A1E] font-bold tracking-normal font-amiri" 
+                : "text-xs sm:text-sm uppercase tracking-[0.16em] text-[#7D5A1E] font-bold font-cinzel"}
               style={{ fontFamily: isArabic(custom.hostFamiliesTitle) ? "'Amiri', 'Aref Ruqaa', serif" : "'Cinzel', serif" }}
             >
               {custom.hostFamiliesTitle || (isArabicContent ? 'بمباركة الأهل والأحباب' : 'ATALAY VE UYSAL AİLESİ')}
@@ -272,10 +272,10 @@ export const SculptedPorcelainArchTemplate: React.FC<TemplateRenderContext> = ({
 
             {/* Two Family Columns with Vertical Divider */}
             {(custom.family1Father || custom.family2Father) && (
-              <div className="flex items-center justify-center gap-3 text-[11px] sm:text-xs text-[#694E23] pt-0.5">
+              <div className="flex items-center justify-center gap-3 text-sm sm:text-base text-[#694E23] pt-0.5">
                 <div className="text-center font-medium" style={{ fontFamily: isArabic(custom.family1Father) ? "'Amiri', serif" : "'Cormorant Garamond', serif" }}>
                   <p className="font-bold">{custom.family1Father}</p>
-                  {custom.family1Surname && <p className="text-[9px] sm:text-[10px] text-[#8C6D38]">{custom.family1Surname}</p>}
+                  {custom.family1Surname && <p className="text-xs text-[#8C6D38]">{custom.family1Surname}</p>}
                 </div>
 
                 {/* Vertical Divider */}
@@ -285,17 +285,17 @@ export const SculptedPorcelainArchTemplate: React.FC<TemplateRenderContext> = ({
 
                 <div className="text-center font-medium" style={{ fontFamily: isArabic(custom.family2Father) ? "'Amiri', serif" : "'Cormorant Garamond', serif" }}>
                   <p className="font-bold">{custom.family2Father}</p>
-                  {custom.family2Surname && <p className="text-[9px] sm:text-[10px] text-[#8C6D38]">{custom.family2Surname}</p>}
+                  {custom.family2Surname && <p className="text-xs text-[#8C6D38]">{custom.family2Surname}</p>}
                 </div>
               </div>
             )}
 
-            {/* Ceremony Label */}
+            {/* Ceremony Label (e.g. "طلعه ب الحب") */}
             {custom.ceremonyLabel && (
               <p 
                 className={isArabic(custom.ceremonyLabel) 
-                  ? "text-[11px] sm:text-xs font-bold text-[#7D5A1E] tracking-normal font-amiri pt-0.5" 
-                  : "text-[9.5px] sm:text-[10px] font-semibold uppercase tracking-[0.14em] text-[#7D5A1E] font-cinzel pt-0.5"}
+                  ? "text-sm sm:text-base md:text-lg font-bold text-[#7D5A1E] tracking-normal font-amiri pt-0.5" 
+                  : "text-xs sm:text-sm font-semibold uppercase tracking-[0.14em] text-[#7D5A1E] font-cinzel pt-0.5"}
                 style={{ fontFamily: isArabic(custom.ceremonyLabel) ? "'Amiri', serif" : "'Cinzel', serif" }}
               >
                 {custom.ceremonyLabel}
@@ -304,14 +304,14 @@ export const SculptedPorcelainArchTemplate: React.FC<TemplateRenderContext> = ({
           </div>
 
           {/* 4. Signature Calendar Date Section (Rich Gold Engraving Style) */}
-          <div className="w-full max-w-[220px] sm:max-w-[240px] flex flex-col items-center py-1">
+          <div className="w-full max-w-[240px] sm:max-w-[260px] flex flex-col items-center py-1">
             <div className="w-full border-t border-[#8C6D38]/50 my-1" />
             
             <div className="w-full flex items-center justify-between px-2 py-0.5">
               {/* Month Name */}
               <span 
                 className={isArabic(monthName) 
-                  ? "text-xs sm:text-sm font-bold text-[#7D5A1E] tracking-normal font-amiri" 
+                  ? "text-sm sm:text-base font-bold text-[#7D5A1E] tracking-normal font-amiri" 
                   : "text-[11px] sm:text-xs font-bold tracking-[0.16em] text-[#7D5A1E] uppercase font-cinzel"}
                 style={{ fontFamily: isArabic(monthName) ? "'Amiri', serif" : "'Cinzel', serif" }}
               >
@@ -332,7 +332,7 @@ export const SculptedPorcelainArchTemplate: React.FC<TemplateRenderContext> = ({
               {/* Time */}
               <span 
                 className={isArabic(timeFormatted) 
-                  ? "text-xs sm:text-sm font-bold text-[#7D5A1E] tracking-normal font-amiri" 
+                  ? "text-sm sm:text-base font-bold text-[#7D5A1E] tracking-normal font-amiri" 
                   : "text-[10px] sm:text-[11px] font-bold tracking-[0.14em] text-[#7D5A1E] uppercase font-cinzel"}
                 style={{ fontFamily: isArabic(timeFormatted) ? "'Amiri', serif" : "'Cinzel', serif" }}
               >
@@ -344,7 +344,7 @@ export const SculptedPorcelainArchTemplate: React.FC<TemplateRenderContext> = ({
           </div>
 
           {/* 5. Venue (YER) Location Section */}
-          <div className="space-y-0.5 max-w-[260px] w-full">
+          <div className="space-y-0.5 max-w-[280px] w-full">
             <p 
               className={isArabic(custom.venueHeader) 
                 ? "text-xs sm:text-sm font-bold text-[#7D5A1E] tracking-normal font-amiri" 
@@ -356,15 +356,15 @@ export const SculptedPorcelainArchTemplate: React.FC<TemplateRenderContext> = ({
             {data.venueName && (
               <p 
                 className={isArabic(data.venueName) 
-                  ? "text-xs sm:text-sm font-bold text-[#6B4B18] tracking-normal font-amiri" 
-                  : "text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-[#6B4B18] font-cinzel"}
+                  ? "text-sm sm:text-base md:text-lg font-bold text-[#6B4B18] tracking-normal font-amiri" 
+                  : "text-[11px] sm:text-xs font-bold uppercase tracking-wider text-[#6B4B18] font-cinzel"}
                 style={{ fontFamily: isArabic(data.venueName) ? "'Amiri', serif" : "'Cinzel', serif" }}
               >
                 {data.venueName}
               </p>
             )}
             {(data.venueAddress || custom.venueStreet) && (
-              <p className="text-[10px] sm:text-[11px] tracking-normal text-[#694E23] leading-tight line-clamp-1">
+              <p className="text-xs sm:text-sm tracking-normal text-[#694E23] leading-tight line-clamp-1">
                 {custom.venueStreet || data.venueAddress}
               </p>
             )}
