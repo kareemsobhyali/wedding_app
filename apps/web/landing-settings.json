@@ -12,7 +12,10 @@
     "modern-minimalist": "/preview?template=modern-minimalist",
     "floral-romance": "/preview?template=floral-romance",
     "botanical-rustic": "/preview?template=botanical-rustic",
-    "butterfly-elegance": "/preview?template=butterfly-elegance"
+    "butterfly-elegance": "/preview?template=butterfly-elegance",
+    "sculpted-porcelain-arch": "/preview?template=sculpted-porcelain-arch",
+    "cathedral-grand-arch": "/preview?template=cathedral-grand-arch",
+    "mughal-palace-portal": "/preview?template=mughal-palace-portal"
   },
   "previewImages": {
     "classic-elegance": "https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=1000&auto=format&fit=crop",
@@ -21,6 +24,9 @@
     "botanical-rustic": "https://images.unsplash.com/photo-1469334031218-e382a71b716b?q=80&w=1000&auto=format&fit=crop",
     "golden-arabic": "https://images.unsplash.com/photo-1606216794074-735e91aa2c92?q=80&w=1000&auto=format&fit=crop",
     "heavenly-roses": "https://images.unsplash.com/photo-1519225421980-715cb0215aed?q=80&w=1000&auto=format&fit=crop",
-    "butterfly-elegance": "https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=1000&auto=format&fit=crop"
+    "butterfly-elegance": "https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=1000&auto=format&fit=crop",
+    "sculpted-porcelain-arch": "/assets/templates/sculpted-porcelain-bg.jpg",
+    "cathedral-grand-arch": "/assets/templates/cathedral-grand-bg.jpg",
+    "mughal-palace-portal": "/assets/templates/mughal-palace-bg.jpg"
   }
 }

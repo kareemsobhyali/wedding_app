@@ -42,7 +42,10 @@ export const defaultSettings = {
     'deckle-edge-cotton': '/preview?template=deckle-edge-cotton',
     'vellum-silk-wrap': '/preview?template=vellum-silk-wrap',
     'acrylic-glass-card': '/preview?template=acrylic-glass-card',
-    'trifold-pocket-folio': '/preview?template=trifold-pocket-folio'
+    'trifold-pocket-folio': '/preview?template=trifold-pocket-folio',
+    'sculpted-porcelain-arch': '/preview?template=sculpted-porcelain-arch',
+    'cathedral-grand-arch': '/preview?template=cathedral-grand-arch',
+    'mughal-palace-portal': '/preview?template=mughal-palace-portal'
   },
   previewImages: {}
 };

@@ -32,6 +32,9 @@ import { DeckleEdgeCottonTemplate } from './designs/deckle-edge-cotton';
 import { VellumSilkWrapTemplate } from './designs/vellum-silk-wrap';
 import { AcrylicGlassCardTemplate } from './designs/acrylic-glass-card';
 import { TrifoldPocketFolioTemplate } from './designs/trifold-pocket-folio';
+import { SculptedPorcelainArchTemplate } from './designs/sculpted-porcelain-arch';
+import { CathedralGrandArchTemplate } from './designs/cathedral-grand-arch';
+import { MughalPalacePortalTemplate } from './designs/mughal-palace-portal';
 
 export interface RegisteredTemplate {
   component: React.FC<TemplateRenderContext>;
@@ -772,6 +775,88 @@ export const templateRegistry: Record<string, RegisteredTemplate> = {
         { key: 'holyVerse', label: 'الآية الكريمة', type: 'textarea', defaultValue: '«وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا وَجَعَلَ بَيْنَكُم مَّوَدَّةً وَرَحْمَةً»' },
         { key: 'invitationIntro', label: 'مقدمة بطاقة الدعوة', type: 'text', defaultValue: 'نتشرف بدعوتكم لحضور حفل زفاف' },
         { key: 'invitationNote', label: 'نص بطاقة الدعوة الترحيبي', type: 'textarea', defaultValue: 'يسعدنا ويشرفنا حضوركم ومشاركتنا أبهى ليالي العمر، لتكتمل سعادتنا برؤيتكم بيننا.' }
+      ]
+    }
+  },
+  'sculpted-porcelain-arch': {
+    component: SculptedPorcelainArchTemplate,
+    metadata: {
+      id: 'sculpted-porcelain-arch',
+      name: 'Sculpted Porcelain Arch 🏛️ (قوس البورسلين الملكي)',
+      description: 'تصميم مطابق 100% لإطار البورسلين المنحوت 3D والورود البيضاء واللؤلؤ مع تفاصيل العائلات وجدول المواعيد المذهب وتفاعل 3D واقعي.',
+      previewImage: '/assets/templates/sculpted-porcelain-bg.jpg',
+      version: '1.0.0',
+      supportedFeatures: ['HERO', 'VENUE', 'MAPS', 'MUSIC', 'CONTACTS', 'SHARE'],
+      customFields: [
+        { key: 'welcomeSubtitle1', label: 'السطر الترحيبي الأول', type: 'text', defaultValue: 'BU MUTLU GÜNÜMÜZDE' },
+        { key: 'welcomeSubtitle2', label: 'السطر الترحيبي الثاني', type: 'text', defaultValue: 'SİZ DEĞERLİ DOST VE AKRABALARIMIZI' },
+        { key: 'welcomeSubtitle3', label: 'السطر الترحيبي الثالث', type: 'text', defaultValue: 'ARAMIZDA GÖRMEKTEN ONUR DUYARIZ.' },
+        { key: 'connectorText', label: 'أداة الربط بين الاسمين (مثال: Ve أو & أو و)', type: 'text', defaultValue: 'Ve' },
+        { key: 'hostFamiliesTitle', label: 'عنوان العائلات المستضيفة', type: 'text', defaultValue: 'ATALAY VE UYSAL AİLESİ' },
+        { key: 'family1Father', label: 'العائلة الأولى - أسماء الوالدين', type: 'text', defaultValue: 'Mustafa & Havva' },
+        { key: 'family1Surname', label: 'العائلة الأولى - اللقب', type: 'text', defaultValue: 'Atalay' },
+        { key: 'family2Father', label: 'العائلة الثانية - أسماء الوالدين', type: 'text', defaultValue: 'Halis & Meral' },
+        { key: 'family2Surname', label: 'العائلة الثانية - اللقب', type: 'text', defaultValue: 'Uysal' },
+        { key: 'ceremonyLabel', label: 'عنوان المراسم الأولى (مثال: KIZ ALMA: 17.00)', type: 'text', defaultValue: 'KIZ ALMA: 17.00' },
+        { key: 'ceremonyAddress', label: 'عنوان المراسم الأولى', type: 'text', defaultValue: 'AŞKAN MAH. KALEDİBİ SOK NO:10/1' },
+        { key: 'dateMonth', label: 'الشهر (كبير)', type: 'text', defaultValue: 'EKİM' },
+        { key: 'dateDay', label: 'اليوم (رقم كبير)', type: 'text', defaultValue: '10' },
+        { key: 'dateTime', label: 'توقيت الحفل (SAAT 18.00)', type: 'text', defaultValue: 'SAAT 18.00' },
+        { key: 'venueHeader', label: 'ترويسة المكان (YER :)', type: 'text', defaultValue: 'YER :' },
+        { key: 'venueStreet', label: 'الشارع / العنوان', type: 'text', defaultValue: '48. OSMAN GAZİ HATİP ÇAD' },
+        { key: 'venueCity', label: 'المدينة / الرمز البريدي', type: 'text', defaultValue: '42090 MERAM / KONYA' },
+        { key: 'venueHallName', label: 'اسم القاعة الكبرى', type: 'text', defaultValue: 'HALİS USTA PİLAV KONAĞI' }
+      ]
+    }
+  },
+  'cathedral-grand-arch': {
+    component: CathedralGrandArchTemplate,
+    metadata: {
+      id: 'cathedral-grand-arch',
+      name: 'Cathedral Grand Arch ⛪ (قوس الكاتدرائية الملكي)',
+      description: 'تصميم مطابق 100% للكاتدرائية الملكية، ثريات كريستال معلقة وفوانيس بلهب شموع متحرك واقعي وبطاقات مراسم الحفل والموقع.',
+      previewImage: '/assets/templates/cathedral-grand-bg.jpg',
+      version: '1.0.0',
+      supportedFeatures: ['HERO', 'VENUE', 'MAPS', 'MUSIC', 'CONTACTS', 'SHARE'],
+      customFields: [
+        { key: 'sacredQuote', label: 'الآية أو الاقتباس المقدس', type: 'text', defaultValue: '"SO THEY ARE NO LONGER TWO, BUT ONE FLESH."' },
+        { key: 'sacredReference', label: 'المرجع / الشاهد (مثال: MATTHEW 19:6)', type: 'text', defaultValue: 'MATTHEW 19:6' },
+        { key: 'familiesHeader', label: 'عنوان العائلات', type: 'text', defaultValue: 'TOGETHER WITH THEIR FAMILIES' },
+        { key: 'groomSurname', label: 'لقب العريس أسفل الاسم', type: 'text', defaultValue: 'D\'SOUZA' },
+        { key: 'brideSurname', label: 'لقب العروس أسفل الاسم', type: 'text', defaultValue: 'FERNANDES' },
+        { key: 'invitationNote1', label: 'عبارة الدعوة - السطر الأول', type: 'text', defaultValue: 'JOYFULLY INVITE YOU TO CELEBRATE' },
+        { key: 'invitationNote2', label: 'عبارة الدعوة - السطر الثاني', type: 'text', defaultValue: 'THEIR WEDDING' },
+        { key: 'ceremonyTitle', label: 'عنوان فقرة المراسم', type: 'text', defaultValue: 'WEDDING CEREMONY' },
+        { key: 'ceremonyTime', label: 'توقيت المراسم', type: 'text', defaultValue: '04:00 PM' },
+        { key: 'receptionTitle', label: 'عنوان فقرة حفل الاستقبال', type: 'text', defaultValue: 'RECEPTION' },
+        { key: 'receptionTime', label: 'توقيت حفل الاستقبال', type: 'text', defaultValue: '07:30 PM' },
+        { key: 'venueAddressSub', label: 'العنوان التفصيلي للقاعة', type: 'text', defaultValue: 'Park Street, City Center' },
+        { key: 'receptionBallroomNote', label: 'ملاحظة القاعة الختامية بالخط المائل', type: 'text', defaultValue: 'Reception to follow at The Grand Ballroom' },
+        { key: 'closingBannerText', label: 'العبارة الختامية أسفل البطاقة', type: 'text', defaultValue: 'YOUR PRESENCE WILL MAKE OUR DAY' }
+      ]
+    }
+  },
+  'mughal-palace-portal': {
+    component: MughalPalacePortalTemplate,
+    metadata: {
+      id: 'mughal-palace-portal',
+      name: 'Mughal Palace Portal 🕌 (بوابة القصر الملكية)',
+      description: 'تصميم مطابق 100% لبوابة القصر الملكية بأقواس الحجر المنحوتة وأعمدة الرخام المذهبة وشلال الزهور المتدلية مع تساقط البتلات.',
+      previewImage: '/assets/templates/mughal-palace-bg.jpg',
+      version: '1.0.0',
+      supportedFeatures: ['HERO', 'VENUE', 'MAPS', 'MUSIC', 'CONTACTS', 'SHARE'],
+      customFields: [
+        { key: 'cursiveHeader', label: 'الكلمة التمهيدية بالخط المتصل (مثال: The أو تفاصيل)', type: 'text', defaultValue: 'The' },
+        { key: 'detailsTitle', label: 'العنوان الرئيسي للبطاقة', type: 'text', defaultValue: 'WEDDING DETAILS' },
+        { key: 'dateMonth', label: 'الشهر (أعلى التاريخ)', type: 'text', defaultValue: 'AUGUST' },
+        { key: 'dateDayName', label: 'اسم اليوم (يسار الرقم)', type: 'text', defaultValue: 'SATURDAY' },
+        { key: 'dateDayNumber', label: 'رقم اليوم (في المنتصف)', type: 'text', defaultValue: '22' },
+        { key: 'dateTime', label: 'توقيت الحفل', type: 'text', defaultValue: '6:30 PM' },
+        { key: 'atTimePrefix', label: 'بادئة الوقت (AT أو الساعة)', type: 'text', defaultValue: 'AT' },
+        { key: 'dateYearNumber', label: 'السنة', type: 'text', defaultValue: '2026' },
+        { key: 'venueHeading', label: 'عنوان قسم القاعة (VENUE)', type: 'text', defaultValue: 'VENUE' },
+        { key: 'venueInsertedText', label: 'اسم قاعة الحفل', type: 'text', defaultValue: 'ROYAL PALACE BALLROOM' },
+        { key: 'venueAddressText', label: 'عنوان القاعة', type: 'text', defaultValue: 'Grand Avenue, Royal Gardens' }
       ]
     }
   }

@@ -87,7 +87,10 @@ export default function AdminSettingsPage() {
     'deckle-edge-cotton',
     'vellum-silk-wrap',
     'acrylic-glass-card',
-    'trifold-pocket-folio'
+    'trifold-pocket-folio',
+    'sculpted-porcelain-arch',
+    'cathedral-grand-arch',
+    'mughal-palace-portal'
   ];
 
   return (

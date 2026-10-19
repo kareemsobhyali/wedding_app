@@ -37,6 +37,9 @@ const TEMPLATES = [
   { id: 'vellum-silk-wrap', slug: 'vellum-silk-wrap', name: '🎀 Translucent Vellum & Silk (غلاف ورق كلك شفاف مع شريط حريري معقود)' },
   { id: 'acrylic-glass-card', slug: 'acrylic-glass-card', name: '💎 Beveled Acrylic Glass (لوح زجاجي أكريليك نقي بحواف مشطوفة عاكسة)' },
   { id: 'trifold-pocket-folio', slug: 'trifold-pocket-folio', name: '📑 Tri-Fold Pocket Folio (حافظة الفوليو الملكية ثلاثية الطيات مع كروت الجيب)' },
+  { id: 'sculpted-porcelain-arch', slug: 'sculpted-porcelain-arch', name: '🏛️ Sculpted Porcelain Arch (قوس البورسلين الملكي المنحوت 3D)' },
+  { id: 'cathedral-grand-arch', slug: 'cathedral-grand-arch', name: '⛪ Cathedral Grand Arch (قوس الكاتدرائية الملكي والثريات المضيئة)' },
+  { id: 'mughal-palace-portal', slug: 'mughal-palace-portal', name: '🕌 Mughal Palace Portal (بوابة القصر الملكية وشلال الزهور المتدلية)' },
 ];
 
 export default function AdminEditForm({ invitation, apiToken }: { invitation: any, apiToken: string }) {
