@@ -20,7 +20,10 @@ export const defaultSettings = {
     'royal-velvet': '/preview?template=royal-velvet',
     'palace-gates': '/preview?template=palace-gates',
     'celestial-stardust': '/preview?template=celestial-stardust',
-    'pearl-box': '/preview?template=pearl-box'
+    'pearl-box': '/preview?template=pearl-box',
+    'story-vogue-editorial': '/preview?template=story-vogue-editorial',
+    'story-royal-emerald': '/preview?template=story-royal-emerald',
+    'story-boho-terracotta': '/preview?template=story-boho-terracotta'
   },
   previewImages: {}
 };

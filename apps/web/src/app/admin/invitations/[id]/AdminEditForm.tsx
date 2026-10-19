@@ -15,6 +15,9 @@ const TEMPLATES = [
   { id: 'palace-gates', slug: 'palace-gates', name: '🏰 Grand Palace Gates (بوابات القصر)' },
   { id: 'celestial-stardust', slug: 'celestial-stardust', name: '🌌 Celestial Stardust (سماء النجوم)' },
   { id: 'pearl-box', slug: 'pearl-box', name: '🦪 Pearl & Jasmine Box (الصندوق اللؤلؤي)' },
+  { id: 'story-vogue-editorial', slug: 'story-vogue-editorial', name: '📱 Vogue Story (ستوري مجلة فوغ الأنيقة)' },
+  { id: 'story-royal-emerald', slug: 'story-royal-emerald', name: '📱 Royal Emerald Story (ستوري الزمرد والذهب الملكي)' },
+  { id: 'story-boho-terracotta', slug: 'story-boho-terracotta', name: '📱 Boho Terracotta Story (ستوري بوهو دافئ ورومانسي)' },
 ];
 
 export default function AdminEditForm({ invitation, apiToken }: { invitation: any, apiToken: string }) {

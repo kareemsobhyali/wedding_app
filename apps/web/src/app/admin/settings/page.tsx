@@ -65,7 +65,10 @@ export default function AdminSettingsPage() {
     'royal-velvet',
     'palace-gates',
     'celestial-stardust',
-    'pearl-box'
+    'pearl-box',
+    'story-vogue-editorial',
+    'story-royal-emerald',
+    'story-boho-terracotta'
   ];
 
   return (

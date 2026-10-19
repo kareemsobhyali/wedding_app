@@ -10,6 +10,9 @@ import { RoyalVelvetTemplate } from './designs/royal-velvet';
 import { PalaceGatesTemplate } from './designs/palace-gates';
 import { CelestialStardustTemplate } from './designs/celestial-stardust';
 import { PearlBoxTemplate } from './designs/pearl-box';
+import { StoryVogueEditorialTemplate } from './designs/story-vogue-editorial';
+import { StoryRoyalEmeraldTemplate } from './designs/story-royal-emerald';
+import { StoryBohoTerracottaTemplate } from './designs/story-boho-terracotta';
 
 export interface RegisteredTemplate {
   component: React.FC<TemplateRenderContext>;
@@ -280,6 +283,56 @@ export const templateRegistry: Record<string, RegisteredTemplate> = {
         { key: 'timeline3Time', label: 'الفقرة 3 - التوقيت', type: 'text', defaultValue: '10:15 PM' },
         { key: 'timeline3Desc', label: 'الفقرة 3 - الوصف', type: 'text', defaultValue: 'بوفيه عشاء مفتوح على أنغام الموسيقى الهادئة' },
         { key: 'closingMessage', label: 'العبارة الختامية', type: 'text', defaultValue: 'فرحتنا لا تكتمل إلا بوجودكم ورؤيتكم بيننا 🤍' }
+      ]
+    }
+  },
+  'story-vogue-editorial': {
+    component: StoryVogueEditorialTemplate,
+    metadata: {
+      id: 'story-vogue-editorial',
+      name: 'Vogue Story 🖤',
+      description: 'دعوة بنمط ستوري إنستغرام كامل للموبايل بتصميم مجلة فوغ الأنيقة بالخطوط الراقية.',
+      previewImage: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=1000&auto=format&fit=crop',
+      version: '1.0.0',
+      supportedFeatures: ['HERO', 'VENUE', 'MAPS', 'MUSIC', 'COUNTDOWN', 'CONTACTS', 'SHARE'],
+      customFields: [
+        { key: 'editorialKicker', label: 'العنوان الفرعي للمجلة', type: 'text', defaultValue: 'THE WEDDING CELEBRATION' },
+        { key: 'coverSubtitle', label: 'عبارة الغلاف الترحيبية', type: 'text', defaultValue: 'يسرنا دعوتكم لمشاركتنا فرحة العمر وتتويج رحلة الحب' },
+        { key: 'introVerse', label: 'الآية الكريمة أو عبارة الترحيب', type: 'textarea', defaultValue: '«وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا وَجَعَلَ بَيْنَكُم مَّوَدَّةً وَرَحْمَةً»' },
+        { key: 'dressCode', label: 'قواعد اللباس (Dress Code)', type: 'text', defaultValue: 'ملابس رسمية أنيقة / Formal Black Tie' }
+      ]
+    }
+  },
+  'story-royal-emerald': {
+    component: StoryRoyalEmeraldTemplate,
+    metadata: {
+      id: 'story-royal-emerald',
+      name: 'Royal Emerald Story ⚜️',
+      description: 'دعوة ستوري ملكية فاخرة بالزمرد الأخضر والأقواس والزخارف الذهبية الأصيلة.',
+      previewImage: 'https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=1000&auto=format&fit=crop',
+      version: '1.0.0',
+      supportedFeatures: ['HERO', 'VENUE', 'MAPS', 'MUSIC', 'COUNTDOWN', 'CONTACTS', 'SHARE'],
+      customFields: [
+        { key: 'introVerse', label: 'الآية الكريمة أو عبارة الافتتاح', type: 'textarea', defaultValue: '«وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا»' },
+        { key: 'invitationNote', label: 'نص بطاقة الدعوة الملكية', type: 'textarea', defaultValue: 'عندما تدق الساعات معلنةً بداية رحلتنا معاً، يسعدنا أن تشاركونا أجمل لحظات العمر بفرحة لا تكتمل إلا بلقياكم وحضوركم الكريم.' },
+        { key: 'dressCode', label: 'قواعد اللباس (Dress Code)', type: 'text', defaultValue: 'أزياء سهرة ملكية راقية / Formal Wear' }
+      ]
+    }
+  },
+  'story-boho-terracotta': {
+    component: StoryBohoTerracottaTemplate,
+    metadata: {
+      id: 'story-boho-terracotta',
+      name: 'Boho Terracotta Story 🌾',
+      description: 'دعوة ستوري دافئة بطابع بوهو وألوان التيراكوتا والوردي الناعم وجمال الطبيعة.',
+      previewImage: 'https://images.unsplash.com/photo-1522673607200-164d1b6ce486?q=80&w=1000&auto=format&fit=crop',
+      version: '1.0.0',
+      supportedFeatures: ['HERO', 'VENUE', 'MAPS', 'MUSIC', 'COUNTDOWN', 'CONTACTS', 'SHARE'],
+      customFields: [
+        { key: 'coverSubtitle', label: 'العبارة الترحيبية للغلاف', type: 'text', defaultValue: 'يسعدنا أن تشاركونا أجمل بدايات العمر والحب 🕊️' },
+        { key: 'introVerse', label: 'الآية الكريمة أو العبارة الرومانسية', type: 'textarea', defaultValue: '«وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا وَجَعَلَ بَيْنَكُم مَّوَدَّةً وَرَحْمَةً»' },
+        { key: 'invitationNote', label: 'رسالة الدعوة', type: 'textarea', defaultValue: 'بين دفء اللحظات وصدق المشاعر، يسعدنا دعوتكم لمشاركتنا ليلة العمر لنحتفل معاً بحب جمع قلبينا.' },
+        { key: 'dressCode', label: 'قواعد اللباس (Dress Code)', type: 'text', defaultValue: 'أناقة عصرية بألوان الباستيل / Semi-formal & Pastel' }
       ]
     }
   }
