@@ -19,6 +19,349 @@ import {
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
+// 20 Natural Falling Petals & Leaves Data
+const PETALS_DATA = [
+  { id: 1, left: 6, delay: 0.2, duration: 10, size: 16, type: 'rose', sway: 18 },
+  { id: 2, left: 16, delay: 2.5, duration: 12, size: 13, type: 'ivory', sway: -14 },
+  { id: 3, left: 26, delay: 4.8, duration: 9.5, size: 18, type: 'rose', sway: 16 },
+  { id: 4, left: 36, delay: 1.2, duration: 13, size: 14, type: 'leaf', sway: -18 },
+  { id: 5, left: 46, delay: 6.0, duration: 11, size: 17, type: 'rose', sway: 15 },
+  { id: 6, left: 56, delay: 3.4, duration: 14, size: 12, type: 'ivory', sway: -12 },
+  { id: 7, left: 66, delay: 5.2, duration: 10.5, size: 19, type: 'rose', sway: 19 },
+  { id: 8, left: 76, delay: 1.7, duration: 12.5, size: 14, type: 'leaf', sway: -16 },
+  { id: 9, left: 86, delay: 3.9, duration: 11.5, size: 16, type: 'rose', sway: 14 },
+  { id: 10, left: 94, delay: 7.0, duration: 13, size: 13, type: 'ivory', sway: -15 },
+  { id: 11, left: 12, delay: 8.2, duration: 11, size: 15, type: 'rose', sway: 17 },
+  { id: 12, left: 32, delay: 5.6, duration: 12, size: 12, type: 'gold', sway: -10 },
+  { id: 13, left: 52, delay: 9.1, duration: 13.5, size: 16, type: 'rose', sway: 14 },
+  { id: 14, left: 62, delay: 7.7, duration: 10, size: 13, type: 'ivory', sway: -18 },
+  { id: 15, left: 72, delay: 2.8, duration: 12.5, size: 18, type: 'rose', sway: 16 },
+  { id: 16, left: 82, delay: 8.8, duration: 11, size: 14, type: 'leaf', sway: -14 },
+  { id: 17, left: 22, delay: 6.5, duration: 14, size: 15, type: 'rose', sway: 18 },
+  { id: 18, left: 42, delay: 4.2, duration: 11, size: 11, type: 'gold', sway: -12 },
+  { id: 19, left: 3, delay: 9.7, duration: 12, size: 15, type: 'rose', sway: 13 },
+  { id: 20, left: 89, delay: 10.4, duration: 11.5, size: 17, type: 'rose', sway: -16 },
+];
+
+// Falling Rose Petals & White Leaves Component
+const FallingRosePetals = () => {
+  return (
+    <div className="absolute inset-0 pointer-events-none overflow-hidden z-[15]">
+      {PETALS_DATA.map((p) => (
+        <motion.div
+          key={p.id}
+          className="absolute"
+          style={{
+            left: `${p.left}%`,
+            width: p.size,
+            height: p.size * 1.35,
+          }}
+          initial={{
+            top: '-8%',
+            x: 0,
+            rotateZ: 0,
+            rotateX: 0,
+            rotateY: 0,
+            opacity: 0,
+          }}
+          animate={{
+            top: '106%',
+            x: [0, p.sway, -p.sway * 0.7, p.sway * 0.5, 0],
+            rotateZ: [0, 160, 320, 480],
+            rotateX: [0, 180, 360],
+            rotateY: [0, 360],
+            opacity: [0, 0.9, 0.95, 0.9, 0],
+          }}
+          transition={{
+            duration: p.duration,
+            repeat: Infinity,
+            delay: p.delay,
+            ease: 'linear',
+          }}
+        >
+          {p.type === 'rose' && (
+            <svg viewBox="0 0 24 30" className="w-full h-full filter drop-shadow-[0_2px_4px_rgba(180,90,90,0.18)]">
+              <defs>
+                <linearGradient id={`roseGrad-${p.id}`} x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stopColor="#F9A8B6" />
+                  <stop offset="60%" stopColor="#F8B4C0" />
+                  <stop offset="100%" stopColor="#FCE7EC" />
+                </linearGradient>
+              </defs>
+              <path
+                d="M 12 2 C 6 2, 2 8, 3 17 C 4 24, 8 29, 12 29 C 16 29, 20 24, 21 17 C 22 8, 18 2, 12 2 Z"
+                fill={`url(#roseGrad-${p.id})`}
+              />
+            </svg>
+          )}
+
+          {p.type === 'ivory' && (
+            <svg viewBox="0 0 24 30" className="w-full h-full filter drop-shadow-[0_2px_4px_rgba(120,90,40,0.12)]">
+              <defs>
+                <linearGradient id={`ivoryGrad-${p.id}`} x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stopColor="#FFFFFF" />
+                  <stop offset="70%" stopColor="#FDFBF7" />
+                  <stop offset="100%" stopColor="#F3E9DA" />
+                </linearGradient>
+              </defs>
+              <path
+                d="M 12 3 C 7 3, 3 9, 4 18 C 5 24, 9 28, 12 28 C 15 28, 19 24, 20 18 C 21 9, 17 3, 12 3 Z"
+                fill={`url(#ivoryGrad-${p.id})`}
+              />
+            </svg>
+          )}
+
+          {p.type === 'leaf' && (
+            <svg viewBox="0 0 24 30" className="w-full h-full filter drop-shadow-[0_2px_3px_rgba(80,100,60,0.1)]">
+              <defs>
+                <linearGradient id={`leafGrad-${p.id}`} x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stopColor="#FAFDF7" />
+                  <stop offset="50%" stopColor="#E2EDE0" />
+                  <stop offset="100%" stopColor="#C9DCC6" />
+                </linearGradient>
+              </defs>
+              <path
+                d="M 12 2 C 5 8, 4 20, 12 28 C 20 20, 19 8, 12 2 Z"
+                fill={`url(#leafGrad-${p.id})`}
+              />
+            </svg>
+          )}
+
+          {p.type === 'gold' && (
+            <div className="w-2.5 h-2.5 rounded-full bg-gradient-to-tr from-[#C5A059] to-[#F5E0A0] shadow-[0_0_6px_rgba(212,175,55,0.6)]" />
+          )}
+        </motion.div>
+      ))}
+    </div>
+  );
+};
+
+// Animated Royal Dancing Couple (Slow Waltz & Romantic Sway)
+const DancingCouple = () => {
+  const handleCoupleClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    confetti({
+      particleCount: 30,
+      spread: 60,
+      origin: { y: 0.88, x: 0.5 },
+      colors: ['#D4AF37', '#FCE7F3', '#FFFBF0']
+    });
+  };
+
+  return (
+    <div 
+      onClick={handleCoupleClick}
+      className="absolute bottom-[5.8%] left-1/2 -translate-x-1/2 z-20 pointer-events-auto cursor-pointer flex flex-col items-center justify-end w-[96px] h-[115px] select-none group"
+      title="مباركة للعروسين"
+    >
+      {/* Background Mask to cleanly conceal the static drawing underneath */}
+      <div 
+        className="absolute inset-x-[-14px] bottom-[-4px] h-[116px] pointer-events-none rounded-full"
+        style={{
+          background: 'radial-gradient(ellipse at 50% 55%, #FBF8F2 70%, rgba(251,248,242,0.85) 85%, transparent 100%)'
+        }}
+      />
+
+      {/* Romantic Golden Halo Beneath Couple */}
+      <motion.div
+        className="absolute bottom-1 w-20 h-5 rounded-full pointer-events-none"
+        style={{
+          background: 'radial-gradient(ellipse at center, rgba(212,175,55,0.3) 0%, transparent 75%)'
+        }}
+        animate={{
+          scale: [0.92, 1.12, 0.92],
+          opacity: [0.35, 0.7, 0.35]
+        }}
+        transition={{
+          duration: 3.6,
+          repeat: Infinity,
+          ease: "easeInOut"
+        }}
+      />
+
+      {/* Floating Sparkles Rising from Dance */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        {[
+          { x: 22, delay: 0, dur: 2.6 },
+          { x: 50, delay: 0.9, dur: 2.2 },
+          { x: 74, delay: 1.8, dur: 2.8 },
+        ].map((spark, idx) => (
+          <motion.div
+            key={idx}
+            className="absolute bottom-4 text-[#C5A059] pointer-events-none text-[10px]"
+            style={{ left: `${spark.x}%` }}
+            animate={{
+              y: [0, -42],
+              opacity: [0, 1, 0],
+              scale: [0.4, 1.1, 0.2]
+            }}
+            transition={{
+              duration: spark.dur,
+              repeat: Infinity,
+              delay: spark.delay,
+              ease: "easeOut"
+            }}
+          >
+            ✦
+          </motion.div>
+        ))}
+      </div>
+
+      {/* Animated Dancing Couple (Waltz Sway) */}
+      <motion.div
+        className="relative w-full h-full flex items-end justify-center"
+        animate={{
+          rotate: [-2.2, 2.2, -2.2],
+          x: [-2.5, 2.5, -2.5],
+          y: [0, -1.8, 0]
+        }}
+        transition={{
+          duration: 3.8,
+          repeat: Infinity,
+          ease: "easeInOut"
+        }}
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+      >
+        <svg
+          viewBox="0 0 100 120"
+          className="w-[84px] h-[106px] filter drop-shadow-[0_2px_4px_rgba(80,50,20,0.18)]"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <defs>
+            <linearGradient id="royalCoupleGold" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#9E793B" />
+              <stop offset="45%" stopColor="#7B5826" />
+              <stop offset="100%" stopColor="#543A14" />
+            </linearGradient>
+            <linearGradient id="veilGradiant" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stopColor="#FAF5EE" stopOpacity="0.85" />
+              <stop offset="100%" stopColor="#E0C99E" stopOpacity="0.35" />
+            </linearGradient>
+          </defs>
+
+          {/* Bride's Flowing Cathedral Veil (Breeze / Sway Wave) */}
+          <motion.path
+            d="M 55 18 C 65 24, 76 45, 82 72 C 86 90, 84 108, 80 114 C 74 115, 68 112, 65 106 C 72 88, 70 56, 56 26 Z"
+            fill="url(#veilGradiant)"
+            stroke="#C5A059"
+            strokeWidth="0.5"
+            strokeDasharray="1.5 1"
+            animate={{
+              scaleX: [1, 1.04, 0.98, 1],
+              skewX: [-1.5, 1.5, -1.5]
+            }}
+            transition={{
+              duration: 2.8,
+              repeat: Infinity,
+              ease: "easeInOut"
+            }}
+          />
+
+          {/* Groom Silhouette */}
+          {/* Groom Head & Neck */}
+          <path
+            d="M 37 14 C 37 10.5, 41 8, 44.5 8 C 47.5 8, 50 10.5, 50 14 C 50 17, 47.5 19.5, 44.5 19.5 C 41 19.5, 37 17, 37 14 Z"
+            fill="url(#royalCoupleGold)"
+          />
+          {/* Groom Sherwani Coat & Trousers */}
+          <path
+            d="M 42 20 L 46 20 L 48 24 L 50 36 L 47 48 L 48 76 L 40 76 L 41 48 L 38 36 L 39 24 Z"
+            fill="url(#royalCoupleGold)"
+          />
+          {/* Groom Left Leg & Shoe */}
+          <path
+            d="M 41 76 L 40 108 L 36 114 L 33 114 L 38 108 L 39 76 Z"
+            fill="url(#royalCoupleGold)"
+          />
+          {/* Groom Right Leg & Shoe */}
+          <path
+            d="M 46 76 L 46 108 L 47 113 L 43 113 L 43 76 Z"
+            fill="url(#royalCoupleGold)"
+          />
+          {/* Groom Left Arm (Holding bride's hand) */}
+          <path
+            d="M 48 24 C 52 26, 56 30, 55 35 C 54 36, 51 34, 48 30 Z"
+            fill="url(#royalCoupleGold)"
+          />
+
+          {/* Bride Silhouette */}
+          {/* Bride Head & Hair Updo */}
+          <path
+            d="M 54 13 C 54 10, 57 8, 60 8 C 63 8, 65 10, 65 13 C 65 16, 62.5 18, 59.5 18 C 56.5 18, 54 16, 54 13 Z"
+            fill="url(#royalCoupleGold)"
+          />
+          {/* Bride Hair Bun / Chignon */}
+          <circle cx="63.5" cy="11.5" r="3" fill="url(#royalCoupleGold)" />
+          {/* Tiara Accent */}
+          <path d="M 58 7.5 L 59.5 5.5 L 61 7.5 Z" fill="#D4AF37" />
+
+          {/* Bride Bodice & Raised Arm */}
+          <path
+            d="M 57 19 L 61 19 L 62 26 C 62 30, 60 38, 59 44 L 53 44 C 54 38, 55 30, 56 26 Z"
+            fill="url(#royalCoupleGold)"
+          />
+          {/* Bride Arms (Embracing groom & raised hand) */}
+          <path
+            d="M 56 25 C 51 28, 47 32, 45 36 C 47 37, 51 32, 55 30 Z"
+            fill="url(#royalCoupleGold)"
+          />
+          <path
+            d="M 60 25 C 57 28, 53 32, 53 36 C 55 36, 58 32, 61 28 Z"
+            fill="url(#royalCoupleGold)"
+          />
+
+          {/* Bride Royal Flared Wedding Gown (Flowing Ballgown) */}
+          <motion.path
+            d="M 53 44 C 56 44, 59 44, 60 44 C 64 56, 70 78, 77 114 C 70 115, 58 114, 46 114 C 47 88, 50 62, 53 44 Z"
+            fill="url(#royalCoupleGold)"
+            animate={{
+              scaleX: [1, 1.02, 0.99, 1]
+            }}
+            transition={{
+              duration: 3.2,
+              repeat: Infinity,
+              ease: "easeInOut"
+            }}
+          />
+
+          {/* Delicate Lace Filigree Details on Gown */}
+          <path
+            d="M 56 54 Q 63 80 69 111"
+            stroke="#C5A059"
+            strokeWidth="0.75"
+            strokeDasharray="2 2"
+            opacity="0.8"
+          />
+          <path
+            d="M 54 62 Q 58 84 60 112"
+            stroke="#C5A059"
+            strokeWidth="0.75"
+            strokeDasharray="2 2"
+            opacity="0.8"
+          />
+          <path
+            d="M 58 68 Q 66 90 73 112"
+            stroke="#C5A059"
+            strokeWidth="0.75"
+            strokeDasharray="2 2"
+            opacity="0.8"
+          />
+
+          {/* Scalloped Lace Hemline */}
+          <path
+            d="M 46 114 Q 50 112 54 114 Q 58 112 62 114 Q 66 112 70 114 Q 74 112 77 114"
+            stroke="#D4AF37"
+            strokeWidth="0.8"
+            fill="none"
+          />
+        </svg>
+      </motion.div>
+    </div>
+  );
+};
+
 export const MughalPalacePortalTemplate: React.FC<TemplateRenderContext> = ({ data, mode }) => {
   const [isPlayingAudio, setIsPlayingAudio] = useState(false);
   const [showRsvpModal, setShowRsvpModal] = useState(false);
@@ -121,7 +464,7 @@ export const MughalPalacePortalTemplate: React.FC<TemplateRenderContext> = ({ da
 
   return (
     <div 
-      className="h-[100dvh] w-full flex flex-col items-center justify-center p-0 sm:p-4 md:p-6 font-serif bg-[#F4EDE4] selection:bg-[#D4AF37]/30 text-[#4A3D2C] overflow-hidden relative"
+      className="h-[100dvh] w-full flex flex-col items-center justify-center p-0 sm:p-4 md:p-6 font-serif bg-[#F4EDE4] selection:bg-[#D4AF37]/30 text-[#4A3518] overflow-hidden relative"
       style={{
         backgroundImage: 'radial-gradient(circle at 50% 40%, #FAF6EE 0%, #E8DFC8 100%)'
       }}
@@ -151,7 +494,7 @@ export const MughalPalacePortalTemplate: React.FC<TemplateRenderContext> = ({ da
         </button>
       </div>
 
-      {/* Main Wedding Portal Card (Exact 100% Replicating Pin 3) */}
+      {/* Main Wedding Portal Card */}
       <motion.div
         onClick={handleCardClick}
         initial={{ opacity: 0, scale: 0.98 }}
@@ -167,33 +510,8 @@ export const MughalPalacePortalTemplate: React.FC<TemplateRenderContext> = ({ da
           }}
         />
 
-        {/* Falling Petals Micro-Animation Effect */}
-        <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          {[...Array(6)].map((_, i) => (
-            <motion.div
-              key={i}
-              className="absolute w-3 h-3 bg-white/80 rounded-tl-full rounded-br-full shadow-sm"
-              initial={{
-                top: -20,
-                left: `${15 + i * 14}%`,
-                rotate: 0,
-                opacity: 0.8
-              }}
-              animate={{
-                top: '105%',
-                left: `${10 + i * 15 + (i % 2 === 0 ? 8 : -8)}%`,
-                rotate: 360,
-                opacity: [0.8, 1, 0]
-              }}
-              transition={{
-                duration: 9 + i * 2,
-                repeat: Infinity,
-                delay: i * 1.5,
-                ease: 'linear'
-              }}
-            />
-          ))}
-        </div>
+        {/* Falling Rose Petals & White Leaves Effect */}
+        <FallingRosePetals />
 
         {/* Ambient Warm Sunbeam Flare */}
         <div 
@@ -203,8 +521,8 @@ export const MughalPalacePortalTemplate: React.FC<TemplateRenderContext> = ({ da
           }}
         />
 
-        {/* Inside Portal Content: Typography & Layout (Correctly Centered Inside Ivory Portal) */}
-        <div className="absolute top-[28.5%] bottom-[13%] left-[18%] right-[18%] flex flex-col items-center justify-between text-center z-10 pointer-events-none py-1 px-1.5">
+        {/* Inside Portal Content: Typography & Layout (Harmonious Royal Gold & Bronze Colors) */}
+        <div className="absolute top-[28.5%] bottom-[13.5%] left-[18%] right-[18%] flex flex-col items-center justify-between text-center z-10 pointer-events-none py-1 px-1.5">
           
           {/* 1. Header & Couple Names */}
           <motion.div
@@ -215,17 +533,17 @@ export const MughalPalacePortalTemplate: React.FC<TemplateRenderContext> = ({ da
           >
             {/* Soft decorative intro */}
             <p 
-              className="text-[11px] sm:text-xs font-bold text-[#8C6D38] tracking-wide"
-              style={{ fontFamily: isArabicContent ? "'Aref Ruqaa Ink', 'Aref Ruqaa', serif" : "'Alex Brush', cursive" }}
+              className="text-[12px] sm:text-[13px] font-bold text-[#8C6D38] tracking-wide"
+              style={{ fontFamily: isArabicContent ? "'Aref Ruqaa', serif" : "'Alex Brush', cursive" }}
             >
               {custom.cursiveHeader || (isArabicContent ? 'يسعدنا ويشرفنا دعوتكم لحضور حفل زفاف' : 'The')}
             </p>
 
             {/* Couple Names */}
             <h1 
-              className="text-2xl sm:text-3xl font-bold text-[#543306] leading-tight flex items-center justify-center gap-2"
+              className="text-2xl sm:text-3xl font-bold text-[#4A3210] leading-tight flex items-center justify-center gap-2"
               style={{ 
-                fontFamily: isArabicContent ? "'Aref Ruqaa Ink', 'Aref Ruqaa', serif" : "'Alex Brush', 'Great Vibes', cursive",
+                fontFamily: isArabicContent ? "'Aref Ruqaa', serif" : "'Alex Brush', 'Great Vibes', cursive",
                 textShadow: '0 1px 2px rgba(255,255,255,0.95), 0 0 6px rgba(255,255,255,0.8)'
               }}
               dir={isArabicContent ? "rtl" : "ltr"}
@@ -244,8 +562,8 @@ export const MughalPalacePortalTemplate: React.FC<TemplateRenderContext> = ({ da
             className="space-y-1 w-full"
           >
             <h2 
-              className="text-[12.5px] sm:text-[14px] text-[#694E23] font-bold tracking-wider"
-              style={{ fontFamily: isArabicContent ? "'Aref Ruqaa Ink', 'Aref Ruqaa', serif" : "'Cinzel', serif" }}
+              className="text-[13px] sm:text-[14px] text-[#543914] font-bold tracking-wider"
+              style={{ fontFamily: isArabicContent ? "'Aref Ruqaa', serif" : "'Cinzel', serif" }}
             >
               {custom.detailsTitle || (isArabicContent ? 'تفاصيل حفل الزفاف المبارك' : 'WEDDING DETAILS')}
             </h2>
@@ -269,7 +587,7 @@ export const MughalPalacePortalTemplate: React.FC<TemplateRenderContext> = ({ da
             {/* Month Name */}
             <p 
               className="text-[13px] sm:text-[14px] font-bold text-[#8C6D38] tracking-wide"
-              style={{ fontFamily: isArabicContent ? "'Aref Ruqaa Ink', 'Aref Ruqaa', serif" : "'Cinzel', serif" }}
+              style={{ fontFamily: isArabicContent ? "'Aref Ruqaa', serif" : "'Cinzel', serif" }}
             >
               {monthName}
             </p>
@@ -278,17 +596,17 @@ export const MughalPalacePortalTemplate: React.FC<TemplateRenderContext> = ({ da
             <div className="w-full flex items-center justify-between px-2 sm:px-4 py-0.5">
               {/* Day Name */}
               <span 
-                className="text-xs sm:text-[13px] font-bold text-[#694E23] tracking-normal"
-                style={{ fontFamily: isArabicContent ? "'Aref Ruqaa Ink', 'Aref Ruqaa', serif" : "'Cinzel', serif" }}
+                className="text-xs sm:text-[13px] font-bold text-[#543914] tracking-normal"
+                style={{ fontFamily: isArabicContent ? "'Aref Ruqaa', serif" : "'Cinzel', serif" }}
               >
                 {dayName}
               </span>
 
               {/* Big Gold Numeral Date */}
               <span 
-                className="text-4xl sm:text-5xl font-extrabold text-[#543306] px-2 leading-none"
+                className="text-4xl sm:text-5xl font-extrabold text-[#4A3210] px-2 leading-none"
                 style={{ 
-                  fontFamily: isArabicContent ? "'Aref Ruqaa Ink', 'Aref Ruqaa', serif" : "'Cormorant Garamond', serif",
+                  fontFamily: isArabicContent ? "'Aref Ruqaa', serif" : "'Cormorant Garamond', serif",
                   textShadow: '0 1px 3px rgba(255,255,255,0.9)'
                 }}
               >
@@ -297,8 +615,8 @@ export const MughalPalacePortalTemplate: React.FC<TemplateRenderContext> = ({ da
 
               {/* Time */}
               <span 
-                className="text-xs sm:text-[13px] font-bold text-[#694E23] tracking-normal"
-                style={{ fontFamily: isArabicContent ? "'Aref Ruqaa Ink', 'Aref Ruqaa', serif" : "'Cinzel', serif" }}
+                className="text-xs sm:text-[13px] font-bold text-[#543914] tracking-normal"
+                style={{ fontFamily: isArabicContent ? "'Aref Ruqaa', serif" : "'Cinzel', serif" }}
               >
                 {timeFormatted}
               </span>
@@ -307,7 +625,7 @@ export const MughalPalacePortalTemplate: React.FC<TemplateRenderContext> = ({ da
             {/* Year */}
             <p 
               className="text-[12px] sm:text-[13px] font-bold text-[#8C6D38] tracking-widest"
-              style={{ fontFamily: isArabicContent ? "'Aref Ruqaa Ink', 'Aref Ruqaa', serif" : "'Cinzel', serif" }}
+              style={{ fontFamily: isArabicContent ? "'Aref Ruqaa', serif" : "'Cinzel', serif" }}
             >
               {yearNumber}
             </p>
@@ -325,20 +643,20 @@ export const MughalPalacePortalTemplate: React.FC<TemplateRenderContext> = ({ da
           >
             <p 
               className="text-[11px] sm:text-xs font-bold text-[#8C6D38] tracking-wider"
-              style={{ fontFamily: isArabicContent ? "'Aref Ruqaa Ink', 'Aref Ruqaa', serif" : "'Cinzel', serif" }}
+              style={{ fontFamily: isArabicContent ? "'Aref Ruqaa', serif" : "'Cinzel', serif" }}
             >
               {custom.venueHeading || (isArabicContent ? 'المكان' : 'VENUE')}
             </p>
             <p 
-              className="text-sm sm:text-base font-bold text-[#543306] max-w-[240px] leading-tight"
-              style={{ fontFamily: isArabicContent ? "'Aref Ruqaa Ink', 'Aref Ruqaa', serif" : "'Cinzel', serif" }}
+              className="text-sm sm:text-base font-bold text-[#4A3210] max-w-[240px] leading-tight"
+              style={{ fontFamily: isArabicContent ? "'Aref Ruqaa', serif" : "'Cinzel', serif" }}
             >
               {data.venueName || (isArabicContent ? 'قاعة اللؤلؤة' : 'ROYAL PALACE BALLROOM')}
             </p>
             {(data.venueAddress || custom.venueAddressText) && (
               <p 
-                className="text-[10px] sm:text-[11px] text-[#7D5A1E] max-w-[240px] leading-snug line-clamp-1"
-                style={{ fontFamily: isArabicContent ? "'Aref Ruqaa Ink', 'Aref Ruqaa', serif" : "'Cinzel', serif" }}
+                className="text-[10px] sm:text-[11px] text-[#6E4D1D] max-w-[240px] leading-snug line-clamp-1"
+                style={{ fontFamily: isArabicContent ? "'Aref Ruqaa', serif" : "'Cinzel', serif" }}
               >
                 {data.venueAddress || custom.venueAddressText || (isArabicContent ? 'جراند أفينيو، حدائق القصر الملكي' : 'Grand Avenue, Royal Gardens')}
               </p>
@@ -350,66 +668,74 @@ export const MughalPalacePortalTemplate: React.FC<TemplateRenderContext> = ({ da
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.65 }}
-            className="flex items-center justify-center gap-2 pt-1"
+            className="flex items-center justify-center gap-2 pt-0.5"
           >
-            <div className="px-3 py-1.5 rounded-xl bg-white/85 backdrop-blur-sm border border-[#D4AF37]/40 text-center shadow-xs min-w-[50px]">
-              <span className="block text-sm sm:text-base font-bold text-[#543306] leading-none" style={{ fontFamily: isArabicContent ? "'Aref Ruqaa Ink', serif" : "inherit" }}>{timeLeft.days}</span>
-              <span className="text-[9px] font-bold text-[#8C6D38] block pt-0.5" style={{ fontFamily: isArabicContent ? "'Aref Ruqaa Ink', serif" : "inherit" }}>{isArabicContent ? 'يوم' : 'DAYS'}</span>
+            <div className="px-3 py-1.5 rounded-xl bg-white/90 backdrop-blur-sm border border-[#D4AF37]/50 text-center shadow-xs min-w-[52px]">
+              <span className="block text-sm sm:text-base font-bold text-[#4A3210] leading-none" style={{ fontFamily: isArabicContent ? "'Aref Ruqaa', serif" : "inherit" }}>{timeLeft.days}</span>
+              <span className="text-[10px] font-bold text-[#8C6D38] block pt-0.5" style={{ fontFamily: isArabicContent ? "'Aref Ruqaa', serif" : "inherit" }}>{isArabicContent ? 'يوم' : 'DAYS'}</span>
             </div>
-            <div className="px-3 py-1.5 rounded-xl bg-white/85 backdrop-blur-sm border border-[#D4AF37]/40 text-center shadow-xs min-w-[50px]">
-              <span className="block text-sm sm:text-base font-bold text-[#543306] leading-none" style={{ fontFamily: isArabicContent ? "'Aref Ruqaa Ink', serif" : "inherit" }}>{timeLeft.hours}</span>
-              <span className="text-[9px] font-bold text-[#8C6D38] block pt-0.5" style={{ fontFamily: isArabicContent ? "'Aref Ruqaa Ink', serif" : "inherit" }}>{isArabicContent ? 'ساعة' : 'HOURS'}</span>
+            <div className="px-3 py-1.5 rounded-xl bg-white/90 backdrop-blur-sm border border-[#D4AF37]/50 text-center shadow-xs min-w-[52px]">
+              <span className="block text-sm sm:text-base font-bold text-[#4A3210] leading-none" style={{ fontFamily: isArabicContent ? "'Aref Ruqaa', serif" : "inherit" }}>{timeLeft.hours}</span>
+              <span className="text-[10px] font-bold text-[#8C6D38] block pt-0.5" style={{ fontFamily: isArabicContent ? "'Aref Ruqaa', serif" : "inherit" }}>{isArabicContent ? 'ساعة' : 'HOURS'}</span>
             </div>
-            <div className="px-3 py-1.5 rounded-xl bg-white/85 backdrop-blur-sm border border-[#D4AF37]/40 text-center shadow-xs min-w-[50px]">
-              <span className="block text-sm sm:text-base font-bold text-[#543306] leading-none" style={{ fontFamily: isArabicContent ? "'Aref Ruqaa Ink', serif" : "inherit" }}>{timeLeft.minutes}</span>
-              <span className="text-[9px] font-bold text-[#8C6D38] block pt-0.5" style={{ fontFamily: isArabicContent ? "'Aref Ruqaa Ink', serif" : "inherit" }}>{isArabicContent ? 'دقيقة' : 'MINS'}</span>
+            <div className="px-3 py-1.5 rounded-xl bg-white/90 backdrop-blur-sm border border-[#D4AF37]/50 text-center shadow-xs min-w-[52px]">
+              <span className="block text-sm sm:text-base font-bold text-[#4A3210] leading-none" style={{ fontFamily: isArabicContent ? "'Aref Ruqaa', serif" : "inherit" }}>{timeLeft.minutes}</span>
+              <span className="text-[10px] font-bold text-[#8C6D38] block pt-0.5" style={{ fontFamily: isArabicContent ? "'Aref Ruqaa', serif" : "inherit" }}>{isArabicContent ? 'دقيقة' : 'MINS'}</span>
             </div>
           </motion.div>
 
         </div>
 
+        {/* Animated Royal Dancing Couple (Conceals static background drawing and sways in romantic waltz) */}
+        <DancingCouple />
+
       </motion.div>
 
-      {/* Luxury Glassmorphism Floating Action Dock (Responsive 3-Col Grid) */}
-      <motion.div 
-        initial={{ y: 30, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ delay: 0.5, duration: 0.6 }}
-        className="fixed bottom-3 sm:bottom-5 left-1/2 -translate-x-1/2 z-40 w-[92%] max-w-[390px]"
-      >
-        <div className="backdrop-blur-xl bg-white/92 border border-[#D4AF37]/50 shadow-[0_12px_36px_rgba(125,90,30,0.22)] rounded-full p-1.5 grid grid-cols-3 gap-1.5 items-center">
-          {/* Google Maps Button */}
-          <a
-            href={data.googleMapsUrl || '#'}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="w-full py-2 px-1 rounded-full bg-[#FAF7F2] hover:bg-[#F2ECE1] border border-[#D4AF37]/35 text-[#7D5A1E] font-bold text-xs flex items-center justify-center gap-1 active:scale-95 transition-all shadow-xs"
+      {/* Luxury Glassmorphism Floating Action Dock (Fixed Safe Center Container) */}
+      <div className="fixed bottom-3 sm:bottom-5 left-0 right-0 z-40 flex justify-center pointer-events-none px-4">
+        <motion.div 
+          initial={{ y: 35, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.5, duration: 0.6 }}
+          className="w-full max-w-[370px] pointer-events-auto"
+        >
+          <div 
+            className="backdrop-blur-xl bg-white/95 border border-[#D4AF37]/60 shadow-[0_12px_36px_rgba(125,90,30,0.25)] rounded-full p-1.5 grid grid-cols-3 gap-1.5 items-center"
+            dir={isArabicContent ? "rtl" : "ltr"}
           >
-            <MapPin className="w-3.5 h-3.5 text-[#B8860B] shrink-0" />
-            <span className="truncate text-xs font-bold" style={{ fontFamily: isArabicContent ? "'Aref Ruqaa Ink', 'Aref Ruqaa', serif" : "'Cinzel', serif" }}>{isArabicContent ? 'الموقع' : 'Location'}</span>
-          </a>
+            {/* Google Maps Button */}
+            <a
+              href={data.googleMapsUrl || '#'}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="py-2 px-1 rounded-full bg-[#FAF7F2] hover:bg-[#F2ECE1] border border-[#D4AF37]/40 text-[#6E4D1D] font-bold text-xs flex items-center justify-center gap-1 active:scale-95 transition-all shadow-xs"
+            >
+              <MapPin className="w-3.5 h-3.5 text-[#B8860B] shrink-0" />
+              <span className="truncate text-xs font-bold" style={{ fontFamily: isArabicContent ? "'Aref Ruqaa', serif" : "'Cinzel', serif" }}>{isArabicContent ? 'الموقع' : 'Location'}</span>
+            </a>
 
-          {/* Add to Calendar Button */}
-          <a
-            href={gcalUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="w-full py-2 px-1 rounded-full bg-[#FAF7F2] hover:bg-[#F2ECE1] border border-[#D4AF37]/35 text-[#7D5A1E] font-bold text-xs flex items-center justify-center gap-1 active:scale-95 transition-all shadow-xs"
-          >
-            <Calendar className="w-3.5 h-3.5 text-[#B8860B] shrink-0" />
-            <span className="truncate text-xs font-bold" style={{ fontFamily: isArabicContent ? "'Aref Ruqaa Ink', 'Aref Ruqaa', serif" : "'Cinzel', serif" }}>{isArabicContent ? 'الموعد' : 'Calendar'}</span>
-          </a>
+            {/* Add to Calendar Button */}
+            <a
+              href={gcalUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="py-2 px-1 rounded-full bg-[#FAF7F2] hover:bg-[#F2ECE1] border border-[#D4AF37]/40 text-[#6E4D1D] font-bold text-xs flex items-center justify-center gap-1 active:scale-95 transition-all shadow-xs"
+            >
+              <Calendar className="w-3.5 h-3.5 text-[#B8860B] shrink-0" />
+              <span className="truncate text-xs font-bold" style={{ fontFamily: isArabicContent ? "'Aref Ruqaa', serif" : "'Cinzel', serif" }}>{isArabicContent ? 'الموعد' : 'Calendar'}</span>
+            </a>
 
-          {/* Primary RSVP Button */}
-          <button
-            onClick={() => setShowRsvpModal(true)}
-            className="w-full py-2 px-1 rounded-full bg-gradient-to-r from-[#A67C37] via-[#C5A059] to-[#8C6D38] text-white shadow-md text-xs font-bold flex items-center justify-center gap-1 hover:brightness-110 active:scale-95 transition-all"
-          >
-            <Heart className="w-3.5 h-3.5 fill-white shrink-0" />
-            <span className="truncate text-xs font-bold" style={{ fontFamily: isArabicContent ? "'Aref Ruqaa Ink', 'Aref Ruqaa', serif" : "'Cinzel', serif" }}>{isArabicContent ? 'تأكيد الحضور' : 'RSVP'}</span>
-          </button>
-        </div>
-      </motion.div>
+            {/* Primary RSVP Button */}
+            <button
+              onClick={() => setShowRsvpModal(true)}
+              className="py-2 px-1 rounded-full bg-gradient-to-r from-[#A67C37] via-[#C5A059] to-[#8C6D38] text-white shadow-md text-xs font-bold flex items-center justify-center gap-1 hover:brightness-110 active:scale-95 transition-all"
+            >
+              <Heart className="w-3.5 h-3.5 fill-white shrink-0" />
+              <span className="truncate text-xs font-bold" style={{ fontFamily: isArabicContent ? "'Aref Ruqaa', serif" : "'Cinzel', serif" }}>{isArabicContent ? 'تأكيد الحضور' : 'RSVP'}</span>
+            </button>
+          </div>
+        </motion.div>
+      </div>
 
       {/* RSVP Modal Dialog */}
       <AnimatePresence>
@@ -431,13 +757,13 @@ export const MughalPalacePortalTemplate: React.FC<TemplateRenderContext> = ({ da
 
               <div className="text-center space-y-1 mb-5">
                 <h3 
-                  className="text-xl font-bold text-[#7D5A1E]"
-                  style={{ fontFamily: isArabicContent ? "'Aref Ruqaa Ink', 'Aref Ruqaa', serif" : "'Cinzel', serif" }}
+                  className="text-xl font-bold text-[#6E4D1D]"
+                  style={{ fontFamily: isArabicContent ? "'Aref Ruqaa', serif" : "'Cinzel', serif" }}
                 >
                   {isArabicContent ? 'تأكيد الحضور' : 'RSVP'}
                 </h3>
                 <p 
-                  className="text-xs text-stone-600"
+                  className="text-xs text-[#785D36]"
                   style={{ fontFamily: isArabicContent ? "'Aref Ruqaa', serif" : "inherit" }}
                 >
                   {isArabicContent ? 'يسعدنا حضوركم ومشاركتنا بهجة هذا اليوم الاستثنائي' : 'We would be honored by your presence'}
@@ -449,13 +775,13 @@ export const MughalPalacePortalTemplate: React.FC<TemplateRenderContext> = ({ da
                   <div className="w-12 h-12 bg-amber-100 text-amber-700 rounded-full flex items-center justify-center mx-auto">
                     <Check className="w-6 h-6" />
                   </div>
-                  <h4 className="text-base font-bold text-stone-800">تم تسجيل حضوركم بنجاح!</h4>
-                  <p className="text-xs text-stone-500">شكراً لكم، ننتظر تشريفكم بكل سعادة ومودة.</p>
+                  <h4 className="text-base font-bold text-stone-800" style={{ fontFamily: isArabicContent ? "'Aref Ruqaa', serif" : "inherit" }}>تم تسجيل حضوركم بنجاح!</h4>
+                  <p className="text-xs text-stone-500" style={{ fontFamily: isArabicContent ? "'Aref Ruqaa', serif" : "inherit" }}>شكراً لكم، ننتظر تشريفكم بكل سعادة ومودة.</p>
                 </div>
               ) : (
                 <form onSubmit={handleRsvpSubmit} className="space-y-3.5">
                   <div>
-                    <label className="block text-xs font-semibold text-stone-700 mb-1">الاسم الكريم</label>
+                    <label className="block text-xs font-semibold text-[#543914] mb-1" style={{ fontFamily: isArabicContent ? "'Aref Ruqaa', serif" : "inherit" }}>الاسم الكريم</label>
                     <input 
                       type="text" 
                       required 
@@ -467,27 +793,29 @@ export const MughalPalacePortalTemplate: React.FC<TemplateRenderContext> = ({ da
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold text-stone-700 mb-1">حالة الحضور</label>
+                    <label className="block text-xs font-semibold text-[#543914] mb-1" style={{ fontFamily: isArabicContent ? "'Aref Ruqaa', serif" : "inherit" }}>حالة الحضور</label>
                     <div className="grid grid-cols-2 gap-2">
                       <button
                         type="button"
                         onClick={() => setRsvpData({ ...rsvpData, attendance: 'yes' })}
-                        className={`py-2 text-xs font-medium rounded-xl border transition-all ${
+                        className={`py-2 text-xs font-bold rounded-xl border transition-all ${
                           rsvpData.attendance === 'yes' 
                             ? 'bg-[#8C6D38] text-white border-[#8C6D38]' 
                             : 'bg-white text-stone-700 border-stone-200 hover:bg-stone-50'
                         }`}
+                        style={{ fontFamily: isArabicContent ? "'Aref Ruqaa', serif" : "inherit" }}
                       >
                         سأحضر بكل سرور ✨
                       </button>
                       <button
                         type="button"
                         onClick={() => setRsvpData({ ...rsvpData, attendance: 'no' })}
-                        className={`py-2 text-xs font-medium rounded-xl border transition-all ${
+                        className={`py-2 text-xs font-bold rounded-xl border transition-all ${
                           rsvpData.attendance === 'no' 
                             ? 'bg-stone-700 text-white border-stone-700' 
                             : 'bg-white text-stone-700 border-stone-200 hover:bg-stone-50'
                         }`}
+                        style={{ fontFamily: isArabicContent ? "'Aref Ruqaa', serif" : "inherit" }}
                       >
                         أعتذر لظروف خاصة
                       </button>
@@ -496,7 +824,7 @@ export const MughalPalacePortalTemplate: React.FC<TemplateRenderContext> = ({ da
 
                   {rsvpData.attendance === 'yes' && (
                     <div>
-                      <label className="block text-xs font-semibold text-stone-700 mb-1">عدد المرافقين</label>
+                      <label className="block text-xs font-semibold text-[#543914] mb-1" style={{ fontFamily: isArabicContent ? "'Aref Ruqaa', serif" : "inherit" }}>عدد المرافقين</label>
                       <select
                         value={rsvpData.guests}
                         onChange={(e) => setRsvpData({ ...rsvpData, guests: e.target.value })}
@@ -511,7 +839,7 @@ export const MughalPalacePortalTemplate: React.FC<TemplateRenderContext> = ({ da
                   )}
 
                   <div>
-                    <label className="block text-xs font-semibold text-stone-700 mb-1">تهنئة أو رسالة للعروسين (اختياري)</label>
+                    <label className="block text-xs font-semibold text-[#543914] mb-1" style={{ fontFamily: isArabicContent ? "'Aref Ruqaa', serif" : "inherit" }}>تهنئة أو رسالة للعروسين (اختياري)</label>
                     <textarea 
                       rows={2}
                       value={rsvpData.note}
@@ -523,7 +851,8 @@ export const MughalPalacePortalTemplate: React.FC<TemplateRenderContext> = ({ da
 
                   <button
                     type="submit"
-                    className="w-full py-2.5 rounded-xl bg-[#8C6D38] text-white font-medium text-xs hover:bg-[#7D5A1E] transition-all flex items-center justify-center gap-1.5 shadow-md shadow-[#8C6D38]/30"
+                    className="w-full py-2.5 rounded-xl bg-gradient-to-r from-[#A67C37] via-[#C5A059] to-[#8C6D38] text-white font-bold text-xs hover:brightness-110 transition-all flex items-center justify-center gap-1.5 shadow-md shadow-[#8C6D38]/30"
+                    style={{ fontFamily: isArabicContent ? "'Aref Ruqaa', serif" : "inherit" }}
                   >
                     <Send className="w-3.5 h-3.5" />
                     <span>إرسال التأكيد</span>
