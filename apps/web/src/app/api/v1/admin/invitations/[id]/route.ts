@@ -58,7 +58,7 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
       'groomPhone', 'bridePhone', 'countdownEnabled', 'expiresAt', 'customData'
     ];
 
-    safeFields.forEach((field) => {
+    safeFields.forEach((field: string) => {
       if (body[field] !== undefined) {
         updateData[field] = body[field];
       }

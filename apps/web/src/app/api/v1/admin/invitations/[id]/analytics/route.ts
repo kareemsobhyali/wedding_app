@@ -54,7 +54,7 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
       lastVisit: lastVisitEvent?.timestamp || null
     };
 
-    events.forEach((e) => {
+    events.forEach((e: any) => {
       switch (e.eventType) {
         case AnalyticsEventType.VIEW:
           metrics.totalViews = e._count;

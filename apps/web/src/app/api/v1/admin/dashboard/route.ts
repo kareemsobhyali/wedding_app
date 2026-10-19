@@ -27,7 +27,7 @@ export async function GET() {
       ARCHIVED: 0,
     };
 
-    counts.forEach(c => {
+    counts.forEach((c: any) => {
       summary[c.status] = c._count;
       summary.TOTAL += c._count;
     });

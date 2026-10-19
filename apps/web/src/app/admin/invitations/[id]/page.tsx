@@ -59,7 +59,7 @@ async function fetchAnalytics(id: string) {
       lastVisit: lastVisitEvent?.timestamp || null
     };
 
-    events.forEach((e) => {
+    events.forEach((e: any) => {
       switch (e.eventType) {
         case 'VIEW': metrics.totalViews = e._count; break;
         case 'MUSIC_PLAY': metrics.musicPlays = e._count; break;

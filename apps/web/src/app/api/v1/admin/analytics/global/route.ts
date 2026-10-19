@@ -31,7 +31,7 @@ export async function GET(req: NextRequest) {
       SHARES: 0
     };
 
-    events.forEach((e) => {
+    events.forEach((e: any) => {
       switch (e.eventType) {
         case AnalyticsEventType.VIEW:
           aggregates.TOTAL_VIEWS = e._count;

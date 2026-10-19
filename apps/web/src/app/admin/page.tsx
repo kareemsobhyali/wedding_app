@@ -28,7 +28,7 @@ async function getDashboardSummary() {
     ARCHIVED: 0,
   };
 
-  counts.forEach(c => {
+  counts.forEach((c: any) => {
     summary[c.status] = c._count;
     summary.TOTAL += c._count;
   });
@@ -59,7 +59,7 @@ async function getDashboardSummary() {
     SHARES: 0
   };
 
-  events.forEach(e => {
+  events.forEach((e: any) => {
     switch (e.eventType) {
       case 'VIEW': analytics.TOTAL_VIEWS = e._count; break;
       case 'MUSIC_PLAY': analytics.MUSIC_PLAYS = e._count; break;
