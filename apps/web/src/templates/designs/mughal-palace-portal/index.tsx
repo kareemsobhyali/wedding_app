@@ -149,19 +149,19 @@ const RomanticCoupleVideo = () => {
 
   return (
     <div 
-      className="absolute bottom-[3.5%] left-1/2 -translate-x-1/2 z-20 pointer-events-none flex flex-col items-center justify-end w-[280px] sm:w-[320px] h-[210px] sm:h-[235px] overflow-hidden select-none"
+      className="absolute bottom-[4%] left-1/2 -translate-x-1/2 z-20 pointer-events-none flex flex-col items-center justify-end w-[145px] sm:w-[165px] h-[120px] sm:h-[135px] overflow-hidden select-none"
     >
       {/* Background Mask to cleanly conceal the static drawing in the palace wallpaper underneath */}
       <div 
-        className="absolute inset-x-[-10px] bottom-[-4px] h-[140px] pointer-events-none rounded-full"
+        className="absolute inset-x-[-6px] bottom-[-4px] h-[95px] pointer-events-none rounded-full"
         style={{
-          background: 'radial-gradient(ellipse at 50% 60%, #FAF5ED 68%, rgba(250,245,237,0.85) 85%, transparent 100%)'
+          background: 'radial-gradient(ellipse at 50% 60%, #FAF5ED 70%, rgba(250,245,237,0.85) 85%, transparent 100%)'
         }}
       />
 
       {/* Romantic Golden Glow Beneath Couple */}
       <div 
-        className="absolute bottom-1 w-28 h-6 rounded-full pointer-events-none"
+        className="absolute bottom-0 w-20 h-4 rounded-full pointer-events-none"
         style={{
           background: 'radial-gradient(ellipse at center, rgba(212,175,55,0.25) 0%, transparent 75%)'
         }}
@@ -180,8 +180,8 @@ const RomanticCoupleVideo = () => {
         style={{
           mixBlendMode: 'multiply',
           filter: 'contrast(1.12) brightness(1.02) saturate(1.1)',
-          maskImage: 'linear-gradient(to top, black 80%, rgba(0,0,0,0.5) 92%, transparent 100%)',
-          WebkitMaskImage: 'linear-gradient(to top, black 80%, rgba(0,0,0,0.5) 92%, transparent 100%)',
+          maskImage: 'linear-gradient(to top, black 82%, rgba(0,0,0,0.5) 93%, transparent 100%)',
+          WebkitMaskImage: 'linear-gradient(to top, black 82%, rgba(0,0,0,0.5) 93%, transparent 100%)',
         }}
       />
     </div>
@@ -349,7 +349,7 @@ export const MughalPalacePortalTemplate: React.FC<TemplateRenderContext> = ({ da
         />
 
         {/* Inside Portal Content: Typography & Layout (Harmonious Royal Gold & Bronze Colors) */}
-        <div className="absolute top-[28.5%] bottom-[21%] left-[18%] right-[18%] flex flex-col items-center justify-between text-center z-10 pointer-events-none py-1 px-1.5">
+        <div className="absolute top-[28.5%] bottom-[17.5%] left-[18%] right-[18%] flex flex-col items-center justify-between text-center z-10 pointer-events-none py-1 px-1.5">
           
           {/* 1. Header & Couple Names */}
           <motion.div
