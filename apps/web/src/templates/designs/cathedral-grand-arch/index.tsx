@@ -20,6 +20,11 @@ import {
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
+const isArabic = (text?: string): boolean => {
+  if (!text) return false;
+  return /[\u0600-\u06FF]/.test(text);
+};
+
 export const CathedralGrandArchTemplate: React.FC<TemplateRenderContext> = ({ data, mode }) => {
   const [isPlayingAudio, setIsPlayingAudio] = useState(false);
   const [showRsvpModal, setShowRsvpModal] = useState(false);
@@ -31,10 +36,21 @@ export const CathedralGrandArchTemplate: React.FC<TemplateRenderContext> = ({ da
   const weddingDate = new Date(data.weddingDate);
 
   // Formatted date values
-  const dayName = custom.dayName || weddingDate.toLocaleDateString('en-US', { weekday: 'long' }).toUpperCase();
+  const isArabicContent = isArabic(data.groomName) || isArabic(data.brideName) || isArabic(custom.sacredQuote);
+  const dayName = custom.dayName || (isArabicContent
+    ? weddingDate.toLocaleDateString('ar-EG', { weekday: 'long' })
+    : weddingDate.toLocaleDateString('en-US', { weekday: 'long' }).toUpperCase()
+  );
   const dayNumber = custom.dayNumber || weddingDate.getDate().toString();
-  const monthName = custom.monthName || weddingDate.toLocaleDateString('en-US', { month: 'long' }).toUpperCase();
+  const monthName = custom.monthName || (isArabicContent
+    ? weddingDate.toLocaleDateString('ar-EG', { month: 'long' })
+    : weddingDate.toLocaleDateString('en-US', { month: 'long' }).toUpperCase()
+  );
   const yearNumber = custom.yearNumber || weddingDate.getFullYear().toString();
+  const timeFormatted = custom.ceremonyTime || (isArabicContent
+    ? weddingDate.toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' })
+    : weddingDate.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })
+  );
 
   const handleCardClick = () => {
     if (data.music && audioRef.current && !isPlayingAudio) {
@@ -152,206 +168,189 @@ export const CathedralGrandArchTemplate: React.FC<TemplateRenderContext> = ({ da
           }}
         />
 
-        {/* Sacred Quote & Families (Top Center, Above Baroque Cartouche) */}
-        <div className="absolute top-[3.5%] left-0 right-0 flex flex-col items-center text-center px-8 z-10 pointer-events-none">
-          {/* Sacred Symbol / Cross or Crest */}
-          <div className="text-[#8C682A] mb-1">
-            <svg width="22" height="26" viewBox="0 0 24 28" fill="none" className="text-[#967431] drop-shadow-sm">
-              <path d="M12 2V26M5 9H19" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-            </svg>
-          </div>
+        {/* Sacred Quote / Blessing & Families (Top Center, Above Baroque Cartouche) */}
+        <div className="absolute top-[4%] left-0 right-0 flex flex-col items-center text-center px-6 z-10 pointer-events-none space-y-0.5">
+          {custom.sacredQuote ? (
+            <p 
+              className="text-[9.5px] sm:text-[10.5px] tracking-[0.16em] uppercase text-[#F5E2B8] drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)] font-semibold max-w-xs leading-relaxed"
+              style={{ fontFamily: isArabic(custom.sacredQuote) ? "'Amiri', serif" : "'Cinzel', serif" }}
+            >
+              {custom.sacredQuote}
+            </p>
+          ) : isArabicContent ? (
+            <p 
+              className="text-xs sm:text-sm font-bold text-[#F5E2B8] drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)] tracking-normal font-amiri leading-relaxed"
+              style={{ fontFamily: "'Amiri', serif" }}
+            >
+              بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
+            </p>
+          ) : (
+            <p 
+              className="text-[9px] sm:text-[10px] tracking-[0.2em] uppercase text-[#F5E2B8] drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)] font-semibold max-w-xs leading-relaxed"
+              style={{ fontFamily: "'Cinzel', serif" }}
+            >
+              "SO THEY ARE NO LONGER TWO, BUT ONE FLESH."
+            </p>
+          )}
 
-          {/* Sacred Quote / Holy Verse */}
           <p 
-            className="text-[9px] sm:text-[10px] tracking-[0.2em] uppercase text-[#735422] font-semibold max-w-xs leading-relaxed"
-            style={{ fontFamily: "'Cinzel', serif" }}
+            className="text-[9px] sm:text-[10px] font-semibold text-[#D4AF37] drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)] tracking-wider"
+            style={{ fontFamily: isArabic(custom.familiesHeader) || isArabicContent ? "'Amiri', serif" : "'Cinzel', serif" }}
           >
-            {custom.sacredQuote || '"SO THEY ARE NO LONGER TWO, BUT ONE FLESH."'}
-          </p>
-          <p 
-            className="text-[8px] sm:text-[8.5px] tracking-[0.25em] uppercase text-[#8C682A] font-medium"
-            style={{ fontFamily: "'Cinzel', serif" }}
-          >
-            {custom.sacredReference || 'MATTHEW 19:6'}
-          </p>
-
-          {/* Together With Their Families */}
-          <p 
-            className="text-[8.5px] sm:text-[9.5px] tracking-[0.3em] uppercase text-[#705220] font-semibold mt-1"
-            style={{ fontFamily: "'Cinzel', serif" }}
-          >
-            {custom.familiesHeader || 'TOGETHER WITH THEIR FAMILIES'}
+            {custom.familiesHeader || (isArabicContent ? 'بمباركة الأهل والأحباب' : 'TOGETHER WITH THEIR FAMILIES')}
           </p>
         </div>
 
         {/* Couple Names (Inside Golden Baroque Cartouche at Top Arch) */}
-        <div className="absolute top-[17%] left-[16%] right-[16%] h-[16%] flex flex-col items-center justify-center text-center z-10 pointer-events-none px-4">
+        <div className="absolute top-[18%] left-[16%] right-[16%] h-[12%] flex flex-col items-center justify-center text-center z-10 pointer-events-none px-2">
           <motion.div
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ delay: 0.3, duration: 0.6 }}
-            className="flex flex-col items-center justify-center space-y-0.5"
+            className="flex items-center justify-center gap-2 sm:gap-3 flex-wrap"
+            dir={isArabic(data.groomName || data.brideName) ? "rtl" : "ltr"}
           >
             {/* Groom Name */}
-            <div className="flex flex-col items-center">
-              <span 
-                className="text-2xl sm:text-[27px] font-normal text-[#6B4B18] leading-tight"
-                style={{ 
-                  fontFamily: "'Cormorant Garamond', serif",
-                  textShadow: '0 1px 1px rgba(255,255,255,0.7)'
-                }}
-              >
-                {data.groomName}
-              </span>
-              {custom.groomSurname && (
-                <span 
-                  className="text-[9px] sm:text-[10px] uppercase tracking-[0.3em] text-[#8C682A] font-semibold -mt-0.5"
-                  style={{ fontFamily: "'Cinzel', serif" }}
-                >
-                  {custom.groomSurname}
-                </span>
-              )}
-            </div>
+            <span 
+              className="text-2xl sm:text-3xl md:text-4xl font-normal text-[#5E3F12] leading-tight"
+              style={{ 
+                fontFamily: isArabic(data.groomName) ? "'Aref Ruqaa', 'Amiri', serif" : "'Alex Brush', 'Great Vibes', cursive",
+                textShadow: '0 1px 2px rgba(255,255,255,0.9), 0 0 1px rgba(94,63,18,0.2)'
+              }}
+            >
+              {data.groomName}
+            </span>
 
             {/* Intertwined Gold Wedding Rings SVG */}
-            <div className="flex items-center justify-center gap-1.5 my-0.5">
-              <div className="h-[0.5px] w-6 bg-[#967431]/60" />
-              <svg width="20" height="12" viewBox="0 0 20 12" fill="none" className="text-[#8C682A]">
-                <circle cx="7" cy="6" r="4.5" stroke="currentColor" strokeWidth="1.2"/>
-                <circle cx="13" cy="6" r="4.5" stroke="currentColor" strokeWidth="1.2"/>
+            <div className="flex items-center justify-center px-0.5 shrink-0">
+              <svg width="22" height="14" viewBox="0 0 20 12" fill="none" className="text-[#967431]">
+                <circle cx="7" cy="6" r="4.5" stroke="currentColor" strokeWidth="1.3"/>
+                <circle cx="13" cy="6" r="4.5" stroke="currentColor" strokeWidth="1.3"/>
               </svg>
-              <div className="h-[0.5px] w-6 bg-[#967431]/60" />
             </div>
 
             {/* Bride Name */}
-            <div className="flex flex-col items-center">
-              <span 
-                className="text-2xl sm:text-[27px] font-normal text-[#6B4B18] leading-tight"
-                style={{ 
-                  fontFamily: "'Cormorant Garamond', serif",
-                  textShadow: '0 1px 1px rgba(255,255,255,0.7)'
-                }}
-              >
-                {data.brideName}
-              </span>
-              {custom.brideSurname && (
-                <span 
-                  className="text-[9px] sm:text-[10px] uppercase tracking-[0.3em] text-[#8C682A] font-semibold -mt-0.5"
-                  style={{ fontFamily: "'Cinzel', serif" }}
-                >
-                  {custom.brideSurname}
-                </span>
-              )}
-            </div>
+            <span 
+              className="text-2xl sm:text-3xl md:text-4xl font-normal text-[#5E3F12] leading-tight"
+              style={{ 
+                fontFamily: isArabic(data.brideName) ? "'Aref Ruqaa', 'Amiri', serif" : "'Alex Brush', 'Great Vibes', cursive",
+                textShadow: '0 1px 2px rgba(255,255,255,0.9), 0 0 1px rgba(94,63,18,0.2)'
+              }}
+            >
+              {data.brideName}
+            </span>
           </motion.div>
         </div>
 
         {/* Invitation Invite Note (Center Below Arch) */}
-        <div className="absolute top-[35.5%] left-0 right-0 flex flex-col items-center text-center px-8 z-10 pointer-events-none">
+        <div className="absolute top-[32%] left-0 right-0 flex flex-col items-center text-center px-8 z-10 pointer-events-none">
           <p 
-            className="text-[8.5px] sm:text-[9.5px] tracking-[0.22em] uppercase text-[#735422] font-semibold"
-            style={{ fontFamily: "'Cinzel', serif" }}
+            className="text-[11px] sm:text-xs font-bold text-[#4A3310] tracking-normal font-amiri drop-shadow-[0_1px_1px_rgba(255,255,255,0.8)]"
+            style={{ fontFamily: isArabic(custom.invitationNote1) || isArabicContent ? "'Amiri', serif" : "'Cinzel', serif" }}
           >
-            {custom.invitationNote1 || 'JOYFULLY INVITE YOU TO CELEBRATE'}
+            {custom.invitationNote1 || (isArabicContent ? 'يسعدنا ويشرفنا دعوتكم لحضور حفل زفافنا' : 'JOYFULLY INVITE YOU TO CELEBRATE')}
           </p>
-          <p 
-            className="text-[9.5px] sm:text-[10.5px] tracking-[0.25em] uppercase text-[#5E4114] font-bold"
-            style={{ fontFamily: "'Cinzel', serif" }}
-          >
-            {custom.invitationNote2 || 'THEIR WEDDING'}
-          </p>
+          {!isArabicContent && custom.invitationNote2 && (
+            <p 
+              className="text-[9.5px] sm:text-[10.5px] tracking-[0.25em] uppercase text-[#5E4114] font-bold"
+              style={{ fontFamily: "'Cinzel', serif" }}
+            >
+              {custom.invitationNote2 || 'THEIR WEDDING'}
+            </p>
+          )}
           {/* Thin Flourish Rule */}
           <div className="w-16 h-[0.7px] bg-[#967431]/60 my-1" />
         </div>
 
-        {/* Itinerary Column (Right Side of Lower Card, Exactly Matching Pin 2) */}
-        <div className="absolute top-[42%] right-[8%] w-[46%] flex flex-col items-center text-center space-y-3 z-10 pointer-events-none">
+        {/* Itinerary Column (Right Side of Lower Card - Translucent Luxury Parchment Card) */}
+        <div className="absolute top-[39%] right-[6%] w-[50%] max-w-[220px] backdrop-blur-xs bg-[#FFFDF9]/88 border border-[#D4AF37]/45 rounded-2xl p-2.5 shadow-[0_8px_25px_rgba(0,0,0,0.14)] flex flex-col items-center text-center space-y-2 z-10 pointer-events-none">
           
           {/* Wedding Ceremony Section */}
-          <div className="flex flex-col items-center space-y-0.5">
-            {/* Church / Venue Icon */}
+          <div className="flex flex-col items-center space-y-0.5 w-full">
+            {/* Sparkles / Rings Icon */}
             <div className="text-[#8C682A] mb-0.5">
-              <Church className="w-5 h-5 stroke-[1.4]" />
+              <Sparkles className="w-4 h-4" />
             </div>
             <p 
-              className="text-[9px] sm:text-[10px] tracking-[0.2em] uppercase font-bold text-[#6B4B18]"
-              style={{ fontFamily: "'Cinzel', serif" }}
+              className="text-[10px] sm:text-[11px] font-bold text-[#6B4B18]"
+              style={{ fontFamily: isArabicContent ? "'Amiri', serif" : "'Cinzel', serif" }}
             >
-              {custom.ceremonyTitle || 'WEDDING CEREMONY'}
+              {custom.ceremonyTitle || (isArabicContent ? 'مراسم الزفاف' : 'WEDDING CEREMONY')}
             </p>
             <p 
-              className="text-[8px] sm:text-[9px] uppercase tracking-wider text-[#735422]"
-              style={{ fontFamily: "'Cinzel', serif" }}
+              className="text-[9px] sm:text-[10px] font-semibold text-[#8C682A]"
+              style={{ fontFamily: isArabicContent ? "'Amiri', serif" : "'Cinzel', serif" }}
             >
               {dayName}
             </p>
+            
             {/* Day Number and Month Row */}
-            <div className="flex items-center justify-center gap-1.5 py-0.5">
+            <div className="flex items-center justify-center gap-2 py-0.5">
               <span 
-                className="text-2xl sm:text-3xl font-bold text-[#6B4B18] leading-none"
+                className="text-2xl sm:text-3xl font-extrabold text-[#6B4B18] leading-none"
                 style={{ fontFamily: "'Cormorant Garamond', serif" }}
               >
                 {dayNumber}
               </span>
-              <div className="flex flex-col text-left leading-none">
-                <span className="text-[9px] font-bold tracking-wider text-[#6B4B18] uppercase">{monthName}</span>
-                <span className="text-[8px] font-medium tracking-wider text-[#8C682A]">{yearNumber}</span>
+              <div className="flex flex-col text-center leading-none">
+                <span className="text-[10px] font-bold text-[#6B4B18]">{monthName}</span>
+                <span className="text-[9px] font-medium text-[#8C682A]">{yearNumber}</span>
               </div>
             </div>
-            <p className="text-[8.5px] sm:text-[9.5px] uppercase tracking-widest text-[#735422] font-semibold">
-              {custom.ceremonyTime || '04:00 PM'}
-            </p>
-            <p className="text-[7.5px] sm:text-[8px] uppercase tracking-wider text-[#8C682A]">
-              ONWARDS
+
+            <p className="text-[9.5px] sm:text-[10px] text-[#735422] font-bold">
+              {timeFormatted}
             </p>
             <div className="w-14 h-[0.5px] bg-[#967431]/40 my-0.5" />
           </div>
 
-          {/* Reception Section */}
-          <div className="flex flex-col items-center space-y-0.5">
+          {/* Reception / Dinner Section */}
+          <div className="flex flex-col items-center space-y-0.5 w-full">
             <div className="text-[#8C682A] mb-0.5">
-              <Wine className="w-4 h-4 stroke-[1.4]" />
+              <Heart className="w-3.5 h-3.5" />
             </div>
             <p 
-              className="text-[9px] sm:text-[10px] tracking-[0.2em] uppercase font-bold text-[#6B4B18]"
-              style={{ fontFamily: "'Cinzel', serif" }}
+              className="text-[10px] sm:text-[11px] font-bold text-[#6B4B18]"
+              style={{ fontFamily: isArabicContent ? "'Amiri', serif" : "'Cinzel', serif" }}
             >
-              {custom.receptionTitle || 'RECEPTION'}
+              {custom.receptionTitle || (isArabicContent ? 'حفل الاستقبال' : 'RECEPTION')}
             </p>
-            <p className="text-[8.5px] sm:text-[9.5px] uppercase tracking-widest text-[#735422] font-semibold">
-              {custom.receptionTime || '07:30 PM'}
-            </p>
-            <p className="text-[7.5px] sm:text-[8px] uppercase tracking-wider text-[#8C682A]">
-              ONWARDS
+            <p className="text-[9px] sm:text-[10px] text-[#735422] font-semibold">
+              {custom.receptionTime || (isArabicContent ? '٠٧:٣٠ م' : '07:30 PM')}
             </p>
             <div className="w-14 h-[0.5px] bg-[#967431]/40 my-0.5" />
           </div>
 
           {/* Venue & Location Address */}
-          <div className="flex flex-col items-center space-y-0.5 max-w-[180px]">
+          <div className="flex flex-col items-center space-y-0.5 max-w-[180px] w-full">
+            <div className="text-[#8C682A] mb-0.5">
+              <MapPin className="w-3.5 h-3.5" />
+            </div>
             <p 
-              className="text-[9px] sm:text-[10px] font-bold tracking-[0.15em] uppercase text-[#6B4B18] leading-tight"
-              style={{ fontFamily: "'Cinzel', serif" }}
+              className="text-xs sm:text-sm font-bold text-[#6B4B18] leading-tight"
+              style={{ fontFamily: isArabicContent ? "'Amiri', serif" : "'Cinzel', serif" }}
             >
-              {data.venueName || 'ST. MARY\'S CATHEDRAL'}
+              {data.venueName || (isArabicContent ? 'قاعة اللؤلؤة' : 'ST. MARY\'S CATHEDRAL')}
             </p>
-            <p className="text-[7.5px] sm:text-[8.5px] uppercase tracking-wider text-[#735422] leading-tight">
-              {data.venueAddress || custom.venueAddressSub || 'Park Street, City Center'}
-            </p>
+            {(data.venueAddress || custom.venueAddressSub) && (
+              <p className="text-[9px] sm:text-[10px] text-[#735422] leading-tight line-clamp-2">
+                {data.venueAddress || custom.venueAddressSub}
+              </p>
+            )}
           </div>
 
           {/* Reception to Follow Footnote in Cursive */}
-          <div className="pt-1 flex flex-col items-center">
+          <div className="pt-0.5 flex flex-col items-center">
             <p 
-              className="text-xs sm:text-sm text-[#735422] italic font-normal"
-              style={{ fontFamily: "'Alex Brush', 'Great Vibes', cursive" }}
+              className="text-[10px] sm:text-xs text-[#735422] italic font-normal"
+              style={{ fontFamily: isArabicContent ? "'Amiri', serif" : "'Alex Brush', 'Great Vibes', cursive" }}
             >
-              {custom.receptionBallroomNote || 'Reception to follow at The Grand Ballroom'}
+              {custom.receptionBallroomNote || (isArabicContent ? 'حضوركم يكتمل به فرحنا وسعادتنا' : 'Reception to follow at The Grand Ballroom')}
             </p>
             {/* Heart flourish */}
             <div className="flex items-center justify-center my-0.5">
-              <svg width="50" height="8" viewBox="0 0 50 8" fill="none" className="text-[#8C682A]">
-                <path d="M0 4H20M30 4H50" stroke="currentColor" strokeWidth="0.5"/>
+              <svg width="45" height="8" viewBox="0 0 50 8" fill="none" className="text-[#8C6D38]">
+                <path d="M0 4H20M30 4H50" stroke="currentColor" strokeWidth="0.6"/>
                 <path d="M25 6C25 6 22 4 22 2.8C22 2 22.6 1.5 23.2 1.5C23.7 1.5 25 2.2 25 2.2C25 2.2 26.3 1.5 26.8 1.5C27.4 1.5 28 2 28 2.8C28 4 25 6 25 6Z" fill="currentColor"/>
               </svg>
             </div>
@@ -359,76 +358,43 @@ export const CathedralGrandArchTemplate: React.FC<TemplateRenderContext> = ({ da
 
         </div>
 
-        {/* Bottom Banner (Your Presence Will Make Our Day Even More Special) */}
-        <div className="absolute bottom-[2.5%] left-0 right-0 flex flex-col items-center text-center px-6 z-10 pointer-events-none">
-          <p 
-            className="text-[8px] sm:text-[9px] tracking-[0.25em] uppercase text-[#6B4B18] font-semibold"
-            style={{ fontFamily: "'Cinzel', serif" }}
-          >
-            {custom.closingBannerText || 'YOUR PRESENCE WILL MAKE OUR DAY'}
-          </p>
-          <p 
-            className="text-[7.5px] sm:text-[8.5px] tracking-[0.28em] uppercase text-[#8C682A] font-medium"
-            style={{ fontFamily: "'Cinzel', serif" }}
-          >
-            EVEN MORE SPECIAL
-          </p>
-
-          <div className="flex items-center justify-center mt-1">
-            <svg width="60" height="8" viewBox="0 0 60 8" fill="none" className="text-[#967431]">
-              <path d="M0 4H24M36 4H60" stroke="currentColor" strokeWidth="0.6"/>
-              <circle cx="26" cy="4" r="1" fill="currentColor"/>
-              <circle cx="34" cy="4" r="1" fill="currentColor"/>
-              <path d="M30 6C30 6 28 4.2 28 3.2C28 2.5 28.5 2 29.1 2C29.6 2 30 2.6 30 2.6C30 2.6 30.4 2 30.9 2C31.5 2 32 2.5 32 3.2C32 4.2 30 6 30 6Z" fill="currentColor"/>
-            </svg>
-          </div>
-        </div>
-
       </motion.div>
 
-      {/* Action Controls Bar */}
-      {/* Luxury Glassmorphism Floating Action Dock */}
-      <motion.div 
-        initial={{ y: 30, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ delay: 0.5, duration: 0.6 }}
-        className="fixed bottom-4 sm:bottom-6 left-1/2 -translate-x-1/2 z-40 w-[94%] max-w-[440px]"
-      >
-        <div className="backdrop-blur-xl bg-black/80 border border-[#D4AF37]/50 shadow-[0_12px_36px_rgba(0,0,0,0.5)] rounded-full p-1.5 flex items-center justify-between gap-1.5">
-          {/* Google Maps Button */}
-          {data.googleMapsUrl && (
-            <a
-              href={data.googleMapsUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="py-2.5 px-3 sm:px-4 rounded-full bg-stone-900/90 hover:bg-stone-800 border border-[#D4AF37]/40 text-[#E6C687] font-medium text-xs flex items-center justify-center gap-1.5 active:scale-95 transition-all shadow-xs"
-            >
-              <MapPin className="w-3.5 h-3.5 text-[#D4AF37]" />
-              <span className="font-cairo">الموقع</span>
-            </a>
-          )}
+      {/* Floating 3-Pill Luxury Dock (Grid 3-cols: Never wraps or truncates!) */}
+      <div className="fixed bottom-3 sm:bottom-5 left-1/2 -translate-x-1/2 z-40 w-[92%] max-w-[380px]">
+        <div className="backdrop-blur-xl bg-black/85 border border-[#D4AF37]/50 shadow-[0_12px_36px_rgba(0,0,0,0.5)] rounded-full p-1.5 grid grid-cols-3 gap-1.5 items-center">
+          {/* 1. Maps Button */}
+          <a
+            href={data.googleMapsUrl || '#'}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-full py-2 px-1 rounded-full bg-stone-900/90 hover:bg-stone-800 border border-[#D4AF37]/40 text-[#E6C687] font-bold text-xs flex items-center justify-center gap-1 active:scale-95 transition-all shadow-xs"
+          >
+            <MapPin className="w-3.5 h-3.5 text-[#D4AF37] shrink-0" />
+            <span className="font-cairo truncate">الموقع</span>
+          </a>
 
-          {/* Add to Calendar Button */}
+          {/* 2. Add to Calendar Button */}
           <a
             href={gcalUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="py-2.5 px-3 sm:px-4 rounded-full bg-stone-900/90 hover:bg-stone-800 border border-[#D4AF37]/40 text-[#E6C687] font-medium text-xs flex items-center justify-center gap-1.5 active:scale-95 transition-all shadow-xs"
+            className="w-full py-2 px-1 rounded-full bg-stone-900/90 hover:bg-stone-800 border border-[#D4AF37]/40 text-[#E6C687] font-bold text-xs flex items-center justify-center gap-1 active:scale-95 transition-all shadow-xs"
           >
-            <Calendar className="w-3.5 h-3.5 text-[#D4AF37]" />
-            <span className="font-cairo">حفظ الموعد</span>
+            <Calendar className="w-3.5 h-3.5 text-[#D4AF37] shrink-0" />
+            <span className="font-cairo truncate">الموعد</span>
           </a>
 
-          {/* Primary RSVP Button */}
+          {/* 3. Primary RSVP Button */}
           <button
             onClick={() => setShowRsvpModal(true)}
-            className="flex-1 min-w-[125px] py-2.5 px-3 sm:px-4 rounded-full bg-gradient-to-r from-[#967431] via-[#D4AF37] to-[#8C6D38] text-white shadow-md text-xs sm:text-sm font-semibold flex items-center justify-center gap-1.5 hover:brightness-110 active:scale-95 transition-all"
+            className="w-full py-2 px-1 rounded-full bg-gradient-to-r from-[#967431] via-[#D4AF37] to-[#8C6D38] text-white font-bold text-xs shadow-md flex items-center justify-center gap-1 hover:brightness-110 active:scale-95 transition-all"
           >
-            <Heart className="w-3.5 h-3.5 fill-white" />
-            <span className="font-cairo font-bold">تأكيد الحضور (RSVP)</span>
+            <Heart className="w-3.5 h-3.5 fill-white shrink-0" />
+            <span className="font-cairo truncate">تأكيد الحضور</span>
           </button>
         </div>
-      </motion.div>
+      </div>
 
       {/* RSVP Modal Dialog */}
       <AnimatePresence>
