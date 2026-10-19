@@ -22,6 +22,11 @@ import { PearlSilkMinimalistTemplate } from './designs/pearl-silk-minimalist';
 import { LuxuryFlipCardTemplate } from './designs/luxury-flip-card';
 import { BoardingPassVipTemplate } from './designs/boarding-pass-vip';
 import { LuxuryBookletEditorialTemplate } from './designs/luxury-booklet-editorial';
+import { RoyalScrollTemplate } from './designs/royal-scroll';
+import { VelvetJewelryBoxTemplate } from './designs/velvet-jewelry-box';
+import { VintageVinylPlayerTemplate } from './designs/vintage-vinyl-player';
+import { PolaroidPhotoReelTemplate } from './designs/polaroid-photo-reel';
+import { CelestialConstellationsTemplate } from './designs/celestial-constellations';
 
 export interface RegisteredTemplate {
   component: React.FC<TemplateRenderContext>;
@@ -587,6 +592,97 @@ export const templateRegistry: Record<string, RegisteredTemplate> = {
         { key: 'unpluggedText', label: 'ملاحظة التصوير والكاميرات', type: 'text', defaultValue: 'رجاءً الاستمتاع باللحظة والتقليل من التصوير بالهواتف أثناء الزفة 📵' },
         { key: 'kidsText', label: 'ملاحظة الأطفال', type: 'text', defaultValue: 'جنة الأطفال منازلهم.. نعتذر عن قبول حضور الأطفال مع كامل المحبة 👶' },
         { key: 'closingNote', label: 'العبارة الختامية في الصفحة الأخيرة', type: 'text', defaultValue: 'بكم تكتمل فرحتنا وتزداد ليلتنا نوراً وبهاءً 🤍' }
+      ]
+    }
+  },
+  'royal-scroll': {
+    component: RoyalScrollTemplate,
+    metadata: {
+      id: 'royal-scroll',
+      name: 'Royal Parchment Scroll 📜',
+      description: 'مخطوطة وفرمان ملكي تاريخي بمقابض خشبية ينفرد بسحب سلس وأختام شمعية وتوقيع سلطاني.',
+      previewImage: 'https://images.unsplash.com/photo-1519225421980-715cb0215aed?q=80&w=1000&auto=format&fit=crop',
+      version: '1.0.0',
+      supportedFeatures: ['HERO', 'VENUE', 'MAPS', 'MUSIC', 'CONTACTS', 'SHARE'],
+      customFields: [
+        { key: 'scrollSubtitle', label: 'شريط أعلى المخطوطة', type: 'text', defaultValue: 'IMPERIAL ROYAL DECREE • مرسوم زفاف ملكي' },
+        { key: 'decreeHeader', label: 'بسملة أو فاتحة الفرمان', type: 'text', defaultValue: 'بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ' },
+        { key: 'decreeVerse', label: 'الآية الكريمة المباركة', type: 'textarea', defaultValue: '«وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا وَجَعَلَ بَيْنَكُم مَّوَدَّةً وَرَحْمَةً»' },
+        { key: 'decreeTitle', label: 'عنوان الفرمان الملكي', type: 'text', defaultValue: 'فرمان ملكي صادر بالبشرى والمسرة' },
+        { key: 'introLine', label: 'مقدمة إعلان الفرح', type: 'text', defaultValue: 'يتشرف قصر العروسين بإعلان عقد القران الميمون وزفاف:' },
+        { key: 'decreeBody', label: 'نص الفرمان الملكي ودعوة المعازيم', type: 'textarea', defaultValue: 'يسعدنا ويشرفنا دعوة معاليكم وأحبابكم لحضور ليلتنا الكبرى، لنشهد معاً تتويج هذا الرباط المقدس بمكارم جمعكم وطيب أنسكم.' },
+        { key: 'decreeClosing', label: 'خاتمة الفرمان المبارك', type: 'text', defaultValue: '«دامت الأفراح بدياركم عامرة بالمسرات والمحبة»' }
+      ]
+    }
+  },
+  'velvet-jewelry-box': {
+    component: VelvetJewelryBoxTemplate,
+    metadata: {
+      id: 'velvet-jewelry-box',
+      name: 'Velvet Jewelry Box 💍',
+      description: 'صندوق مجوهرات مخملي فاخر ثلاثي الأبعاد ينفتح غطاؤه للأعلى مع وسادة الخواتم ودرج سري ينسحب للأمام.',
+      previewImage: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=1000&auto=format&fit=crop',
+      version: '1.0.0',
+      supportedFeatures: ['HERO', 'VENUE', 'MAPS', 'MUSIC', 'CONTACTS', 'SHARE'],
+      customFields: [
+        { key: 'boxSubtitle', label: 'شريط أعلى الصندوق', type: 'text', defaultValue: 'VELVET JEWELRY BOX & SECRET DRAWER' },
+        { key: 'monogram', label: 'أحرف المونوغرام على الغطاء', type: 'text', defaultValue: '' },
+        { key: 'claspText', label: 'نص زر فتح القفل', type: 'text', defaultValue: 'انقر لفتح قفل الصندوق' },
+        { key: 'holyVerse', label: 'الآية الكريمة أو الرسالة', type: 'textarea', defaultValue: '«وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا وَجَعَلَ بَيْنَكُم مَّوَدَّةً وَرَحْمَةً»' },
+        { key: 'drawerNote', label: 'نص رسالة بطاقة الدرج المخفي', type: 'textarea', defaultValue: 'يسعدنا ويشرفنا حضوركم ومشاركتنا أبهى ليالي العمر لتكتمل سعادتنا برؤيتكم بيننا.' }
+      ]
+    }
+  },
+  'vintage-vinyl-player': {
+    component: VintageVinylPlayerTemplate,
+    metadata: {
+      id: 'vintage-vinyl-player',
+      name: 'Vintage Vinyl Player 🎶',
+      description: 'مشغل أسطوانات فونوغراف كلاسيكي بإبرة دوارة وأسطوانة فينيل مذهبة وغلاف ألبوم ينسحب بتراك ليست الليلة.',
+      previewImage: 'https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=1000&auto=format&fit=crop',
+      version: '1.0.0',
+      supportedFeatures: ['HERO', 'VENUE', 'MAPS', 'MUSIC', 'CONTACTS', 'SHARE'],
+      customFields: [
+        { key: 'vinylSubtitle', label: 'ترويسة الفونوغراف', type: 'text', defaultValue: 'VINTAGE PHONOGRAPH • VINYL WEDDING EDITION' },
+        { key: 'albumNote', label: 'نص غلاف الألبوم الترحيبي', type: 'textarea', defaultValue: '«وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا وَجَعَلَ بَيْنَكُم مَّوَدَّةً وَرَحْمَةً»' },
+        { key: 'track1Title', label: 'التراك 1 - العنوان', type: 'text', defaultValue: 'استقبال الأحباب وبداية اللحن' },
+        { key: 'track1Time', label: 'التراك 1 - التوقيت', type: 'text', defaultValue: '07:30 PM' },
+        { key: 'track2Title', label: 'التراك 2 - العنوان', type: 'text', defaultValue: 'الزفة وعقد القران الملكي' },
+        { key: 'track2Time', label: 'التراك 2 - التوقيت', type: 'text', defaultValue: '08:45 PM' },
+        { key: 'track3Title', label: 'التراك 3 - العنوان', type: 'text', defaultValue: 'مأدبة العشاء ومباركة الجمع' },
+        { key: 'track3Time', label: 'التراك 3 - التوقيت', type: 'text', defaultValue: '10:15 PM' }
+      ]
+    }
+  },
+  'polaroid-photo-reel': {
+    component: PolaroidPhotoReelTemplate,
+    metadata: {
+      id: 'polaroid-photo-reel',
+      name: 'Hanging Polaroid Photo Reel 📸',
+      description: 'معرض لقطات بولارويد حقيقية معلقة على حبل إضاءة بمشابك خشبية تتأرجح وتكبر باللمس لمعاينة كل تفصيلة.',
+      previewImage: 'https://images.unsplash.com/photo-1522673607200-164d1b6ce486?q=80&w=1000&auto=format&fit=crop',
+      version: '1.0.0',
+      supportedFeatures: ['HERO', 'VENUE', 'MAPS', 'MUSIC', 'CONTACTS', 'SHARE'],
+      customFields: [
+        { key: 'polaroidHeader', label: 'شريط الترويسة', type: 'text', defaultValue: 'HANGING POLAROID LOVE REEL' },
+        { key: 'holyVerse', label: 'الآية الكريمة', type: 'textarea', defaultValue: '«وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا وَجَعَلَ بَيْنَكُم مَّوَدَّةً وَرَحْمَةً»' },
+        { key: 'polaroidNote', label: 'نص رسالة البولارويد الترحيبية', type: 'textarea', defaultValue: 'بين عبق الذكريات وبداية الفرح الجديد، نتشرف بحضوركم الكريم معنا.' }
+      ]
+    }
+  },
+  'celestial-constellations': {
+    component: CelestialConstellationsTemplate,
+    metadata: {
+      id: 'celestial-constellations',
+      name: 'Celestial Constellations Map 🌌',
+      description: 'خريطة فلكية تفاعلية بسماء ليلية عميقة، يلمس الضيف النجوم ليرسم كوكبة الحب وتتفتح بطاقة القمر الذهبية.',
+      previewImage: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=1000&auto=format&fit=crop',
+      version: '1.0.0',
+      supportedFeatures: ['HERO', 'VENUE', 'MAPS', 'MUSIC', 'CONTACTS', 'SHARE'],
+      customFields: [
+        { key: 'celestialSubtitle', label: 'ترويسة الخريطة الفلكية', type: 'text', defaultValue: 'CELESTIAL CONSTELLATION MAP' },
+        { key: 'celestialVerse', label: 'الآية الكريمة في سماء النجوم', type: 'textarea', defaultValue: '«وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا وَجَعَلَ بَيْنَكُم مَّوَدَّةً وَرَحْمَةً»' },
+        { key: 'celestialNote', label: 'رسالة بطاقة القمر السماوية', type: 'textarea', defaultValue: 'تحت ضياء النجوم وبريق السماء، يسعدنا أن تشاركونا فرحة العمر في ليلتنا السماوية.' }
       ]
     }
   }

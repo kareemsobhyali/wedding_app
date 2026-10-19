@@ -32,7 +32,12 @@ export const defaultSettings = {
     'pearl-silk-minimalist': '/preview?template=pearl-silk-minimalist',
     'luxury-flip-card': '/preview?template=luxury-flip-card',
     'boarding-pass-vip': '/preview?template=boarding-pass-vip',
-    'luxury-booklet-editorial': '/preview?template=luxury-booklet-editorial'
+    'luxury-booklet-editorial': '/preview?template=luxury-booklet-editorial',
+    'royal-scroll': '/preview?template=royal-scroll',
+    'velvet-jewelry-box': '/preview?template=velvet-jewelry-box',
+    'vintage-vinyl-player': '/preview?template=vintage-vinyl-player',
+    'polaroid-photo-reel': '/preview?template=polaroid-photo-reel',
+    'celestial-constellations': '/preview?template=celestial-constellations'
   },
   previewImages: {}
 };

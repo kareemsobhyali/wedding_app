@@ -77,7 +77,12 @@ export default function AdminSettingsPage() {
     'pearl-silk-minimalist',
     'luxury-flip-card',
     'boarding-pass-vip',
-    'luxury-booklet-editorial'
+    'luxury-booklet-editorial',
+    'royal-scroll',
+    'velvet-jewelry-box',
+    'vintage-vinyl-player',
+    'polaroid-photo-reel',
+    'celestial-constellations'
   ];
 
   return (

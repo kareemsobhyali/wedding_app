@@ -27,6 +27,11 @@ const TEMPLATES = [
   { id: 'luxury-flip-card', slug: 'luxury-flip-card', name: '🎴 3D Luxury Flip Card (بطاقة ذهبية تفاعلية بوجهين شاشة واحدة)' },
   { id: 'boarding-pass-vip', slug: 'boarding-pass-vip', name: '✈️ VIP Wedding Boarding Pass (تذكرة طيران مع كعب قص لتأكيد الحضور)' },
   { id: 'luxury-booklet-editorial', slug: 'luxury-booklet-editorial', name: '📖 Luxury Wedding Booklet (كتيب ومجلة زفاف فاخرة متعددة الصفحات)' },
+  { id: 'royal-scroll', slug: 'royal-scroll', name: '📜 Royal Parchment Scroll (الفرمان والمخطوطة الملكية المنسدلة بمقابض خشبية)' },
+  { id: 'velvet-jewelry-box', slug: 'velvet-jewelry-box', name: '💍 Velvet Jewelry Box (صندوق المجوهرات المخملي مع الدرج السحري)' },
+  { id: 'vintage-vinyl-player', slug: 'vintage-vinyl-player', name: '🎶 Vintage Vinyl Player (مشغل الفونوغراف الكلاسيكي مع أسطوانة الفينيل)' },
+  { id: 'polaroid-photo-reel', slug: 'polaroid-photo-reel', name: '📸 Hanging Polaroid Reel (معرض صور البولارويد المعلقة بمشابك خشبية)' },
+  { id: 'celestial-constellations', slug: 'celestial-constellations', name: '🌌 Celestial Constellations (سماء النجوم والأبراج الفلكية التفاعلية)' },
 ];
 
 export default function AdminEditForm({ invitation, apiToken }: { invitation: any, apiToken: string }) {
