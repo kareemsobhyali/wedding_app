@@ -68,7 +68,9 @@ export default function AdminSettingsPage() {
     'pearl-box',
     'story-vogue-editorial',
     'story-royal-emerald',
-    'story-boho-terracotta'
+    'story-boho-terracotta',
+    'wax-silk-reveal',
+    'arabian-crescent-lantern'
   ];
 
   return (

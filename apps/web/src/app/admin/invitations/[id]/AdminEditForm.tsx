@@ -18,6 +18,8 @@ const TEMPLATES = [
   { id: 'story-vogue-editorial', slug: 'story-vogue-editorial', name: '📱 Vogue Story (ستوري مجلة فوغ الأنيقة)' },
   { id: 'story-royal-emerald', slug: 'story-royal-emerald', name: '📱 Royal Emerald Story (ستوري الزمرد والذهب الملكي)' },
   { id: 'story-boho-terracotta', slug: 'story-boho-terracotta', name: '📱 Boho Terracotta Story (ستوري بوهو دافئ ورومانسي)' },
+  { id: 'wax-silk-reveal', slug: 'wax-silk-reveal', name: '💌 Wax Seal & Silk (كسر الختم الشمعي والمظروف الحريري)' },
+  { id: 'arabian-crescent-lantern', slug: 'arabian-crescent-lantern', name: '🌙 Arabian Crescent & Lanterns (الهلال المذهب والفوانيس الملكية)' },
 ];
 
 export default function AdminEditForm({ invitation, apiToken }: { invitation: any, apiToken: string }) {

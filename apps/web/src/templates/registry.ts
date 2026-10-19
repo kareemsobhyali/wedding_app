@@ -13,6 +13,8 @@ import { PearlBoxTemplate } from './designs/pearl-box';
 import { StoryVogueEditorialTemplate } from './designs/story-vogue-editorial';
 import { StoryRoyalEmeraldTemplate } from './designs/story-royal-emerald';
 import { StoryBohoTerracottaTemplate } from './designs/story-boho-terracotta';
+import { WaxSilkRevealTemplate } from './designs/wax-silk-reveal';
+import { ArabianCrescentLanternTemplate } from './designs/arabian-crescent-lantern';
 
 export interface RegisteredTemplate {
   component: React.FC<TemplateRenderContext>;
@@ -333,6 +335,67 @@ export const templateRegistry: Record<string, RegisteredTemplate> = {
         { key: 'introVerse', label: 'الآية الكريمة أو العبارة الرومانسية', type: 'textarea', defaultValue: '«وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا وَجَعَلَ بَيْنَكُم مَّوَدَّةً وَرَحْمَةً»' },
         { key: 'invitationNote', label: 'رسالة الدعوة', type: 'textarea', defaultValue: 'بين دفء اللحظات وصدق المشاعر، يسعدنا دعوتكم لمشاركتنا ليلة العمر لنحتفل معاً بحب جمع قلبينا.' },
         { key: 'dressCode', label: 'قواعد اللباس (Dress Code)', type: 'text', defaultValue: 'أناقة عصرية بألوان الباستيل / Semi-formal & Pastel' }
+      ]
+    }
+  },
+  'wax-silk-reveal': {
+    component: WaxSilkRevealTemplate,
+    metadata: {
+      id: 'wax-silk-reveal',
+      name: 'Wax Seal & Silk 💌',
+      description: 'مظروف حريري فاخر بختم شمعي ثلاثي الأبعاد ينكسر واقعياً لتنزلق بطاقة الدعوة المذهبة.',
+      previewImage: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=1000&auto=format&fit=crop',
+      version: '1.0.0',
+      supportedFeatures: ['HERO', 'VENUE', 'MAPS', 'MUSIC', 'COUNTDOWN', 'CONTACTS', 'SHARE'],
+      customFields: [
+        { key: 'waxMonogram', label: 'أحرف الختم الشمعي (مثال: A & F)', type: 'text', defaultValue: '' },
+        { key: 'waxColor', label: 'لون الختم الشمعي (burgundy / gold / emerald)', type: 'text', defaultValue: 'burgundy' },
+        { key: 'envelopeTagline', label: 'العنوان أعلى المظروف', type: 'text', defaultValue: 'ROYAL WEDDING INVITATION' },
+        { key: 'envelopeHint', label: 'تلميح زر كسر الختم', type: 'text', defaultValue: 'CLICK WAX TO BREAK SEAL & OPEN' },
+        { key: 'introVerse', label: 'الآية الكريمة أو عبارة الترحيب', type: 'textarea', defaultValue: '«وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا وَجَعَلَ بَيْنَكُم مَّوَدَّةً وَرَحْمَةً»' },
+        { key: 'invitationIntro', label: 'مقدمة بطاقة الدعوة', type: 'text', defaultValue: 'يتشرف العروسان بدعوتكم لحضور حفل زفافهما' },
+        { key: 'invitationNote', label: 'نص بطاقة الدعوة الترحيبي', type: 'textarea', defaultValue: 'يسعدنا ويشرفنا حضوركم ومشاركتنا فرحة العمر في هذا اليوم المبارك، لتكتمل سعادتنا برؤيتكم بيننا.' },
+        { key: 'dressCode', label: 'قواعد اللباس (Dress Code)', type: 'text', defaultValue: 'رسمي وأنيق / Black Tie' },
+        { key: 'timeline1Title', label: 'الفقرة 1 - العنوان', type: 'text', defaultValue: 'استقبال الضيوف الكرام' },
+        { key: 'timeline1Time', label: 'الفقرة 1 - التوقيت', type: 'text', defaultValue: '07:30 PM' },
+        { key: 'timeline1Desc', label: 'الفقرة 1 - الوصف', type: 'text', defaultValue: 'الترحيب والمشروبات المنعشة ومراسم البداية' },
+        { key: 'timeline2Title', label: 'الفقرة 2 - العنوان', type: 'text', defaultValue: 'عقد القران والزفة' },
+        { key: 'timeline2Time', label: 'الفقرة 2 - التوقيت', type: 'text', defaultValue: '08:45 PM' },
+        { key: 'timeline2Desc', label: 'الفقرة 2 - الوصف', type: 'text', defaultValue: 'لحظات مباركة البداية وإطلالة العروسين' },
+        { key: 'timeline3Title', label: 'الفقرة 3 - العنوان', type: 'text', defaultValue: 'العشاء الملكي' },
+        { key: 'timeline3Time', label: 'الفقرة 3 - التوقيت', type: 'text', defaultValue: '10:15 PM' },
+        { key: 'timeline3Desc', label: 'الفقرة 3 - الوصف', type: 'text', defaultValue: 'بوفيه عشاء مفتوح واحتفال حتى النهاية' },
+        { key: 'closingMessage', label: 'العبارة الختامية', type: 'text', defaultValue: 'حضوركم شرف لنا ويزيد ليلتنا بهجة وسروراً 🤍' }
+      ]
+    }
+  },
+  'arabian-crescent-lantern': {
+    component: ArabianCrescentLanternTemplate,
+    metadata: {
+      id: 'arabian-crescent-lantern',
+      name: 'Arabian Crescent & Lanterns 🌙',
+      description: 'سماء ليلية كحلية بهلال ذهبي ثلاثي الأبعاد وفوانيس عربية متأرجحة بنور الشموع وبسملة مذهبة.',
+      previewImage: 'https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=1000&auto=format&fit=crop',
+      version: '1.0.0',
+      supportedFeatures: ['HERO', 'VENUE', 'MAPS', 'MUSIC', 'COUNTDOWN', 'CONTACTS', 'SHARE'],
+      customFields: [
+        { key: 'bismillahText', label: 'نص البسملة أو الافتتاحية', type: 'text', defaultValue: 'بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ' },
+        { key: 'crescentBadge', label: 'الشعار داخل الهلال الذهبي', type: 'text', defaultValue: 'ROYAL CELEBRATION' },
+        { key: 'crescentQuote', label: 'عبارة الهلال والنجوم', type: 'textarea', defaultValue: '«تلاقت الأرواح تحت سماء كُتبت تفاصيل حبها بنور النجوم»' },
+        { key: 'introVerse', label: 'الآية الكريمة أو عبارة الترحيب', type: 'textarea', defaultValue: '«وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا وَجَعَلَ بَيْنَكُم مَّوَدَّةً وَرَحْمَةً»' },
+        { key: 'invitationIntro', label: 'مقدمة بطاقة الدعوة', type: 'text', defaultValue: 'يتشرف العروسان بدعوتكم لحضور حفل زفافهما المبارك' },
+        { key: 'invitationNote', label: 'نص بطاقة الدعوة الترحيبي', type: 'textarea', defaultValue: 'عندما تشرق أنوار هذه الليلة المباركة، نتشرف بدعوتكم لمشاركتنا فرحة العمر وتتويج مسيرة الحب في ليلتنا المنتظرة.' },
+        { key: 'dressCode', label: 'قواعد اللباس (Dress Code)', type: 'text', defaultValue: 'أزياء سهرة ملكية راقية / Formal Wear' },
+        { key: 'timeline1Title', label: 'الفقرة 1 - العنوان', type: 'text', defaultValue: 'توافد الضيوف الكرام' },
+        { key: 'timeline1Time', label: 'الفقرة 1 - التوقيت', type: 'text', defaultValue: '07:30 PM' },
+        { key: 'timeline1Desc', label: 'الفقرة 1 - الوصف', type: 'text', defaultValue: 'مراسم الاستقبال الفاخرة بالبخور والعود والمشروبات' },
+        { key: 'timeline2Title', label: 'الفقرة 2 - العنوان', type: 'text', defaultValue: 'الزفة وعقد القران المبارك' },
+        { key: 'timeline2Time', label: 'الفقرة 2 - التوقيت', type: 'text', defaultValue: '08:45 PM' },
+        { key: 'timeline2Desc', label: 'الفقرة 2 - الوصف', type: 'text', defaultValue: 'لحظات مباركة البداية وإطلالة العروسين الكريمة' },
+        { key: 'timeline3Title', label: 'الفقرة 3 - العنوان', type: 'text', defaultValue: 'العشاء الملكي' },
+        { key: 'timeline3Time', label: 'الفقرة 3 - التوقيت', type: 'text', defaultValue: '10:15 PM' },
+        { key: 'timeline3Desc', label: 'الفقرة 3 - الوصف', type: 'text', defaultValue: 'بوفيه عشاء فاخر احتفاءً بكم واحتفال حتى النهاية' },
+        { key: 'closingDuaa', label: 'دعاء الختام المبارك', type: 'text', defaultValue: '«بَارَكَ اللَّهُ لَكُمَا وَبَارَكَ عَلَيْكُمَا وَجَمَعَ بَيْنَكُمَا فِي خَيْرٍ» ✨' }
       ]
     }
   }

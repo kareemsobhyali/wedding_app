@@ -23,7 +23,9 @@ export const defaultSettings = {
     'pearl-box': '/preview?template=pearl-box',
     'story-vogue-editorial': '/preview?template=story-vogue-editorial',
     'story-royal-emerald': '/preview?template=story-royal-emerald',
-    'story-boho-terracotta': '/preview?template=story-boho-terracotta'
+    'story-boho-terracotta': '/preview?template=story-boho-terracotta',
+    'wax-silk-reveal': '/preview?template=wax-silk-reveal',
+    'arabian-crescent-lantern': '/preview?template=arabian-crescent-lantern'
   },
   previewImages: {}
 };
