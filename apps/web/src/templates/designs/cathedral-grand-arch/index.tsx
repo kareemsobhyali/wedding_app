@@ -188,13 +188,16 @@ export const CathedralGrandArchTemplate: React.FC<TemplateRenderContext> = ({ da
               {data.groomName}
             </span>
 
-            {/* Intertwined Gold Wedding Rings SVG */}
-            <div className="flex items-center justify-center my-0.5">
-              <svg width="18" height="10" viewBox="0 0 20 12" fill="none" className="text-[#967431]">
-                <circle cx="7" cy="6" r="4.5" stroke="currentColor" strokeWidth="1.3"/>
-                <circle cx="13" cy="6" r="4.5" stroke="currentColor" strokeWidth="1.3"/>
-              </svg>
-            </div>
+            {/* Elegant Golden Ampersand between names */}
+            <span 
+              className="text-base sm:text-lg font-serif text-[#8C682A] leading-none my-0.5 select-none"
+              style={{ 
+                fontFamily: "'Cormorant Garamond', 'Cinzel', 'Amiri', serif",
+                textShadow: '0 1px 2px rgba(255,255,255,0.95)'
+              }}
+            >
+              &
+            </span>
 
             {/* Bride Name (Raised Safely Into the White Cloud Medallion) */}
             <span 
