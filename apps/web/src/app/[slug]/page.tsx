@@ -5,6 +5,7 @@ import { getTemplateImplementation } from '../../templates/registry';
 import { formatEventDate } from '../../templates/utils/date';
 import { AnalyticsProvider } from '../../templates/utils/AnalyticsProvider';
 import { getPublicInvitation } from '../../lib/invitations';
+import ExpiredInvitationScreen from '../../components/ExpiredInvitationScreen';
 
 interface PageProps {
   params: { slug: string };
@@ -20,10 +21,25 @@ async function fetchInvitation(slug: string) {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const result = await fetchInvitation(params.slug);
   
-  if (!result || result.type !== 'FOUND') {
+  if (!result || result.type === 'NOT_FOUND') {
     return {
       title: 'Not Found',
       robots: { index: false, follow: false }
+    };
+  }
+
+  if (result.type === 'EXPIRED') {
+    return {
+      title: 'انتهت صلاحية الدعوة | دعوة زفاف',
+      description: 'نعتذر، لقد انتهت صلاحية رابط هذه الدعوة الإلكترونية.',
+      robots: { index: false, follow: false }
+    };
+  }
+
+  if (result.type === 'LEGACY_SLUG') {
+    return {
+      title: 'Wedding Invitation',
+      robots: { index: true, follow: true }
     };
   }
 
@@ -51,6 +67,11 @@ export default async function PublicInvitationPage({ params }: PageProps) {
 
   if (result.type === 'LEGACY_SLUG') {
     redirect(`/${result.canonicalSlug}`);
+  }
+
+  // Handle Invitation Expiration (Minutes / Days limit reached)
+  if (result.type === 'EXPIRED') {
+    return <ExpiredInvitationScreen data={result.data} />;
   }
 
   const { data } = result;

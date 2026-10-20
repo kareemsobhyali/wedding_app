@@ -33,6 +33,23 @@ export async function getPublicInvitation(slug: string) {
     }
 
     const inv = slugRecord.invitation;
+
+    // Check Expiration System (Valid until expiresAt or if status is EXPIRED)
+    const isExpired = inv.status === 'EXPIRED' || (inv.expiresAt && new Date() > new Date(inv.expiresAt));
+    if (isExpired) {
+      return {
+        type: 'EXPIRED' as const,
+        data: {
+          id: inv.id,
+          groomName: inv.groomName,
+          brideName: inv.brideName,
+          weddingDate: inv.weddingDate || new Date(),
+          expiresAt: inv.expiresAt,
+          customerPhone: inv.customerPhone
+        }
+      };
+    }
+
     const media = inv.media || [];
     const coverMedia = media.find((m) => m.role === 'COVER');
     const audioMedia = media.find((m) => m.type === 'AUDIO');

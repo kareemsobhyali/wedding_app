@@ -58,6 +58,7 @@ export default function AdminEditForm({ invitation, apiToken }: { invitation: an
     weddingMessage: invitation.weddingMessage || '',
     groomPhone: invitation.groomPhone || '',
     bridePhone: invitation.bridePhone || '',
+    expiresAt: invitation.expiresAt ? new Date(invitation.expiresAt).toISOString().slice(0, 16) : '',
     customData: invitation.customData || {},
   });
 
@@ -75,6 +76,7 @@ export default function AdminEditForm({ invitation, apiToken }: { invitation: an
       weddingMessage: invitation.weddingMessage || '',
       groomPhone: invitation.groomPhone || '',
       bridePhone: invitation.bridePhone || '',
+      expiresAt: invitation.expiresAt ? new Date(invitation.expiresAt).toISOString().slice(0, 16) : '',
       customData: invitation.customData || {},
     });
   }, [invitation]);
@@ -116,6 +118,7 @@ export default function AdminEditForm({ invitation, apiToken }: { invitation: an
           weddingMessage: formData.weddingMessage,
           groomPhone: formData.groomPhone,
           bridePhone: formData.bridePhone,
+          expiresAt: formData.expiresAt ? new Date(formData.expiresAt) : null,
         })
       });
 
@@ -179,6 +182,18 @@ export default function AdminEditForm({ invitation, apiToken }: { invitation: an
           <label className="block text-sm font-medium">Venue Name</label>
           <input name="venueName" value={formData.venueName} onChange={handleChange} className="w-full p-2 border rounded" />
         </div>
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium">تاريخ ووقت انتهاء الصلاحية (Expires At)</label>
+        <input 
+          type="datetime-local" 
+          name="expiresAt" 
+          value={formData.expiresAt} 
+          onChange={handleChange} 
+          className="w-full p-2 border rounded bg-indigo-50/30" 
+        />
+        <p className="text-xs text-gray-500 mt-1">اتركه فارغاً إذا كنت تريد أن تظل الدعوة دائمة بدون تاريخ انتهاء.</p>
       </div>
 
       <div>

@@ -108,6 +108,7 @@ export async function POST(req: NextRequest) {
           venueName: body.venueName || '',
           venueAddress: body.venueAddress || '',
           weddingDate: body.weddingDate ? new Date(body.weddingDate) : new Date(),
+          expiresAt: body.expiresAt ? new Date(body.expiresAt) : null,
           status: 'DRAFT',
           template: { connect: { id: template.id } },
           version: 1,

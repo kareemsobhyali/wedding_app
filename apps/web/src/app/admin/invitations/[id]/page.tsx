@@ -1,6 +1,7 @@
 import AdminEditForm from './AdminEditForm';
 import AdminActionButtons from './AdminActionButtons';
 import SlugEditor from './SlugEditor';
+import AdminValidityManager from './AdminValidityManager';
 import React from 'react';
 import { cookies } from 'next/headers';
 import { notFound } from 'next/navigation';
@@ -137,6 +138,12 @@ export default async function AdminInvitationDetail({ params }: { params: { id: 
           <p><strong>Phone:</strong> {inv.customerPhone}</p>
           <p><strong>Created:</strong> {new Date(inv.createdAt).toLocaleString()}</p>
         </div>
+
+        <AdminValidityManager 
+          invitationId={inv.id}
+          currentExpiresAt={inv.expiresAt ? inv.expiresAt.toISOString() : null}
+          apiToken={cookieStore.get("admin_session")?.value || ''}
+        />
 
         <SlugEditor 
           invitationId={inv.id} 

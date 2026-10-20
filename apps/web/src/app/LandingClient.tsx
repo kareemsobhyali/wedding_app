@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useState, useMemo, useRef } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
@@ -10,14 +10,10 @@ import {
   MessageCircle, 
   Eye, 
   Search, 
-  CheckCircle2, 
   Clock, 
   ShieldCheck, 
-  SlidersHorizontal,
-  Music,
-  MapPin,
-  Calendar,
-  Send,
+  ChevronLeft,
+  ChevronRight,
   Mail,
   Camera
 } from 'lucide-react';
@@ -95,6 +91,10 @@ export default function LandingClient({
   const [scrolled, setScrolled] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
+  const [activeIndex, setActiveIndex] = useState<number>(0);
+  
+  const carouselRef = useRef<HTMLDivElement>(null);
+  const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -119,7 +119,6 @@ export default function LandingClient({
 
   // Sort & Filter Templates
   const sortedAndFilteredTemplates = useMemo(() => {
-    // 1. Sort by Priority
     const sorted = [...templatesList].sort((a, b) => {
       const indexA = PRIORITY_ORDER.indexOf(a.id);
       const indexB = PRIORITY_ORDER.indexOf(b.id);
@@ -128,7 +127,6 @@ export default function LandingClient({
       return rankA - rankB;
     });
 
-    // 2. Filter by Category & Search Query
     return sorted.filter((tpl) => {
       const cat = getThemeCategory(tpl.id);
       const matchesCategory = selectedCategory === 'all' || cat === selectedCategory;
@@ -138,6 +136,62 @@ export default function LandingClient({
       return matchesCategory && matchesSearch;
     });
   }, [templatesList, selectedCategory, searchQuery]);
+
+  // When filters change, reset active index and scroll to beginning
+  useEffect(() => {
+    setActiveIndex(0);
+    if (carouselRef.current) {
+      carouselRef.current.scrollTo({ left: 0, behavior: 'smooth' });
+    }
+  }, [selectedCategory, searchQuery]);
+
+  // Handle Horizontal Scroll to detect the Center / Active Theme
+  const handleCarouselScroll = () => {
+    if (!carouselRef.current) return;
+    const container = carouselRef.current;
+    const containerCenter = container.getBoundingClientRect().left + container.offsetWidth / 2;
+
+    let closestIdx = 0;
+    let minDistance = Infinity;
+
+    cardRefs.current.forEach((card, idx) => {
+      if (!card) return;
+      const rect = card.getBoundingClientRect();
+      const cardCenter = rect.left + rect.width / 2;
+      const distance = Math.abs(containerCenter - cardCenter);
+
+      if (distance < minDistance) {
+        minDistance = distance;
+        closestIdx = idx;
+      }
+    });
+
+    if (closestIdx !== activeIndex) {
+      setActiveIndex(closestIdx);
+    }
+  };
+
+  // Scroll to a specific card index
+  const scrollToTheme = (index: number) => {
+    if (index < 0 || index >= sortedAndFilteredTemplates.length) return;
+    const targetCard = cardRefs.current[index];
+    if (targetCard && carouselRef.current) {
+      targetCard.scrollIntoView({
+        behavior: 'smooth',
+        inline: 'center',
+        block: 'nearest'
+      });
+      setActiveIndex(index);
+    }
+  };
+
+  const handleNextTheme = () => {
+    scrollToTheme(Math.min(activeIndex + 1, sortedAndFilteredTemplates.length - 1));
+  };
+
+  const handlePrevTheme = () => {
+    scrollToTheme(Math.max(activeIndex - 1, 0));
+  };
 
   // Categories config
   const categories = [
@@ -211,7 +265,7 @@ export default function LandingClient({
       {/* ========================================================= */}
       {/* 2. Hero Section - Royal Luxury Boutique */}
       {/* ========================================================= */}
-      <section className="relative pt-32 pb-16 md:pt-40 md:pb-24 overflow-hidden bg-gradient-to-b from-[#FFFDF9] via-[#FAF7F2] to-[#FAF7F2]">
+      <section className="relative pt-32 pb-14 md:pt-40 md:pb-20 overflow-hidden bg-gradient-to-b from-[#FFFDF9] via-[#FAF7F2] to-[#FAF7F2]">
         
         {/* Decorative Golden Ambient Glows */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -259,7 +313,7 @@ export default function LandingClient({
             initial={{ opacity: 0, y: 25 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.6 }}
-            className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full sm:w-auto mb-14"
+            className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full sm:w-auto mb-12"
           >
             <a 
               href="#templates" 
@@ -279,60 +333,36 @@ export default function LandingClient({
             </a>
           </motion.div>
 
-          {/* Quick Value Metrics / Trust Badges */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1, delay: 0.8 }}
-            className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-6 w-full max-w-4xl pt-6 border-t border-[#E8DCC8]/70"
-          >
-            <div className="flex flex-col items-center p-3 rounded-2xl bg-white/70 border border-[#EFE5D5]">
-              <span className="text-xl sm:text-2xl font-extrabold text-[#8C6D38]">+35</span>
-              <span className="text-xs font-bold text-[#6B5338]">ثيم حصري فاخر</span>
-            </div>
-            <div className="flex flex-col items-center p-3 rounded-2xl bg-white/70 border border-[#EFE5D5]">
-              <span className="text-xl sm:text-2xl font-extrabold text-[#8C6D38]">24 ساعة</span>
-              <span className="text-xs font-bold text-[#6B5338]">تسليم سريع ومباشر</span>
-            </div>
-            <div className="flex flex-col items-center p-3 rounded-2xl bg-white/70 border border-[#EFE5D5]">
-              <span className="text-xl sm:text-2xl font-extrabold text-[#8C6D38]">100%</span>
-              <span className="text-xs font-bold text-[#6B5338]">متوافق مع كل الهواتف</span>
-            </div>
-            <div className="flex flex-col items-center p-3 rounded-2xl bg-white/70 border border-[#EFE5D5]">
-              <span className="text-xl sm:text-2xl font-extrabold text-[#8C6D38]">مفتوحة</span>
-              <span className="text-xs font-bold text-[#6B5338]">تعديلات حتى الرضا التام</span>
-            </div>
-          </motion.div>
-
         </div>
       </section>
 
 
       {/* ========================================================= */}
-      {/* 3. Core Section: THEMES SHOWCASE (Direct WhatsApp + Preview) */}
+      {/* 3. Core Section: THEMES SHOWCASE (Horizontal Coverflow Carousel) */}
       {/* ========================================================= */}
-      <section id="templates" className="py-20 bg-white relative">
+      <section id="templates" className="py-16 md:py-24 bg-white relative overflow-hidden">
+        
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           
           {/* Section Header */}
-          <div className="text-center max-w-3xl mx-auto mb-10">
+          <div className="text-center max-w-3xl mx-auto mb-8">
             <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#FAF0D7] text-[#8C6D38] text-xs font-bold mb-3 border border-[#E5C987]/60">
               <Sparkles className="w-3.5 h-3.5" />
-              <span>المجموعة الكاملة لعام 2026</span>
+              <span>معرض الثيمات التفاعلي</span>
             </div>
             <h2 
-              className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#38260F] mb-4"
+              className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#38260F] mb-3"
               style={{ fontFamily: "'Aref Ruqaa', 'Cairo', serif" }}
             >
               تشكيلة الثيمات الحصرية
             </h2>
             <p className="text-sm sm:text-base text-gray-600 leading-relaxed">
-              اختر التصميم الذي يعبر عن ذوقك، اضغط على <strong>معاينة حية</strong> لتجربته كما سيراه ضيوفك، ثم اضغط على <strong>اطلب بالواتساب</strong> لإرسال طلبك مباشرة.
+              اسحب أفقياً أو استخدم الأسهم للتنقل بين التصاميم. الثيم الأوسط يظهر بحجم بارز وعائم مع إمكانية المعاينة الحية والطلب الفوري.
             </p>
           </div>
 
           {/* Filter Bar & Live Search */}
-          <div className="bg-[#FAF7F2] p-4 sm:p-5 rounded-3xl border border-[#EADBCA] shadow-sm mb-10">
+          <div className="bg-[#FAF7F2] p-4 sm:p-5 rounded-3xl border border-[#EADBCA] shadow-sm mb-8">
             <div className="flex flex-col md:flex-row items-center justify-between gap-4">
               
               {/* Category Filter Tabs */}
@@ -383,46 +413,95 @@ export default function LandingClient({
             </div>
           </div>
 
-          {/* Results Summary if filtered */}
-          {(selectedCategory !== 'all' || searchQuery) && (
-            <div className="flex items-center justify-between mb-6 px-2 text-xs font-bold text-gray-500">
-              <span>عرض {sortedAndFilteredTemplates.length} ثيم متطابق</span>
-              <button 
-                onClick={() => { setSelectedCategory('all'); setSearchQuery(''); }}
-                className="text-[#8C6D38] hover:underline"
-              >
-                إعادة ضبط الفلاتر ↺
-              </button>
+          {/* Quick Counter & Nav Controls */}
+          {sortedAndFilteredTemplates.length > 0 && (
+            <div className="flex items-center justify-between mb-4 px-2">
+              <div className="flex items-center gap-2 text-xs font-bold text-[#8C6D38]">
+                <span>الثيم رقم ({activeIndex + 1}) من ({sortedAndFilteredTemplates.length})</span>
+                <span className="text-gray-400">•</span>
+                <span className="text-gray-600 font-medium hidden sm:inline">اسحب باللمس أو اضغط على الأسهم</span>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={handlePrevTheme}
+                  disabled={activeIndex === 0}
+                  aria-label="الثيم السابق"
+                  className="w-10 h-10 rounded-full bg-white border border-[#D5C7B2] text-[#6E4E26] hover:bg-[#FAF5ED] disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center shadow-xs transition-all active:scale-95"
+                >
+                  <ChevronRight className="w-5 h-5" />
+                </button>
+                <button
+                  onClick={handleNextTheme}
+                  disabled={activeIndex === sortedAndFilteredTemplates.length - 1}
+                  aria-label="الثيم التالي"
+                  className="w-10 h-10 rounded-full bg-[#8C6D38] text-white hover:brightness-110 disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center shadow-md transition-all active:scale-95"
+                >
+                  <ChevronLeft className="w-5 h-5" />
+                </button>
+              </div>
             </div>
           )}
 
-          {/* Templates Grid - Royal Smartphone Cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-            <AnimatePresence mode="popLayout">
+        </div>
+
+        {/* ========================================================= */}
+        {/* HORIZONTAL COVERFLOW TRACK */}
+        {/* Cards are horizontally scrollable with snap-center */}
+        {/* Active card is centered, enlarged (scale-105/108), elevated shadow, floating */}
+        {/* Previous and next cards are partially visible (peeking) on both sides */}
+        {/* ========================================================= */}
+        {sortedAndFilteredTemplates.length > 0 ? (
+          <div className="relative w-full py-8 overflow-hidden">
+            
+            {/* Scrollable Container with Side Padding to ensure center alignment & peeking */}
+            <div 
+              ref={carouselRef}
+              onScroll={handleCarouselScroll}
+              className="flex items-center gap-5 sm:gap-8 overflow-x-auto snap-x snap-mandatory scroll-smooth px-[10vw] sm:px-[22vw] md:px-[28vw] lg:px-[32vw] pb-6 pt-4 scrollbar-none"
+              style={{
+                scrollPadding: '0 25%',
+                WebkitOverflowScrolling: 'touch'
+              }}
+            >
               {sortedAndFilteredTemplates.map((tpl, i) => {
+                const isActive = i === activeIndex;
                 const demoUrl = settings.demoLinks?.[tpl.id] || `/preview?template=${tpl.id}`;
                 const previewImg = settings.previewImages?.[tpl.id] || tpl.previewImage || '/assets/templates/placeholder-couple.jpg';
                 const whatsappUrl = getThemeWhatsAppUrl(tpl.name);
                 const isFeatured = ['mughal-palace-portal', 'cathedral-grand-arch', 'butterfly-elegance'].includes(tpl.id);
 
                 return (
-                  <motion.div
+                  <div
                     key={tpl.id}
-                    layout
-                    initial={{ opacity: 0, y: 25 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, scale: 0.95 }}
-                    transition={{ duration: 0.4, delay: Math.min(i * 0.05, 0.4) }}
-                    className="bg-[#FAF7F2] rounded-[28px] p-3.5 border border-[#EADBCA] shadow-sm hover:shadow-xl hover:border-[#D5C7B2] transition-all duration-300 group flex flex-col justify-between"
+                    ref={(el) => { cardRefs.current[i] = el; }}
+                    onClick={() => {
+                      if (!isActive) scrollToTheme(i);
+                    }}
+                    className={`shrink-0 snap-center transition-all duration-500 ease-out flex flex-col justify-between cursor-pointer select-none rounded-[32px] p-4 ${
+                      isActive 
+                        ? 'w-[80vw] sm:w-[350px] md:w-[380px] bg-white ring-2 ring-[#C5A059] border-2 border-[#DFBA73] shadow-2xl shadow-[#8C6D38]/30 -translate-y-3 scale-100 sm:scale-105 z-30'
+                        : 'w-[72vw] sm:w-[310px] md:w-[340px] bg-white/80 border border-[#EADBCA] shadow-md opacity-70 hover:opacity-95 hover:scale-[0.98] scale-95 z-10'
+                    }`}
                   >
+
+                    {/* Active Floating Pill */}
+                    {isActive && (
+                      <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 z-40 bg-gradient-to-r from-[#8C6D38] via-[#C5A059] to-[#8C6D38] text-white text-[11px] font-extrabold px-3.5 py-1 rounded-full shadow-md flex items-center gap-1.5 whitespace-nowrap animate-pulse">
+                        <Sparkles className="w-3.5 h-3.5" />
+                        <span>الثيم المعروض بالمنتصف</span>
+                      </div>
+                    )}
                     
                     {/* Mockup Display Box */}
-                    <div className="relative rounded-[22px] overflow-hidden aspect-[9/13] bg-neutral-200 mb-3.5 border border-[#EAE0D1]">
+                    <div className="relative rounded-[24px] overflow-hidden aspect-[9/13] bg-neutral-200 mb-3.5 border border-[#EAE0D1]">
                       <img 
                         src={previewImg} 
                         alt={tpl.name}
                         loading="lazy"
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                        className={`w-full h-full object-cover transition-transform duration-700 ease-out ${
+                          isActive ? 'group-hover:scale-105' : ''
+                        }`}
                         onError={(e) => {
                           (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=800';
                         }}
@@ -445,7 +524,7 @@ export default function LandingClient({
                       </div>
 
                       {/* Gradient Bottom Shadow */}
-                      <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-black/80 via-black/30 to-transparent pointer-events-none" />
+                      <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-black/85 via-black/35 to-transparent pointer-events-none" />
 
                       {/* Bottom Info inside phone preview */}
                       <div className="absolute inset-x-0 bottom-0 p-3 text-white text-center z-10">
@@ -456,26 +535,29 @@ export default function LandingClient({
                     </div>
 
                     {/* Card Content & Action Buttons */}
-                    <div className="px-1.5 flex-1 flex flex-col justify-between">
+                    <div className="px-1 flex-1 flex flex-col justify-between">
                       
-                      <div className="mb-3.5">
-                        <h3 className="font-extrabold text-lg text-[#38260F] mb-1 line-clamp-1 group-hover:text-[#8C6D38] transition-colors">
+                      <div className="mb-3">
+                        <h3 className={`font-extrabold text-lg mb-1 line-clamp-1 transition-colors ${
+                          isActive ? 'text-[#38260F]' : 'text-gray-700'
+                        }`}>
                           {tpl.name}
                         </h3>
                         <p className="text-xs text-gray-600 line-clamp-2 leading-relaxed">
-                          {tpl.description || 'تصميم راقٍ ومميز لحفل زفافك يجمع بين الجمال العصري وسهولة مشاركة الرابط مع ضيوفك.'}
+                          {tpl.description || 'تصميم راقٍ ومميز لحفل زفافك يجمع بين الجمال وسهولة مشاركة الرابط.'}
                         </p>
                       </div>
 
-                      {/* THE 2 CORE BUTTONS: (Preview & WhatsApp Order) */}
-                      <div className="grid grid-cols-2 gap-2 pt-3 border-t border-[#EADBCA]/70">
+                      {/* THE 2 DIRECT BUTTONS */}
+                      <div className="grid grid-cols-2 gap-2 pt-2.5 border-t border-[#EADBCA]/70">
                         
                         {/* 1. Live Demo Preview */}
                         <a
                           href={demoUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="py-2.5 px-2 sm:px-3 rounded-xl bg-white hover:bg-[#F2ECE1] border border-[#D5C7B2]/80 text-[#543914] font-bold text-xs flex items-center justify-center gap-1.5 transition-all text-center shadow-xs active:scale-95"
+                          onClick={(e) => e.stopPropagation()}
+                          className="py-2.5 px-2 rounded-xl bg-white hover:bg-[#F2ECE1] border border-[#D5C7B2]/80 text-[#543914] font-bold text-xs flex items-center justify-center gap-1.5 transition-all text-center shadow-xs active:scale-95"
                         >
                           <Eye className="w-3.5 h-3.5 text-[#8C6D38] shrink-0" />
                           <span>معاينة حية</span>
@@ -486,7 +568,8 @@ export default function LandingClient({
                           href={whatsappUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="py-2.5 px-2 sm:px-3 rounded-xl bg-gradient-to-r from-[#25D366] to-[#128C7E] hover:brightness-105 active:scale-95 text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-md shadow-[#25D366]/20 transition-all text-center"
+                          onClick={(e) => e.stopPropagation()}
+                          className="py-2.5 px-2 rounded-xl bg-gradient-to-r from-[#25D366] to-[#128C7E] hover:brightness-105 active:scale-95 text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-md shadow-[#25D366]/20 transition-all text-center"
                         >
                           <MessageCircle className="w-3.5 h-3.5 fill-white/20 shrink-0" />
                           <span>اطلب بالواتساب</span>
@@ -496,28 +579,48 @@ export default function LandingClient({
 
                     </div>
 
-                  </motion.div>
+                  </div>
                 );
               })}
-            </AnimatePresence>
-          </div>
-
-          {/* Empty State */}
-          {sortedAndFilteredTemplates.length === 0 && (
-            <div className="text-center py-16 bg-[#FAF7F2] rounded-3xl border border-dashed border-gray-300">
-              <span className="text-4xl mb-3 block">🔍</span>
-              <h3 className="font-bold text-lg text-gray-800 mb-1">لم يتم العثور على ثيمات مطابقة للبحث</h3>
-              <p className="text-xs text-gray-500 mb-4">جرب البحث بكلمات أخرى أو تصفح جميع الثيمات</p>
-              <button
-                onClick={() => { setSelectedCategory('all'); setSearchQuery(''); }}
-                className="px-5 py-2 rounded-full bg-[#8C6D38] text-white text-xs font-bold shadow-sm"
-              >
-                عرض جميع الثيمات
-              </button>
             </div>
-          )}
 
-        </div>
+            {/* Pagination Dots Indicator */}
+            <div className="flex items-center justify-center gap-1.5 pt-4">
+              {sortedAndFilteredTemplates.slice(0, 15).map((_, dotIdx) => (
+                <button
+                  key={dotIdx}
+                  onClick={() => scrollToTheme(dotIdx)}
+                  aria-label={`انتقل للثيم ${dotIdx + 1}`}
+                  className={`h-2 rounded-full transition-all duration-300 ${
+                    activeIndex === dotIdx 
+                      ? 'w-7 bg-[#8C6D38]' 
+                      : 'w-2 bg-[#E0D3BE] hover:bg-[#C5A059]'
+                  }`}
+                />
+              ))}
+              {sortedAndFilteredTemplates.length > 15 && (
+                <span className="text-[10px] text-gray-400 font-bold mr-1">
+                  +{sortedAndFilteredTemplates.length - 15}
+                </span>
+              )}
+            </div>
+
+          </div>
+        ) : (
+          /* Empty Search State */
+          <div className="text-center py-16 bg-[#FAF7F2] rounded-3xl border border-dashed border-gray-300 max-w-xl mx-auto">
+            <span className="text-4xl mb-3 block">🔍</span>
+            <h3 className="font-bold text-lg text-gray-800 mb-1">لم يتم العثور على ثيمات مطابقة للبحث</h3>
+            <p className="text-xs text-gray-500 mb-4">جرب البحث بكلمات أخرى أو تصفح جميع الثيمات</p>
+            <button
+              onClick={() => { setSelectedCategory('all'); setSearchQuery(''); }}
+              className="px-5 py-2 rounded-full bg-[#8C6D38] text-white text-xs font-bold shadow-sm"
+            >
+              عرض جميع الثيمات
+            </button>
+          </div>
+        )}
+
       </section>
 
 
@@ -716,7 +819,7 @@ export default function LandingClient({
 
 
       {/* ========================================================= */}
-      {/* 8. Footer */}
+      {/* 8. Footer (Admin button completely removed as requested) */}
       {/* ========================================================= */}
       <footer id="contact" className="bg-[#FAF7F2] pt-16 pb-12 border-t border-[#EADBCA]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -763,16 +866,6 @@ export default function LandingClient({
                   <span>انستغرام</span>
                 </a>
               )}
-            </div>
-
-            {/* Admin Link */}
-            <div>
-              <Link 
-                href="/admin-login" 
-                className="text-xs text-gray-400 hover:text-gray-700 transition-colors"
-              >
-                تسجيل دخول الإدارة
-              </Link>
             </div>
 
           </div>

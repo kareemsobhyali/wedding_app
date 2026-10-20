@@ -71,12 +71,16 @@ export default async function AdminInvitationsListPage({ searchParams }: { searc
   const data = await fetchInvitations(searchParams);
   const { items, pagination } = data;
 
-  const getStatusBadge = (status: string) => {
-    switch(status) {
+  const getStatusBadge = (inv: any) => {
+    const isExpired = inv.status === 'EXPIRED' || (inv.expiresAt && new Date() > new Date(inv.expiresAt));
+    if (isExpired) {
+      return <span className="px-2 py-1 bg-red-100 text-red-800 text-xs rounded-full font-bold">EXPIRED ⛔</span>;
+    }
+    switch(inv.status) {
       case 'ACTIVE': return <span className="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">ACTIVE</span>;
       case 'PENDING_REVIEW': return <span className="px-2 py-1 bg-yellow-100 text-yellow-800 text-xs rounded-full">PENDING</span>;
       case 'DRAFT': return <span className="px-2 py-1 bg-gray-100 text-gray-800 text-xs rounded-full">DRAFT</span>;
-      default: return <span className="px-2 py-1 bg-stone-100 text-stone-800 text-xs rounded-full">{status}</span>;
+      default: return <span className="px-2 py-1 bg-stone-100 text-stone-800 text-xs rounded-full">{inv.status}</span>;
     }
   }
 
@@ -119,7 +123,7 @@ export default async function AdminInvitationsListPage({ searchParams }: { searc
                   <p className="text-xs text-gray-500">/{inv.slugs[0]?.slug}</p>
                 </td>
                 <td className="p-4 text-sm text-gray-600">{inv.customerPhone}</td>
-                <td className="p-4">{getStatusBadge(inv.status)}</td>
+                <td className="p-4">{getStatusBadge(inv)}</td>
                 <td className="p-4 text-sm text-gray-600">
                   {inv.weddingDate ? new Date(inv.weddingDate).toISOString().split('T')[0] : 'N/A'}
                 </td>
