@@ -415,14 +415,14 @@ export const MughalPalacePortalTemplate: React.FC<TemplateRenderContext> = ({ da
         />
 
         {/* Inside Portal Content: Typography & Layout (Enlarged, Balanced, Harmonious in Portal Center) */}
-        <div className="absolute top-[32%] bottom-[20%] left-[15%] right-[15%] flex flex-col items-center justify-between text-center z-20 pointer-events-none py-1 px-1">
+        <div className="absolute top-[31%] bottom-[7.5%] left-[13%] right-[13%] flex flex-col items-center justify-between text-center z-20 pointer-events-none py-1 px-0.5">
           
           {/* 1. Header & Couple Names */}
           <motion.div
             initial={{ opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="flex flex-col items-center w-full space-y-1"
+            className="flex flex-col items-center w-full space-y-0.5"
           >
             {/* Soft decorative intro */}
             <p 
@@ -553,43 +553,58 @@ export const MughalPalacePortalTemplate: React.FC<TemplateRenderContext> = ({ da
             )}
           </motion.div>
 
-          {/* 5. Live Countdown Pills */}
+          {/* 5. Live Countdown Section (4 Capsules with Seconds, Harmonious & Balanced) */}
           <motion.div 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.65 }}
-            className="flex items-center justify-center gap-2 pt-0.5"
+            className="flex flex-col items-center justify-center w-full py-0.5"
           >
-            <div className="px-3 py-1.5 rounded-2xl bg-white/92 backdrop-blur-sm border border-[#D4AF37]/50 text-center shadow-xs min-w-[50px]">
-              <span className="block text-sm sm:text-base font-bold text-[#4A3210] leading-none" style={{ fontFamily: isArabicContent ? "'Aref Ruqaa', serif" : "inherit" }}>{timeLeft.days}</span>
-              <span className="text-[10px] font-bold text-[#8C6D38] block pt-0.5" style={{ fontFamily: isArabicContent ? "'Aref Ruqaa', serif" : "inherit" }}>{isArabicContent ? 'يوم' : 'DAYS'}</span>
-            </div>
-            <div className="px-3 py-1.5 rounded-2xl bg-white/92 backdrop-blur-sm border border-[#D4AF37]/50 text-center shadow-xs min-w-[50px]">
-              <span className="block text-sm sm:text-base font-bold text-[#4A3210] leading-none" style={{ fontFamily: isArabicContent ? "'Aref Ruqaa', serif" : "inherit" }}>{timeLeft.hours}</span>
-              <span className="text-[10px] font-bold text-[#8C6D38] block pt-0.5" style={{ fontFamily: isArabicContent ? "'Aref Ruqaa', serif" : "inherit" }}>{isArabicContent ? 'ساعة' : 'HOURS'}</span>
-            </div>
-            <div className="px-3 py-1.5 rounded-2xl bg-white/92 backdrop-blur-sm border border-[#D4AF37]/50 text-center shadow-xs min-w-[50px]">
-              <span className="block text-sm sm:text-base font-bold text-[#4A3210] leading-none" style={{ fontFamily: isArabicContent ? "'Aref Ruqaa', serif" : "inherit" }}>{timeLeft.minutes}</span>
-              <span className="text-[10px] font-bold text-[#8C6D38] block pt-0.5" style={{ fontFamily: isArabicContent ? "'Aref Ruqaa', serif" : "inherit" }}>{isArabicContent ? 'دقيقة' : 'MINS'}</span>
+            <span 
+              className="text-[10px] sm:text-[11px] font-bold text-[#8C6D38] tracking-wider mb-1"
+              style={{ fontFamily: isArabicContent ? "'Aref Ruqaa', serif" : "'Cinzel', serif" }}
+            >
+              {isArabicContent ? 'العد التنازلي لليوم المنتظر' : 'COUNTDOWN'}
+            </span>
+            <div 
+              className="flex items-center justify-center gap-1.5 sm:gap-2"
+              dir={isArabicContent ? "rtl" : "ltr"}
+            >
+              <div className="px-2.5 py-1 sm:py-1.5 rounded-xl bg-white/92 backdrop-blur-xs border border-[#D4AF37]/50 text-center shadow-xs min-w-[44px] sm:min-w-[48px]">
+                <span className="block text-sm sm:text-base font-bold text-[#4A3210] leading-none" style={{ fontFamily: isArabicContent ? "'Aref Ruqaa', serif" : "inherit" }}>{timeLeft.days}</span>
+                <span className="text-[9px] sm:text-[10px] font-bold text-[#8C6D38] block pt-0.5" style={{ fontFamily: isArabicContent ? "'Aref Ruqaa', serif" : "inherit" }}>{isArabicContent ? 'يوم' : 'DAYS'}</span>
+              </div>
+              <div className="px-2.5 py-1 sm:py-1.5 rounded-xl bg-white/92 backdrop-blur-xs border border-[#D4AF37]/50 text-center shadow-xs min-w-[44px] sm:min-w-[48px]">
+                <span className="block text-sm sm:text-base font-bold text-[#4A3210] leading-none" style={{ fontFamily: isArabicContent ? "'Aref Ruqaa', serif" : "inherit" }}>{timeLeft.hours}</span>
+                <span className="text-[9px] sm:text-[10px] font-bold text-[#8C6D38] block pt-0.5" style={{ fontFamily: isArabicContent ? "'Aref Ruqaa', serif" : "inherit" }}>{isArabicContent ? 'ساعة' : 'HOURS'}</span>
+              </div>
+              <div className="px-2.5 py-1 sm:py-1.5 rounded-xl bg-white/92 backdrop-blur-xs border border-[#D4AF37]/50 text-center shadow-xs min-w-[44px] sm:min-w-[48px]">
+                <span className="block text-sm sm:text-base font-bold text-[#4A3210] leading-none" style={{ fontFamily: isArabicContent ? "'Aref Ruqaa', serif" : "inherit" }}>{timeLeft.minutes}</span>
+                <span className="text-[9px] sm:text-[10px] font-bold text-[#8C6D38] block pt-0.5" style={{ fontFamily: isArabicContent ? "'Aref Ruqaa', serif" : "inherit" }}>{isArabicContent ? 'دقيقة' : 'MINS'}</span>
+              </div>
+              <div className="px-2.5 py-1 sm:py-1.5 rounded-xl bg-white/92 backdrop-blur-xs border border-[#D4AF37]/50 text-center shadow-xs min-w-[44px] sm:min-w-[48px]">
+                <span className="block text-sm sm:text-base font-bold text-[#4A3210] leading-none" style={{ fontFamily: isArabicContent ? "'Aref Ruqaa', serif" : "inherit" }}>{timeLeft.seconds}</span>
+                <span className="text-[9px] sm:text-[10px] font-bold text-[#8C6D38] block pt-0.5" style={{ fontFamily: isArabicContent ? "'Aref Ruqaa', serif" : "inherit" }}>{isArabicContent ? 'ثانية' : 'SECS'}</span>
+              </div>
             </div>
           </motion.div>
 
-          {/* 6. Action Buttons in the Center ("ف النص") */}
+          {/* 6. Stacked Action Buttons (Occupying Space Elegantly in the Lower Portal Center) */}
           <motion.div
             initial={{ opacity: 0, y: 5 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.75 }}
-            className="flex items-center justify-center gap-1.5 w-full pt-1 pointer-events-auto"
+            className="flex flex-col items-center gap-1.5 sm:gap-2 w-full max-w-[200px] sm:max-w-[220px] pointer-events-auto"
             dir={isArabicContent ? "rtl" : "ltr"}
           >
             {/* Primary RSVP Button */}
             <button
               onClick={() => setShowRsvpModal(true)}
-              className="py-2 px-3.5 rounded-full bg-gradient-to-r from-[#A67C37] via-[#C5A059] to-[#8C6D38] text-white shadow-md text-xs sm:text-[13px] font-bold flex items-center justify-center gap-1.5 hover:brightness-110 active:scale-95 transition-all"
+              className="w-full py-2 sm:py-2.5 px-3.5 rounded-full bg-gradient-to-r from-[#A67C37] via-[#C5A059] to-[#8C6D38] text-white shadow-md text-xs sm:text-[13px] font-bold flex items-center justify-center gap-2 hover:brightness-110 active:scale-95 transition-all"
               style={{ fontFamily: isArabicContent ? "'Aref Ruqaa', serif" : "'Cinzel', serif" }}
             >
               <Heart className="w-3.5 h-3.5 fill-white shrink-0" />
-              <span>{isArabicContent ? 'تأكيد الحضور' : 'RSVP'}</span>
+              <span>{isArabicContent ? 'تأكيد الحضور (RSVP)' : 'Confirm RSVP'}</span>
             </button>
 
             {/* Add to Calendar Button */}
@@ -597,11 +612,11 @@ export const MughalPalacePortalTemplate: React.FC<TemplateRenderContext> = ({ da
               href={gcalUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="py-2 px-3 rounded-full bg-white/95 hover:bg-white border border-[#D4AF37]/50 text-[#6E4D1D] font-bold text-xs sm:text-[13px] flex items-center justify-center gap-1.5 active:scale-95 transition-all shadow-xs"
+              className="w-full py-1.5 sm:py-2 px-3.5 rounded-full bg-white/92 hover:bg-white border border-[#D4AF37]/60 text-[#6E4D1D] font-bold text-xs sm:text-[13px] flex items-center justify-center gap-2 active:scale-95 transition-all shadow-xs backdrop-blur-xs"
               style={{ fontFamily: isArabicContent ? "'Aref Ruqaa', serif" : "'Cinzel', serif" }}
             >
               <Calendar className="w-3.5 h-3.5 text-[#B8860B] shrink-0" />
-              <span>{isArabicContent ? 'الموعد' : 'Calendar'}</span>
+              <span>{isArabicContent ? 'إضافة الموعد للتقويم' : 'Add to Calendar'}</span>
             </a>
 
             {/* Google Maps Button */}
@@ -609,11 +624,11 @@ export const MughalPalacePortalTemplate: React.FC<TemplateRenderContext> = ({ da
               href={data.googleMapsUrl || '#'}
               target="_blank"
               rel="noopener noreferrer"
-              className="py-2 px-3 rounded-full bg-white/95 hover:bg-white border border-[#D4AF37]/50 text-[#6E4D1D] font-bold text-xs sm:text-[13px] flex items-center justify-center gap-1.5 active:scale-95 transition-all shadow-xs"
+              className="w-full py-1.5 sm:py-2 px-3.5 rounded-full bg-white/92 hover:bg-white border border-[#D4AF37]/60 text-[#6E4D1D] font-bold text-xs sm:text-[13px] flex items-center justify-center gap-2 active:scale-95 transition-all shadow-xs backdrop-blur-xs"
               style={{ fontFamily: isArabicContent ? "'Aref Ruqaa', serif" : "'Cinzel', serif" }}
             >
               <MapPin className="w-3.5 h-3.5 text-[#B8860B] shrink-0" />
-              <span>{isArabicContent ? 'الموقع' : 'Location'}</span>
+              <span>{isArabicContent ? 'موقع الحفل على الخريطة' : 'View on Google Maps'}</span>
             </a>
           </motion.div>
 
