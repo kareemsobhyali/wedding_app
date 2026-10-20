@@ -18,8 +18,10 @@ import {
   Calendar, 
   MapPin, 
   Sparkles,
-  Heart
+  Heart,
+  QrCode
 } from 'lucide-react';
+import PersonalizedLinksGenerator from '@/components/PersonalizedLinksGenerator';
 
 interface RsvpItem {
   id: string;
@@ -52,6 +54,7 @@ export default function RsvpListClient({ invitation, initialRsvps }: RsvpListCli
   const [search, setSearch] = useState('');
   const [filter, setFilter] = useState<'all' | 'yes' | 'no'>('all');
   const [copied, setCopied] = useState(false);
+  const [showLinkGen, setShowLinkGen] = useState(false);
 
   const isArabic = invitation.language !== 'en';
   const weddingDate = new Date(invitation.weddingDate);
@@ -119,7 +122,7 @@ export default function RsvpListClient({ invitation, initialRsvps }: RsvpListCli
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10">
 
         {/* Top Navigation Bar */}
-        <div className="flex items-center justify-between mb-6 pb-4 border-b border-[#EADCC5]/70">
+        <div className="flex flex-wrap items-center justify-between gap-3 mb-6 pb-4 border-b border-[#EADCC5]/70">
           <Link 
             href={`/${invitation.slug}`}
             className="inline-flex items-center gap-2 text-xs sm:text-sm font-bold text-[#8C6D38] hover:text-[#5F451B] bg-white px-3.5 py-2 rounded-full border border-[#D5C7B2]/60 shadow-2xs hover:shadow-xs transition-all active:scale-95"
@@ -128,11 +131,43 @@ export default function RsvpListClient({ invitation, initialRsvps }: RsvpListCli
             <span>{isArabic ? 'العودة لبطاقة الدعوة' : 'Back to Invitation'}</span>
           </Link>
 
-          <span className="text-xs font-semibold text-[#8C6D38] bg-[#F4EDE2] px-3 py-1 rounded-full border border-[#D5C7B2]/50 flex items-center gap-1.5">
-            <Sparkles className="w-3.5 h-3.5 text-[#C5A059]" />
-            <span>{isArabic ? 'قائمة الحضور الرسمية' : 'Official Guest List'}</span>
-          </span>
+          <div className="flex items-center gap-2">
+            <a 
+              href={`/${invitation.slug}/card`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 text-xs font-bold text-[#8C6D38] hover:text-[#5F451B] bg-white px-3.5 py-2 rounded-full border border-[#D5C7B2]/60 shadow-2xs hover:shadow-xs transition-all active:scale-95"
+            >
+              <QrCode className="w-3.5 h-3.5 text-[#C5A059]" />
+              <span>{isArabic ? 'بطاقة QR للطباعة' : 'Printable QR Card'}</span>
+            </a>
+
+            <button
+              type="button"
+              onClick={() => setShowLinkGen(prev => !prev)}
+              className={`inline-flex items-center gap-1.5 text-xs font-bold px-3.5 py-2 rounded-full border transition-all active:scale-95 ${
+                showLinkGen 
+                  ? 'bg-amber-600 text-white border-amber-600 shadow-xs'
+                  : 'bg-[#F4EDE2] text-[#8C6D38] border-[#D5C7B2]/60 hover:bg-[#ebdcc8]'
+              }`}
+            >
+              <Sparkles className="w-3.5 h-3.5 text-[#C5A059]" />
+              <span>{isArabic ? 'مولّد روابط المعازيم' : 'Personalized Invites'}</span>
+            </button>
+          </div>
         </div>
+
+        {/* Personalized Links Generator Drawer */}
+        {showLinkGen && (
+          <div className="mb-8">
+            <PersonalizedLinksGenerator 
+              slug={invitation.slug}
+              groomName={invitation.groomName}
+              brideName={invitation.brideName}
+              isArabic={isArabic}
+            />
+          </div>
+        )}
 
         {/* Header Hero Section */}
         <header className="text-center mb-8 space-y-2">

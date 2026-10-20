@@ -2,6 +2,7 @@ import AdminEditForm from './AdminEditForm';
 import AdminActionButtons from './AdminActionButtons';
 import SlugEditor from './SlugEditor';
 import AdminValidityManager from './AdminValidityManager';
+import PersonalizedLinksGenerator from '@/components/PersonalizedLinksGenerator';
 import React from 'react';
 import { cookies } from 'next/headers';
 import { notFound } from 'next/navigation';
@@ -230,6 +231,63 @@ export default async function AdminInvitationDetail({ params }: { params: { id: 
                 </div>
               )}
             </div>
+          );
+        })()}
+
+        {/* Printable Luxury QR Card */}
+        {(() => {
+          const currentSlug = inv.slugs?.find((s: any) => s.isCurrent)?.slug || inv.slugs?.[0]?.slug || '';
+          if (!currentSlug) return null;
+
+          return (
+            <div className="bg-white p-5 shadow rounded border border-amber-200">
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-8 h-8 rounded-lg bg-amber-100 text-amber-800 flex items-center justify-center font-bold text-base">
+                    🖨️
+                  </div>
+                  <div>
+                    <h2 className="font-bold text-sm text-stone-900">بطاقة QR الفاخرة للطباعة والتنزيل</h2>
+                    <p className="text-xs text-stone-500">بطاقة 4x6 جاهزة للتنزيل بجودة فائقة (PNG) أو الطباعة الورقية الفورية</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <a
+                  href={`/${currentSlug}/card`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex-1 py-2 px-3 bg-[#8C6D38] hover:bg-[#6E4D1D] text-white rounded-lg text-xs font-bold text-center transition-all shadow-sm flex items-center justify-center gap-1.5"
+                >
+                  <span>فتح بطاقة QR والطباعة (PNG / Print)</span>
+                  <span>↗</span>
+                </a>
+                <a
+                  href={`/${currentSlug}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="py-2 px-3 bg-stone-100 hover:bg-stone-200 text-stone-700 rounded-lg text-xs font-bold text-center transition-all"
+                >
+                  معاينة الدعوة ↗
+                </a>
+              </div>
+            </div>
+          );
+        })()}
+
+        {/* Personalized Invites Generator */}
+        {(() => {
+          const currentSlug = inv.slugs?.find((s: any) => s.isCurrent)?.slug || inv.slugs?.[0]?.slug || '';
+          if (!currentSlug) return null;
+
+          return (
+            <PersonalizedLinksGenerator 
+              slug={currentSlug}
+              groomName={inv.groomName}
+              brideName={inv.brideName}
+              isArabic={true}
+            />
           );
         })()}
 

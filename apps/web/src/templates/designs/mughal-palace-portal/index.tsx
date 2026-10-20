@@ -15,7 +15,8 @@ import {
   Heart,
   Share2,
   X,
-  Compass
+  Compass,
+  QrCode
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
@@ -258,7 +259,14 @@ export const MughalPalacePortalTemplate: React.FC<TemplateRenderContext> = ({ da
   const [isPlayingAudio, setIsPlayingAudio] = useState(false);
   const [showRsvpModal, setShowRsvpModal] = useState(false);
   const [rsvpSent, setRsvpSent] = useState(false);
-  const [rsvpData, setRsvpData] = useState({ name: '', attendance: 'yes', guests: '1', note: '' });
+  const initialGuestName = data.guestName || (typeof window !== 'undefined' ? (new URLSearchParams(window.location.search).get('to') || new URLSearchParams(window.location.search).get('guest') || new URLSearchParams(window.location.search).get('name') || '') : '');
+  const [rsvpData, setRsvpData] = useState({ name: initialGuestName, attendance: 'yes', guests: '1', note: '' });
+
+  useEffect(() => {
+    if (initialGuestName && !rsvpData.name) {
+      setRsvpData(prev => ({ ...prev, name: initialGuestName }));
+    }
+  }, [initialGuestName]);
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
@@ -390,6 +398,18 @@ export const MughalPalacePortalTemplate: React.FC<TemplateRenderContext> = ({ da
 
       {/* Floating Controls */}
       <div className="fixed top-3 right-3 sm:top-4 sm:right-4 z-40 flex items-center gap-2">
+        {slug && (
+          <a
+            href={`/${slug}/card${initialGuestName ? `?to=${encodeURIComponent(initialGuestName)}` : ''}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="h-10 px-3 rounded-full bg-white/90 backdrop-blur-md shadow-md border border-[#D4AF37]/50 flex items-center gap-1.5 text-xs font-bold text-[#8C6D38] hover:bg-[#8C6D38] hover:text-white transition-all transform hover:scale-105 active:scale-95"
+            title={isArabicContent ? "بطاقة QR للطباعة" : "Printable QR Card"}
+          >
+            <QrCode className="w-4 h-4 text-[#8C6D38]" />
+            <span className="hidden sm:inline">{isArabicContent ? "بطاقة QR" : "QR Card"}</span>
+          </a>
+        )}
         <button
           onClick={toggleAudio}
           className="w-10 h-10 rounded-full bg-white/90 backdrop-blur-md shadow-md border border-[#D4AF37]/50 flex items-center justify-center text-[#8C6D38] hover:bg-[#8C6D38] hover:text-white transition-all transform hover:scale-105 active:scale-95"
@@ -464,6 +484,16 @@ export const MughalPalacePortalTemplate: React.FC<TemplateRenderContext> = ({ da
               <span className="text-[#8C682A] font-serif text-xl leading-none">&</span>
               <span>{data.brideName}</span>
             </h1>
+
+            {/* Personalized Guest Badge */}
+            {initialGuestName && (
+              <div className="mt-1 px-3 py-0.5 rounded-full bg-[#DFBA73]/30 border border-[#DFBA73]/80 inline-flex items-center gap-1.5 shadow-sm">
+                <Sparkles className="w-3 h-3 text-[#8C6D38]" />
+                <span className="text-[11px] sm:text-xs font-bold text-[#4A3210]">
+                  {isArabicContent ? `دعوة خاصة لـ: ${initialGuestName}` : `Special Invitation for: ${initialGuestName}`}
+                </span>
+              </div>
+            )}
           </motion.div>
 
           {/* 2. "تفاصيل حفل الزفاف" / "WEDDING DETAILS" */}

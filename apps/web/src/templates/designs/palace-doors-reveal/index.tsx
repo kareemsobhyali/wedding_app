@@ -14,7 +14,8 @@ import {
   Share2, 
   X,
   RotateCcw,
-  Check
+  Check,
+  QrCode
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
@@ -30,10 +31,17 @@ export const PalaceDoorsRevealTemplate: React.FC<TemplateRenderContext> = ({ dat
   const [doorVibrate, setDoorVibrate] = useState<boolean>(false);
   const [ripples, setRipples] = useState<Array<{ id: number; x: number; y: number }>>([]);
   
+  const initialGuestName = data.guestName || (typeof window !== 'undefined' ? (new URLSearchParams(window.location.search).get('to') || new URLSearchParams(window.location.search).get('guest') || new URLSearchParams(window.location.search).get('name') || '') : '');
   const [isPlayingAudio, setIsPlayingAudio] = useState(false);
   const [showRsvpModal, setShowRsvpModal] = useState(false);
   const [rsvpSent, setRsvpSent] = useState(false);
-  const [rsvpData, setRsvpData] = useState({ name: '', attendance: 'yes', guests: '1', note: '' });
+  const [rsvpData, setRsvpData] = useState({ name: initialGuestName, attendance: 'yes', guests: '1', note: '' });
+
+  useEffect(() => {
+    if (initialGuestName && !rsvpData.name) {
+      setRsvpData(prev => ({ ...prev, name: initialGuestName }));
+    }
+  }, [initialGuestName]);
 
   const singleKnockAudioRef = useRef<HTMLAudioElement | null>(null);
   const doorCreakAudioRef = useRef<HTMLAudioElement | null>(null);
@@ -447,6 +455,20 @@ export const PalaceDoorsRevealTemplate: React.FC<TemplateRenderContext> = ({ dat
                   {dayName}، {dayNumber} {monthName} {yearNumber}
                 </p>
 
+                {/* Personalized Guest Welcome Badge */}
+                {initialGuestName && (
+                  <motion.div 
+                    initial={{ scale: 0.9, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    className="mt-2 inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-black/60 backdrop-blur-md border border-[#DFBA73] text-[#FFE8A3] text-xs font-bold shadow-xl"
+                  >
+                    <Sparkles className="w-3.5 h-3.5 text-[#DFBA73]" />
+                    <span style={{ fontFamily: isArabicContent ? "'Aref Ruqaa', serif" : undefined }}>
+                      {isArabicContent ? `دعوة خاصة لـ: ${initialGuestName}` : `Special Invitation for: ${initialGuestName}`}
+                    </span>
+                  </motion.div>
+                )}
+
               </div>
 
               {/* Bottom Knock Interaction Prompt & 3 Flower Indicators */}
@@ -524,8 +546,21 @@ export const PalaceDoorsRevealTemplate: React.FC<TemplateRenderContext> = ({ dat
                   <span>إعادة إغلاق الباب</span>
                 </button>
 
-                {/* Right controls: Share & Music */}
+                {/* Right controls: QR Card, Share & Music */}
                 <div className="flex items-center gap-2">
+                  {slug && (
+                    <a
+                      href={`/${slug}/card${initialGuestName ? `?to=${encodeURIComponent(initialGuestName)}` : ''}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      title={isArabicContent ? "بطاقة QR للطباعة" : "Printable QR Card"}
+                      className="px-2.5 py-1.5 rounded-full bg-black/60 hover:bg-black/80 backdrop-blur-md text-white border border-white/30 flex items-center gap-1 text-[11px] font-bold shadow-md active:scale-95 transition-all"
+                    >
+                      <QrCode className="w-3.5 h-3.5 text-[#DFBA73]" />
+                      <span className="hidden sm:inline">{isArabicContent ? "بطاقة QR" : "QR Card"}</span>
+                    </a>
+                  )}
+
                   <button
                     onClick={handleShare}
                     className="w-8 h-8 rounded-full bg-black/60 hover:bg-black/80 backdrop-blur-md text-white border border-white/30 flex items-center justify-center shadow-md active:scale-95 transition-all"
@@ -592,6 +627,16 @@ export const PalaceDoorsRevealTemplate: React.FC<TemplateRenderContext> = ({ dat
                   <span className="text-[#8C682A] font-serif text-lg leading-none">&</span>
                   <span>{data.brideName}</span>
                 </h2>
+
+                {/* Personalized Guest Invitation Banner inside Glass Card */}
+                {initialGuestName && (
+                  <div className="my-2 py-1.5 px-3 rounded-full bg-gradient-to-r from-[#DFBA73]/15 via-[#DFBA73]/30 to-[#DFBA73]/15 border border-[#DFBA73]/60 inline-flex items-center gap-1.5 shadow-sm">
+                    <Sparkles className="w-3.5 h-3.5 text-[#8C6D38]" />
+                    <span className="text-xs sm:text-sm font-bold text-[#4A3210]" style={{ fontFamily: isArabicContent ? "'Aref Ruqaa', serif" : undefined }}>
+                      {isArabicContent ? `يتشرف العروسان بدعوة: ${initialGuestName}` : `Cordially Invited: ${initialGuestName}`}
+                    </span>
+                  </div>
+                )}
 
                 {/* Invitation Body Message */}
                 <p 

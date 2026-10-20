@@ -27,6 +27,7 @@ export interface AudioViewModel {
 export interface InvitationRenderData {
   id?: string;
   slug?: string;
+  guestName?: string;
   groomName: string;
   brideName: string;
   weddingDate: Date;

@@ -9,6 +9,7 @@ import ExpiredInvitationScreen from '../../components/ExpiredInvitationScreen';
 
 interface PageProps {
   params: { slug: string };
+  searchParams?: { [key: string]: string | string[] | undefined };
 }
 
 // ISR configuration - revalidate every 60 seconds
@@ -18,7 +19,7 @@ async function fetchInvitation(slug: string) {
   return await getPublicInvitation(slug);
 }
 
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+export async function generateMetadata({ params, searchParams }: PageProps): Promise<Metadata> {
   const result = await fetchInvitation(params.slug);
   
   if (!result || result.type === 'NOT_FOUND') {
@@ -45,12 +46,20 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const { data } = result;
   const formattedDate = data.weddingDate ? formatEventDate(data.weddingDate, 'LTR') : '';
+  const rawGuest = searchParams?.to || searchParams?.guest || searchParams?.name;
+  const guestName = typeof rawGuest === 'string' ? decodeURIComponent(rawGuest).trim() : undefined;
   
+  const title = guestName 
+    ? `دعوة خاصة لـ ${guestName} | حفل زفاف ${data.groomName} & ${data.brideName}`
+    : `${data.groomName} & ${data.brideName} | You're Invited!`;
+
   return {
-    title: `${data.groomName} & ${data.brideName} | You're Invited!`,
-    description: `Join us for our wedding on ${formattedDate} at ${data.venueName}.`,
+    title,
+    description: guestName 
+      ? `يتشرف العروسان بدعوة ${guestName} لحضور حفل الزفاف في ${data.venueName}.`
+      : `Join us for our wedding on ${formattedDate} at ${data.venueName}.`,
     openGraph: {
-      title: `${data.groomName} & ${data.brideName} | Wedding Invitation`,
+      title,
       description: `Join us for our wedding at ${data.venueName}.`,
       images: data.coverImage ? [data.coverImage.url] : [],
     },
@@ -58,7 +67,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   };
 }
 
-export default async function PublicInvitationPage({ params }: PageProps) {
+export default async function PublicInvitationPage({ params, searchParams }: PageProps) {
   const result = await fetchInvitation(params.slug);
 
   if (!result || result.type === 'NOT_FOUND') {
@@ -90,12 +99,16 @@ export default async function PublicInvitationPage({ params }: PageProps) {
     : /[\u0600-\u06FF]/.test(data.groomName || data.brideName || '');
   const direction: 'LTR' | 'RTL' = isArabic ? 'RTL' : 'LTR';
 
+  const rawGuest = searchParams?.to || searchParams?.guest || searchParams?.name;
+  const guestName = typeof rawGuest === 'string' ? decodeURIComponent(rawGuest).trim() : undefined;
+
   const renderContext: TemplateRenderContext = {
     mode: 'PUBLIC',
     direction,
     data: {
       ...data,
-      slug: params.slug
+      slug: params.slug,
+      guestName
     } as any,
     metadata
   };
