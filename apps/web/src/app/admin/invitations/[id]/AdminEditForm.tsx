@@ -54,6 +54,12 @@ const getInitialCover = (inv: any): string => {
   return cover?.publicUrl || cover?.storageKey || (inv?.customData as any)?.coverImageUrl || '';
 };
 
+const getInitialLanguage = (inv: any): 'ar' | 'en' => {
+  if (inv?.customData?.language === 'en') return 'en';
+  if (inv?.customData?.language === 'ar') return 'ar';
+  return /[\u0600-\u06FF]/.test(inv?.groomName || inv?.brideName || '') ? 'ar' : 'en';
+};
+
 export default function AdminEditForm({ invitation, apiToken }: { invitation: any, apiToken: string }) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
@@ -77,6 +83,7 @@ export default function AdminEditForm({ invitation, apiToken }: { invitation: an
     bridePhone: invitation.bridePhone || '',
     expiresAt: invitation.expiresAt ? new Date(invitation.expiresAt).toISOString().slice(0, 16) : '',
     customData: invitation.customData || {},
+    language: getInitialLanguage(invitation),
     musicUrl: getInitialMusic(invitation),
     coverImageUrl: getInitialCover(invitation),
   });
@@ -97,6 +104,7 @@ export default function AdminEditForm({ invitation, apiToken }: { invitation: an
       bridePhone: invitation.bridePhone || '',
       expiresAt: invitation.expiresAt ? new Date(invitation.expiresAt).toISOString().slice(0, 16) : '',
       customData: invitation.customData || {},
+      language: getInitialLanguage(invitation),
       musicUrl: getInitialMusic(invitation),
       coverImageUrl: getInitialCover(invitation),
     });
@@ -175,8 +183,10 @@ export default function AdminEditForm({ invitation, apiToken }: { invitation: an
         body: JSON.stringify({
           version: formData.version,
           templateId: formData.templateId,
+          language: formData.language,
           customData: {
             ...(formData.customData || {}),
+            language: formData.language,
             musicUrl: formData.musicUrl,
             coverImageUrl: formData.coverImageUrl,
           },
@@ -235,6 +245,59 @@ export default function AdminEditForm({ invitation, apiToken }: { invitation: an
             {activeTemplate.metadata.description}
           </p>
         )}
+      </div>
+
+      {/* 1.1 Language & Text Direction Selector */}
+      <div className="p-3.5 bg-gradient-to-r from-blue-50/80 to-indigo-50/70 rounded-xl border border-blue-200 shadow-2xs space-y-2">
+        <div className="flex items-center justify-between">
+          <label className="text-sm font-bold text-blue-950 flex items-center gap-1.5">
+            <span>🌐 لغة الدعوة واتجاه العرض (Language & Text Direction)</span>
+          </label>
+          <span className="text-xs px-2.5 py-0.5 rounded-full font-bold bg-blue-100 text-blue-800 border border-blue-200">
+            {formData.language === 'en' ? 'Left-to-Right (LTR) • إنجليزي' : 'من اليمين لليسار (RTL) • عربي'}
+          </span>
+        </div>
+        
+        <div className="grid grid-cols-2 gap-2">
+          <button
+            type="button"
+            onClick={() => setFormData({ 
+              ...formData, 
+              language: 'ar', 
+              customData: { ...(formData.customData || {}), language: 'ar' } 
+            })}
+            className={`py-2 px-3 rounded-lg text-xs sm:text-sm font-bold border transition-all flex items-center justify-center gap-2 ${
+              formData.language === 'ar'
+                ? 'bg-blue-600 text-white border-blue-600 shadow-xs'
+                : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
+            }`}
+          >
+            <span>🇸🇦 العربية (Arabic - RTL)</span>
+          </button>
+          
+          <button
+            type="button"
+            onClick={() => setFormData({ 
+              ...formData, 
+              language: 'en', 
+              customData: { ...(formData.customData || {}), language: 'en' } 
+            })}
+            className={`py-2 px-3 rounded-lg text-xs sm:text-sm font-bold border transition-all flex items-center justify-center gap-2 ${
+              formData.language === 'en'
+                ? 'bg-blue-600 text-white border-blue-600 shadow-xs'
+                : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
+            }`}
+          >
+            <span>🇬🇧 English (الإنجليزية - LTR)</span>
+          </button>
+        </div>
+        
+        <p className="text-[11px] text-blue-900/75">
+          {formData.language === 'en' 
+            ? 'عند اختيار الإنجليزية: يتحول اتجاه الثيم إلى (LTR) وتتغير نصوص الأزرار، التواريخ، والعد التنازلي ونموذج الحضور إلى الإنجليزية تلقائياً.'
+            : 'عند اختيار العربية: يتم تفعيل اتجاه اليمين لليسار (RTL) مع كتابة كافة الأزرار والتواريخ باللغة العربية الفاخرة.'
+          }
+        </p>
       </div>
 
       {/* 2. Names */}

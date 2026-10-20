@@ -64,12 +64,15 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
       }
     });
 
-    // Merge and persist customData, musicUrl, and coverImageUrl
+    // Merge and persist customData, language, musicUrl, and coverImageUrl
     const currentCustom = (existing.customData as Record<string, any>) || {};
     const mergedCustom = {
       ...currentCustom,
       ...(body.customData || {})
     };
+    if (body.language !== undefined) {
+      mergedCustom.language = body.language;
+    }
     if (body.musicUrl !== undefined) {
       mergedCustom.musicUrl = body.musicUrl;
     }

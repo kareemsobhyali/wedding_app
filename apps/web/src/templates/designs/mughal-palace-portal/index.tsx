@@ -254,7 +254,7 @@ const RomanticCoupleVideo = () => {
   );
 };
 
-export const MughalPalacePortalTemplate: React.FC<TemplateRenderContext> = ({ data, mode }) => {
+export const MughalPalacePortalTemplate: React.FC<TemplateRenderContext> = ({ data, mode, direction }) => {
   const [isPlayingAudio, setIsPlayingAudio] = useState(false);
   const [showRsvpModal, setShowRsvpModal] = useState(false);
   const [rsvpSent, setRsvpSent] = useState(false);
@@ -266,7 +266,9 @@ export const MughalPalacePortalTemplate: React.FC<TemplateRenderContext> = ({ da
   const weddingDate = new Date(data.weddingDate);
 
   const isArabic = (text?: string) => /[\u0600-\u06FF]/.test(text || '');
-  const isArabicContent = isArabic(data.groomName) || isArabic(data.brideName) || isArabic(data.venueName);
+  const isArabicContent = custom.language 
+    ? custom.language === 'ar' 
+    : (direction === 'RTL' || isArabic(data.groomName) || isArabic(data.brideName) || isArabic(data.venueName));
 
   // Month, Day, Year, DayName, Time formatting (Locale-Aware)
   const monthName = custom.dateMonth || (isArabicContent 
@@ -429,7 +431,7 @@ export const MughalPalacePortalTemplate: React.FC<TemplateRenderContext> = ({ da
               className="text-xs sm:text-sm font-bold text-[#8C6D38] tracking-wide"
               style={{ fontFamily: isArabicContent ? "'Aref Ruqaa', serif" : "'Alex Brush', cursive" }}
             >
-              {custom.cursiveHeader || (isArabicContent ? 'يسعدنا ويشرفنا دعوتكم لحضور حفل زفاف' : 'The')}
+              {custom.cursiveHeader || (isArabicContent ? 'يسعدنا ويشرفنا دعوتكم لحضور حفل زفاف' : 'Together with their families, cordially invite you')}
             </p>
 
             {/* Couple Names - Grand & Royal */}
@@ -647,12 +649,12 @@ export const MughalPalacePortalTemplate: React.FC<TemplateRenderContext> = ({ da
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
-              className="bg-[#FAF8F5] border-2 border-[#D4AF37]/50 rounded-3xl p-6 sm:p-8 max-w-sm w-full shadow-2xl relative text-right"
-              dir="rtl"
+              className={`bg-[#FAF8F5] border-2 border-[#D4AF37]/50 rounded-3xl p-6 sm:p-8 max-w-sm w-full shadow-2xl relative ${isArabicContent ? 'text-right' : 'text-left'}`}
+              dir={isArabicContent ? "rtl" : "ltr"}
             >
               <button 
                 onClick={() => setShowRsvpModal(false)}
-                className="absolute top-4 left-4 text-stone-400 hover:text-stone-700 p-1"
+                className={`absolute top-4 ${isArabicContent ? 'left-4' : 'right-4'} text-stone-400 hover:text-stone-700 p-1`}
               >
                 <X className="w-5 h-5" />
               </button>
@@ -677,25 +679,25 @@ export const MughalPalacePortalTemplate: React.FC<TemplateRenderContext> = ({ da
                   <div className="w-12 h-12 bg-amber-100 text-amber-700 rounded-full flex items-center justify-center mx-auto">
                     <Check className="w-6 h-6" />
                   </div>
-                  <h4 className="text-base font-bold text-stone-800" style={{ fontFamily: isArabicContent ? "'Aref Ruqaa', serif" : "inherit" }}>تم تسجيل حضوركم بنجاح!</h4>
-                  <p className="text-xs text-stone-500" style={{ fontFamily: isArabicContent ? "'Aref Ruqaa', serif" : "inherit" }}>شكراً لكم، ننتظر تشريفكم بكل سعادة ومودة.</p>
+                  <h4 className="text-base font-bold text-stone-800" style={{ fontFamily: isArabicContent ? "'Aref Ruqaa', serif" : "inherit" }}>{isArabicContent ? 'تم تسجيل حضوركم بنجاح!' : 'Your RSVP has been confirmed!'}</h4>
+                  <p className="text-xs text-stone-500" style={{ fontFamily: isArabicContent ? "'Aref Ruqaa', serif" : "inherit" }}>{isArabicContent ? 'شكراً لكم، ننتظر تشريفكم بكل سعادة ومودة.' : 'Thank you! We look forward to celebrating together.'}</p>
                 </div>
               ) : (
                 <form onSubmit={handleRsvpSubmit} className="space-y-3.5">
                   <div>
-                    <label className="block text-xs font-semibold text-[#543914] mb-1" style={{ fontFamily: isArabicContent ? "'Aref Ruqaa', serif" : "inherit" }}>الاسم الكريم</label>
+                    <label className="block text-xs font-semibold text-[#543914] mb-1" style={{ fontFamily: isArabicContent ? "'Aref Ruqaa', serif" : "inherit" }}>{isArabicContent ? 'الاسم الكريم' : 'Full Name'}</label>
                     <input 
                       type="text" 
                       required 
                       value={rsvpData.name}
                       onChange={(e) => setRsvpData({ ...rsvpData, name: e.target.value })}
                       className="w-full px-3 py-2 text-xs rounded-xl border border-stone-300 focus:outline-none focus:border-[#8C6D38] bg-white text-stone-800"
-                      placeholder="اكتب اسمك الكريم"
+                      placeholder={isArabicContent ? "اكتب اسمك الكريم" : "Enter your full name"}
                     />
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold text-[#543914] mb-1" style={{ fontFamily: isArabicContent ? "'Aref Ruqaa', serif" : "inherit" }}>حالة الحضور</label>
+                    <label className="block text-xs font-semibold text-[#543914] mb-1" style={{ fontFamily: isArabicContent ? "'Aref Ruqaa', serif" : "inherit" }}>{isArabicContent ? 'حالة الحضور' : 'Attendance'}</label>
                     <div className="grid grid-cols-2 gap-2">
                       <button
                         type="button"
@@ -707,7 +709,7 @@ export const MughalPalacePortalTemplate: React.FC<TemplateRenderContext> = ({ da
                         }`}
                         style={{ fontFamily: isArabicContent ? "'Aref Ruqaa', serif" : "inherit" }}
                       >
-                        سأحضر بكل سرور ✨
+                        {isArabicContent ? 'سأحضر بكل سرور ✨' : 'Attending with pleasure ✨'}
                       </button>
                       <button
                         type="button"
@@ -719,35 +721,35 @@ export const MughalPalacePortalTemplate: React.FC<TemplateRenderContext> = ({ da
                         }`}
                         style={{ fontFamily: isArabicContent ? "'Aref Ruqaa', serif" : "inherit" }}
                       >
-                        أعتذر لظروف خاصة
+                        {isArabicContent ? 'أعتذر لظروف خاصة' : 'Regretfully Decline'}
                       </button>
                     </div>
                   </div>
 
                   {rsvpData.attendance === 'yes' && (
                     <div>
-                      <label className="block text-xs font-semibold text-[#543914] mb-1" style={{ fontFamily: isArabicContent ? "'Aref Ruqaa', serif" : "inherit" }}>عدد المرافقين</label>
+                      <label className="block text-xs font-semibold text-[#543914] mb-1" style={{ fontFamily: isArabicContent ? "'Aref Ruqaa', serif" : "inherit" }}>{isArabicContent ? 'عدد المرافقين' : 'Number of Guests'}</label>
                       <select
                         value={rsvpData.guests}
                         onChange={(e) => setRsvpData({ ...rsvpData, guests: e.target.value })}
                         className="w-full px-3 py-2 text-xs rounded-xl border border-stone-300 focus:outline-none focus:border-[#8C6D38] bg-white text-stone-800"
                       >
-                        <option value="1">شخص واحد (أنا فقط)</option>
-                        <option value="2">شخصان (2)</option>
-                        <option value="3">3 أشخاص</option>
-                        <option value="4">4 أشخاص أو أكثر</option>
+                        <option value="1">{isArabicContent ? 'شخص واحد (أنا فقط)' : '1 person (myself only)'}</option>
+                        <option value="2">{isArabicContent ? 'شخصان (2)' : '2 persons'}</option>
+                        <option value="3">{isArabicContent ? '3 أشخاص' : '3 persons'}</option>
+                        <option value="4">{isArabicContent ? '4 أشخاص أو أكثر' : '4+ persons'}</option>
                       </select>
                     </div>
                   )}
 
                   <div>
-                    <label className="block text-xs font-semibold text-[#543914] mb-1" style={{ fontFamily: isArabicContent ? "'Aref Ruqaa', serif" : "inherit" }}>تهنئة أو رسالة للعروسين (اختياري)</label>
+                    <label className="block text-xs font-semibold text-[#543914] mb-1" style={{ fontFamily: isArabicContent ? "'Aref Ruqaa', serif" : "inherit" }}>{isArabicContent ? 'تهنئة أو رسالة للعروسين (اختياري)' : 'Message to the Couple (Optional)'}</label>
                     <textarea 
                       rows={2}
                       value={rsvpData.note}
                       onChange={(e) => setRsvpData({ ...rsvpData, note: e.target.value })}
                       className="w-full px-3 py-2 text-xs rounded-xl border border-stone-300 focus:outline-none focus:border-[#8C6D38] bg-white text-stone-800"
-                      placeholder="أجمل التمنيات بحياة مباركة..."
+                      placeholder={isArabicContent ? "أجمل التمنيات بحياة مباركة..." : "Best wishes for a lifetime of love and joy..."}
                     />
                   </div>
 
@@ -757,7 +759,7 @@ export const MughalPalacePortalTemplate: React.FC<TemplateRenderContext> = ({ da
                     style={{ fontFamily: isArabicContent ? "'Aref Ruqaa', serif" : "inherit" }}
                   >
                     <Send className="w-3.5 h-3.5" />
-                    <span>إرسال التأكيد</span>
+                    <span>{isArabicContent ? 'إرسال التأكيد' : 'Confirm RSVP'}</span>
                   </button>
                 </form>
               )}

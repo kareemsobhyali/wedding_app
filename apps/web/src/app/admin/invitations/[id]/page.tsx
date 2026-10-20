@@ -166,12 +166,19 @@ export default async function AdminInvitationDetail({ params }: { params: { id: 
       <div className="w-1/2">
         <h2 className="font-bold text-xl mb-4">Preview</h2>
         <div className="bg-white shadow rounded border overflow-hidden relative" style={{ height: '800px', transform: 'scale(1)', transformOrigin: 'top left' }}>
-          {TemplateComponent ? (
-            <TemplateComponent 
-              mode="PREVIEW"
-              direction="LTR"
-              metadata={metadata!}
-              data={{
+          {TemplateComponent ? (() => {
+            const customLang = (inv.customData as any)?.language;
+            const isAr = customLang 
+              ? customLang === 'ar' 
+              : /[\u0600-\u06FF]/.test(inv.groomName || inv.brideName || '');
+            const direction: 'LTR' | 'RTL' = isAr ? 'RTL' : 'LTR';
+
+            return (
+              <TemplateComponent 
+                mode="PREVIEW"
+                direction={direction}
+                metadata={metadata!}
+                data={{
                 groomName: inv.groomName,
                 brideName: inv.brideName,
                 weddingDate: inv.weddingDate || new Date(),
@@ -201,7 +208,8 @@ export default async function AdminInvitationDetail({ params }: { params: { id: 
                 })(),
               }}
             />
-          ) : (
+            );
+          })() : (
             <div className="p-12 text-center text-gray-500">No template assigned or template missing</div>
           )}
         </div>

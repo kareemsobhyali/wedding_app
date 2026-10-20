@@ -109,6 +109,10 @@ export async function POST(req: NextRequest) {
           venueAddress: body.venueAddress || '',
           weddingDate: body.weddingDate ? new Date(body.weddingDate) : new Date(),
           expiresAt: body.expiresAt ? new Date(body.expiresAt) : null,
+          customData: {
+            language: body.language || (body.groomName && /[\u0600-\u06FF]/.test(body.groomName) ? 'ar' : 'en'),
+            ...(body.customData || {})
+          },
           status: 'DRAFT',
           template: { connect: { id: template.id } },
           version: 1,

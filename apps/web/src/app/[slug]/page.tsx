@@ -84,9 +84,15 @@ export default async function PublicInvitationPage({ params }: PageProps) {
 
   const { component: TemplateComponent, metadata } = registeredTemplate;
 
+  const customLang = (data.customData as any)?.language;
+  const isArabic = customLang 
+    ? customLang === 'ar' 
+    : /[\u0600-\u06FF]/.test(data.groomName || data.brideName || '');
+  const direction: 'LTR' | 'RTL' = isArabic ? 'RTL' : 'LTR';
+
   const renderContext: TemplateRenderContext = {
     mode: 'PUBLIC',
-    direction: 'LTR',
+    direction,
     data: data as any,
     metadata
   };

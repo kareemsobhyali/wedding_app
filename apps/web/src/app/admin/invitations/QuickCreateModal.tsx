@@ -12,6 +12,7 @@ export default function QuickCreateModal({ apiToken }: { apiToken: string }) {
     brideName: '',
     customerPhone: '',
     weddingDate: '',
+    language: 'ar',
     validityType: 'days_30', // 'minutes_30' | 'minutes_60' | 'days_30' | 'days_60' | 'unlimited'
   });
 
@@ -35,6 +36,7 @@ export default function QuickCreateModal({ apiToken }: { apiToken: string }) {
         brideName: formData.brideName,
         customerPhone: formData.customerPhone,
         weddingDate: formData.weddingDate,
+        language: formData.language,
         expiresAt,
       };
 
@@ -87,6 +89,19 @@ export default function QuickCreateModal({ apiToken }: { apiToken: string }) {
               <div>
                 <label className="block text-sm font-medium mb-1">Wedding Date</label>
                 <input type="date" required className="w-full border rounded p-2" value={formData.weddingDate} onChange={e => setFormData({...formData, weddingDate: e.target.value})} />
+              </div>
+
+              {/* Language Selector */}
+              <div>
+                <label className="block text-sm font-medium mb-1 text-indigo-900 font-bold">لغة الدعوة واتجاه العرض (Language)</label>
+                <select 
+                  className="w-full border rounded p-2 bg-indigo-50/50 font-medium"
+                  value={formData.language} 
+                  onChange={e => setFormData({...formData, language: e.target.value})}
+                >
+                  <option value="ar">🇸🇦 العربية (Arabic - RTL)</option>
+                  <option value="en">🇬🇧 English (الإنجليزية - LTR)</option>
+                </select>
               </div>
 
               {/* Validity Selector */}

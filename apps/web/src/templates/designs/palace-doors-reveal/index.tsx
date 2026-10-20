@@ -23,7 +23,7 @@ const isArabic = (text?: string): boolean => {
   return /[\u0600-\u06FF]/.test(text);
 };
 
-export const PalaceDoorsRevealTemplate: React.FC<TemplateRenderContext> = ({ data, mode }) => {
+export const PalaceDoorsRevealTemplate: React.FC<TemplateRenderContext> = ({ data, mode, direction }) => {
   const [knockCount, setKnockCount] = useState<number>(0);
   const [isDoorOpen, setIsDoorOpen] = useState<boolean>(false);
   const [isAnimatingDoor, setIsAnimatingDoor] = useState<boolean>(false);
@@ -43,7 +43,9 @@ export const PalaceDoorsRevealTemplate: React.FC<TemplateRenderContext> = ({ dat
   const weddingDate = new Date(data.weddingDate);
 
   // Formatted date values
-  const isArabicContent = isArabic(data.groomName) || isArabic(data.brideName) || isArabic(custom.sacredQuote);
+  const isArabicContent = custom.language 
+    ? custom.language === 'ar' 
+    : (direction === 'RTL' || isArabic(data.groomName) || isArabic(data.brideName) || isArabic(custom.sacredQuote));
   const dayName = custom.dayName || (isArabicContent
     ? weddingDate.toLocaleDateString('ar-EG', { weekday: 'long' })
     : weddingDate.toLocaleDateString('en-US', { weekday: 'long' }).toUpperCase()
@@ -426,10 +428,10 @@ export const PalaceDoorsRevealTemplate: React.FC<TemplateRenderContext> = ({ dat
                 >
                   <Sparkles className="w-3.5 h-3.5 text-[#DFBA73]" />
                   <span>
-                    {knockCount === 0 && (custom.knockInstruction || 'دُقّوا على الباب ثلاث دقّاتٍ ليُفتح')}
-                    {knockCount === 1 && 'الدقة الأولى... استمروا بالدق (1 / 3)'}
-                    {knockCount === 2 && 'الدقة الثانية... أوشك الباب أن يفتح! (2 / 3)'}
-                    {knockCount >= 3 && 'الدقة الثالثة... مرحباً بكم في ليلة العمر ✨'}
+                    {knockCount === 0 && (custom.knockInstruction || (isArabicContent ? 'دُقّوا على الباب ثلاث دقّاتٍ ليُفتح' : 'Knock 3 times on the doors to enter'))}
+                    {knockCount === 1 && (isArabicContent ? 'الدقة الأولى... استمروا بالدق (1 / 3)' : 'First knock... keep knocking (1 / 3)')}
+                    {knockCount === 2 && (isArabicContent ? 'الدقة الثانية... أوشك الباب أن يفتح! (2 / 3)' : 'Second knock... almost open! (2 / 3)')}
+                    {knockCount >= 3 && (isArabicContent ? 'الدقة الثالثة... مرحباً بكم في ليلة العمر ✨' : 'Opening doors... Welcome to the Palace ✨')}
                   </span>
                 </motion.div>
 
@@ -455,7 +457,7 @@ export const PalaceDoorsRevealTemplate: React.FC<TemplateRenderContext> = ({ dat
                 </div>
 
                 <span className="text-[10px] text-white/85 font-semibold mt-2 drop-shadow-md">
-                  اضغط في أي مكان على الباب للدق 👆
+                  {isArabicContent ? 'اضغط في أي مكان على الباب للدق 👆' : 'Tap anywhere on the doors to knock 👆'}
                 </span>
 
               </div>
@@ -596,10 +598,10 @@ export const PalaceDoorsRevealTemplate: React.FC<TemplateRenderContext> = ({ dat
                 {data.countdownEnabled && (
                   <div className="grid grid-cols-4 gap-1 max-w-[260px] mx-auto mb-3">
                     {[
-                      { label: 'أيام', val: timeLeft.days },
-                      { label: 'ساعات', val: timeLeft.hours },
-                      { label: 'دقائق', val: timeLeft.minutes },
-                      { label: 'ثوانٍ', val: timeLeft.seconds },
+                      { label: isArabicContent ? 'أيام' : 'DAYS', val: timeLeft.days },
+                      { label: isArabicContent ? 'ساعات' : 'HOURS', val: timeLeft.hours },
+                      { label: isArabicContent ? 'دقائق' : 'MINS', val: timeLeft.minutes },
+                      { label: isArabicContent ? 'ثوانٍ' : 'SECS', val: timeLeft.seconds },
                     ].map((item, idx) => (
                       <div key={idx} className="bg-white/90 p-1 rounded-xl border border-[#D5C7B2] shadow-xs">
                         <span className="text-xs font-black text-[#4A3210] block font-mono leading-tight">
@@ -612,16 +614,19 @@ export const PalaceDoorsRevealTemplate: React.FC<TemplateRenderContext> = ({ dat
                 )}
 
                 {/* Action Buttons: RSVP, Calendar, Maps */}
-                <div className="flex items-center justify-center gap-1.5 pt-1 border-t border-[#EADBCA]">
+                <div 
+                  className="flex items-center justify-center gap-1.5 pt-1 border-t border-[#EADBCA]"
+                  dir={isArabicContent ? "rtl" : "ltr"}
+                >
                   
                   {/* RSVP Button */}
                   <button
                     onClick={() => setShowRsvpModal(true)}
                     className="flex-1 py-1.5 px-2 rounded-full bg-gradient-to-r from-[#A67C37] via-[#C5A059] to-[#8C6D38] text-white shadow-md text-xs font-bold flex items-center justify-center gap-1 hover:brightness-110 active:scale-95 transition-all"
-                    style={{ fontFamily: "'Aref Ruqaa', serif" }}
+                    style={{ fontFamily: isArabicContent ? "'Aref Ruqaa', serif" : "'Cinzel', serif" }}
                   >
                     <Heart className="w-3 h-3 fill-white shrink-0" />
-                    <span>تأكيد الحضور</span>
+                    <span>{isArabicContent ? 'تأكيد الحضور' : 'RSVP'}</span>
                   </button>
 
                   {/* Calendar Button */}
@@ -630,10 +635,10 @@ export const PalaceDoorsRevealTemplate: React.FC<TemplateRenderContext> = ({ dat
                     target="_blank"
                     rel="noopener noreferrer"
                     className="py-1.5 px-2.5 rounded-full bg-white hover:bg-gray-50 border border-[#D4AF37]/50 text-[#6E4D1D] font-bold text-xs flex items-center justify-center gap-1 active:scale-95 transition-all shadow-xs"
-                    style={{ fontFamily: "'Aref Ruqaa', serif" }}
+                    style={{ fontFamily: isArabicContent ? "'Aref Ruqaa', serif" : "'Cinzel', serif" }}
                   >
                     <Calendar className="w-3 h-3 text-[#B8860B] shrink-0" />
-                    <span>الموعد</span>
+                    <span>{isArabicContent ? 'الموعد' : 'Calendar'}</span>
                   </a>
 
                   {/* Location Map Button */}
@@ -642,10 +647,10 @@ export const PalaceDoorsRevealTemplate: React.FC<TemplateRenderContext> = ({ dat
                     target="_blank"
                     rel="noopener noreferrer"
                     className="py-1.5 px-2.5 rounded-full bg-white hover:bg-gray-50 border border-[#D4AF37]/50 text-[#6E4D1D] font-bold text-xs flex items-center justify-center gap-1 active:scale-95 transition-all shadow-xs"
-                    style={{ fontFamily: "'Aref Ruqaa', serif" }}
+                    style={{ fontFamily: isArabicContent ? "'Aref Ruqaa', serif" : "'Cinzel', serif" }}
                   >
                     <MapPin className="w-3 h-3 text-[#B8860B] shrink-0" />
-                    <span>الموقع</span>
+                    <span>{isArabicContent ? 'الموقع' : 'Location'}</span>
                   </a>
 
                 </div>
@@ -674,11 +679,11 @@ export const PalaceDoorsRevealTemplate: React.FC<TemplateRenderContext> = ({ dat
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.9 }}
-                className="bg-white rounded-[28px] p-5 max-w-sm w-full shadow-2xl border border-[#D4AF37] text-right"
-                dir="rtl"
+                className={`bg-white rounded-[28px] p-5 max-w-sm w-full shadow-2xl border border-[#D4AF37] ${isArabicContent ? 'text-right' : 'text-left'}`}
+                dir={isArabicContent ? "rtl" : "ltr"}
               >
                 <div className="flex items-center justify-between pb-3 border-b mb-3">
-                  <h3 className="font-bold text-sm text-[#4A3210]">تأكيد الحضور (RSVP)</h3>
+                  <h3 className="font-bold text-sm text-[#4A3210]">{isArabicContent ? 'تأكيد الحضور (RSVP)' : 'Confirm RSVP'}</h3>
                   <button onClick={() => setShowRsvpModal(false)} className="text-gray-400 hover:text-black">
                     <X className="w-5 h-5" />
                   </button>
@@ -689,13 +694,13 @@ export const PalaceDoorsRevealTemplate: React.FC<TemplateRenderContext> = ({ dat
                     <div className="w-10 h-10 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-2">
                       <Check className="w-5 h-5" />
                     </div>
-                    <h4 className="font-bold text-sm text-gray-900 mb-1">شكراً لك!</h4>
-                    <p className="text-xs text-gray-600 mb-3">تم تسجيل تأكيد حضورك بنجاح، ويسعدنا وجودك معنا.</p>
+                    <h4 className="font-bold text-sm text-gray-900 mb-1">{isArabicContent ? 'شكراً لك!' : 'Thank you!'}</h4>
+                    <p className="text-xs text-gray-600 mb-3">{isArabicContent ? 'تم تسجيل تأكيد حضورك بنجاح، ويسعدنا وجودك معنا.' : 'Your attendance has been confirmed successfully.'}</p>
                     <button
                       onClick={() => { setShowRsvpModal(false); setRsvpSent(false); }}
                       className="px-5 py-1.5 bg-[#8C6D38] text-white rounded-full text-xs font-bold"
                     >
-                      إغلاق
+                      {isArabicContent ? 'إغلاق' : 'Close'}
                     </button>
                   </div>
                 ) : (
@@ -707,52 +712,52 @@ export const PalaceDoorsRevealTemplate: React.FC<TemplateRenderContext> = ({ dat
                     className="space-y-2.5"
                   >
                     <div>
-                      <label className="block text-xs font-bold text-gray-700 mb-1">الاسم الكريم</label>
+                      <label className="block text-xs font-bold text-gray-700 mb-1">{isArabicContent ? 'الاسم الكريم' : 'Full Name'}</label>
                       <input
                         required
                         type="text"
                         value={rsvpData.name}
                         onChange={(e) => setRsvpData({ ...rsvpData, name: e.target.value })}
-                        placeholder="اكتب اسمك هنا"
+                        placeholder={isArabicContent ? "اكتب اسمك هنا" : "Enter your full name"}
                         className="w-full p-2 text-xs rounded-xl border border-gray-200 focus:outline-none focus:border-[#8C6D38]"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-xs font-bold text-gray-700 mb-1">هل ستشرفنا بالحضور؟</label>
+                      <label className="block text-xs font-bold text-gray-700 mb-1">{isArabicContent ? 'هل ستشرفنا بالحضور؟' : 'Attendance'}</label>
                       <select
                         value={rsvpData.attendance}
                         onChange={(e) => setRsvpData({ ...rsvpData, attendance: e.target.value })}
                         className="w-full p-2 text-xs rounded-xl border border-gray-200 focus:outline-none focus:border-[#8C6D38]"
                       >
-                        <option value="yes">نعم، بكل سرور يشرفني الحضور 🤍</option>
-                        <option value="no">أعتذر بكل أسف لعدم التمكن من الحضور</option>
+                        <option value="yes">{isArabicContent ? 'نعم، بكل سرور يشرفني الحضور 🤍' : 'Yes, attending with pleasure 🤍'}</option>
+                        <option value="no">{isArabicContent ? 'أعتذر بكل أسف لعدم التمكن من الحضور' : 'Regretfully Decline'}</option>
                       </select>
                     </div>
 
                     {rsvpData.attendance === 'yes' && (
                       <div>
-                        <label className="block text-xs font-bold text-gray-700 mb-1">عدد المرافقين</label>
+                        <label className="block text-xs font-bold text-gray-700 mb-1">{isArabicContent ? 'عدد المرافقين' : 'Number of Guests'}</label>
                         <select
                           value={rsvpData.guests}
                           onChange={(e) => setRsvpData({ ...rsvpData, guests: e.target.value })}
                           className="w-full p-2 text-xs rounded-xl border border-gray-200 focus:outline-none focus:border-[#8C6D38]"
                         >
-                          <option value="1">شخص واحد (أنا فقط)</option>
-                          <option value="2">شخصان (2)</option>
-                          <option value="3">3 أشخاص</option>
-                          <option value="4">عائلة / 4 أشخاص فأكثر</option>
+                          <option value="1">{isArabicContent ? 'شخص واحد (أنا فقط)' : '1 person (myself only)'}</option>
+                          <option value="2">{isArabicContent ? 'شخصان (2)' : '2 persons'}</option>
+                          <option value="3">{isArabicContent ? '3 أشخاص' : '3 persons'}</option>
+                          <option value="4">{isArabicContent ? 'عائلة / 4 أشخاص فأكثر' : 'Family / 4+ persons'}</option>
                         </select>
                       </div>
                     )}
 
                     <div>
-                      <label className="block text-xs font-bold text-gray-700 mb-1">رسالة تهنئة للعروسين (اختياري)</label>
+                      <label className="block text-xs font-bold text-gray-700 mb-1">{isArabicContent ? 'رسالة تهنئة للعروسين (اختياري)' : 'Message to the Couple (Optional)'}</label>
                       <textarea
                         rows={2}
                         value={rsvpData.note}
                         onChange={(e) => setRsvpData({ ...rsvpData, note: e.target.value })}
-                        placeholder="أطيب الأمنيات للعروسين..."
+                        placeholder={isArabicContent ? "أطيب الأمنيات للعروسين..." : "Best wishes for a lifetime of love..."}
                         className="w-full p-2 text-xs rounded-xl border border-gray-200 focus:outline-none focus:border-[#8C6D38]"
                       />
                     </div>
@@ -761,7 +766,7 @@ export const PalaceDoorsRevealTemplate: React.FC<TemplateRenderContext> = ({ dat
                       type="submit"
                       className="w-full py-2.5 rounded-full bg-gradient-to-r from-[#8C6D38] via-[#C5A059] to-[#DFBA73] text-white font-bold text-xs shadow-md mt-1"
                     >
-                      إرسال التأكيد
+                      {isArabicContent ? 'إرسال التأكيد' : 'Confirm RSVP'}
                     </button>
                   </form>
                 )}
