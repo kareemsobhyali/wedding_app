@@ -213,11 +213,11 @@ const RomanticCoupleVideo = () => {
 
   return (
     <>
-      {/* Background Mask to cleanly conceal the static drawing in the palace wallpaper center */}
+      {/* Background Mask strictly contained ABOVE the marble ledge (y >= 6.5%) */}
       <div 
-        className="absolute bottom-[3.5%] left-1/2 -translate-x-1/2 w-[110px] h-[95px] pointer-events-none rounded-full"
+        className="absolute bottom-[6.5%] left-1/2 -translate-x-1/2 w-[85px] h-[75px] rounded-t-full pointer-events-none"
         style={{
-          background: 'radial-gradient(ellipse at 50% 60%, #FAF5ED 70%, rgba(250,245,237,0.85) 85%, transparent 100%)'
+          background: 'radial-gradient(ellipse at 50% 85%, #FAF5ED 75%, rgba(250,245,237,0.85) 90%, transparent 100%)'
         }}
       />
 
@@ -414,8 +414,8 @@ export const MughalPalacePortalTemplate: React.FC<TemplateRenderContext> = ({ da
           }}
         />
 
-        {/* Inside Portal Content: Typography & Layout (Harmonious Royal Gold & Bronze Colors) */}
-        <div className="absolute top-[28%] bottom-[32.5%] left-[13%] right-[13%] flex flex-col items-center justify-between text-center z-20 pointer-events-none py-0.5 px-1">
+        {/* Inside Portal Content: Typography & Layout (Lowered safely inside ivory opening, no column collision) */}
+        <div className="absolute top-[32.5%] bottom-[19%] left-[17%] right-[17%] flex flex-col items-center justify-between text-center z-20 pointer-events-none py-0.5 px-1">
           
           {/* 1. Header & Couple Names */}
           <motion.div
@@ -485,8 +485,8 @@ export const MughalPalacePortalTemplate: React.FC<TemplateRenderContext> = ({ da
               {monthName}
             </p>
 
-            {/* Middle Row: DayName | Big Numeral | Time */}
-            <div className="w-full flex items-center justify-between px-2 sm:px-4 py-0.5">
+            {/* Middle Row: DayName | Big Numeral | Time (Clustered safely in the ivory center) */}
+            <div className="flex items-center justify-center gap-3 sm:gap-5 py-0.5">
               {/* Day Name */}
               <span 
                 className="text-[11px] sm:text-xs font-bold text-[#543914] tracking-normal"
@@ -497,7 +497,7 @@ export const MughalPalacePortalTemplate: React.FC<TemplateRenderContext> = ({ da
 
               {/* Big Gold Numeral Date */}
               <span 
-                className="text-3xl sm:text-4xl font-extrabold text-[#4A3210] px-2 leading-none"
+                className="text-3xl sm:text-4xl font-extrabold text-[#4A3210] px-1 leading-none"
                 style={{ 
                   fontFamily: isArabicContent ? "'Aref Ruqaa', serif" : "'Cormorant Garamond', serif",
                   textShadow: '0 1px 3px rgba(255,255,255,0.9)'
@@ -574,50 +574,50 @@ export const MughalPalacePortalTemplate: React.FC<TemplateRenderContext> = ({ da
             </div>
           </motion.div>
 
-          {/* 6. Integrated Luxury Action Buttons (Replacing the bottom floating banner) */}
-          <motion.div
-            initial={{ opacity: 0, y: 5 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.75 }}
-            className="flex items-center justify-center gap-1.5 w-full pt-1 pointer-events-auto"
-            dir={isArabicContent ? "rtl" : "ltr"}
-          >
-            {/* Primary RSVP Button */}
-            <button
-              onClick={() => setShowRsvpModal(true)}
-              className="py-1.5 px-3 rounded-full bg-gradient-to-r from-[#A67C37] via-[#C5A059] to-[#8C6D38] text-white shadow-md text-xs font-bold flex items-center justify-center gap-1 hover:brightness-110 active:scale-95 transition-all"
-              style={{ fontFamily: isArabicContent ? "'Aref Ruqaa', serif" : "'Cinzel', serif" }}
-            >
-              <Heart className="w-3.5 h-3.5 fill-white shrink-0" />
-              <span>{isArabicContent ? 'تأكيد الحضور' : 'RSVP'}</span>
-            </button>
-
-            {/* Add to Calendar Button */}
-            <a
-              href={gcalUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="py-1.5 px-2.5 rounded-full bg-white/95 hover:bg-white border border-[#D4AF37]/50 text-[#6E4D1D] font-bold text-xs flex items-center justify-center gap-1 active:scale-95 transition-all shadow-xs"
-              style={{ fontFamily: isArabicContent ? "'Aref Ruqaa', serif" : "'Cinzel', serif" }}
-            >
-              <Calendar className="w-3.5 h-3.5 text-[#B8860B] shrink-0" />
-              <span>{isArabicContent ? 'الموعد' : 'Calendar'}</span>
-            </a>
-
-            {/* Google Maps Button */}
-            <a
-              href={data.googleMapsUrl || '#'}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="py-1.5 px-2.5 rounded-full bg-white/95 hover:bg-white border border-[#D4AF37]/50 text-[#6E4D1D] font-bold text-xs flex items-center justify-center gap-1 active:scale-95 transition-all shadow-xs"
-              style={{ fontFamily: isArabicContent ? "'Aref Ruqaa', serif" : "'Cinzel', serif" }}
-            >
-              <MapPin className="w-3.5 h-3.5 text-[#B8860B] shrink-0" />
-              <span>{isArabicContent ? 'الموقع' : 'Location'}</span>
-            </a>
-          </motion.div>
-
         </div>
+
+        {/* 6. Lowered Luxury Action Buttons (Positioned down in the open lower terrace) */}
+        <motion.div
+          initial={{ opacity: 0, y: 6 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.7 }}
+          className="absolute bottom-[6.5%] sm:bottom-[7.5%] left-1/2 -translate-x-1/2 z-30 pointer-events-auto flex items-center justify-center gap-1.5 w-[92%] max-w-[340px]"
+          dir={isArabicContent ? "rtl" : "ltr"}
+        >
+          {/* Primary RSVP Button */}
+          <button
+            onClick={() => setShowRsvpModal(true)}
+            className="py-1.5 px-3 rounded-full bg-gradient-to-r from-[#A67C37] via-[#C5A059] to-[#8C6D38] text-white shadow-md text-xs font-bold flex items-center justify-center gap-1 hover:brightness-110 active:scale-95 transition-all"
+            style={{ fontFamily: isArabicContent ? "'Aref Ruqaa', serif" : "'Cinzel', serif" }}
+          >
+            <Heart className="w-3.5 h-3.5 fill-white shrink-0" />
+            <span>{isArabicContent ? 'تأكيد الحضور' : 'RSVP'}</span>
+          </button>
+
+          {/* Add to Calendar Button */}
+          <a
+            href={gcalUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="py-1.5 px-2.5 rounded-full bg-white/95 hover:bg-white border border-[#D4AF37]/50 text-[#6E4D1D] font-bold text-xs flex items-center justify-center gap-1 active:scale-95 transition-all shadow-xs"
+            style={{ fontFamily: isArabicContent ? "'Aref Ruqaa', serif" : "'Cinzel', serif" }}
+          >
+            <Calendar className="w-3.5 h-3.5 text-[#B8860B] shrink-0" />
+            <span>{isArabicContent ? 'الموعد' : 'Calendar'}</span>
+          </a>
+
+          {/* Google Maps Button */}
+          <a
+            href={data.googleMapsUrl || '#'}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="py-1.5 px-2.5 rounded-full bg-white/95 hover:bg-white border border-[#D4AF37]/50 text-[#6E4D1D] font-bold text-xs flex items-center justify-center gap-1 active:scale-95 transition-all shadow-xs"
+            style={{ fontFamily: isArabicContent ? "'Aref Ruqaa', serif" : "'Cinzel', serif" }}
+          >
+            <MapPin className="w-3.5 h-3.5 text-[#B8860B] shrink-0" />
+            <span>{isArabicContent ? 'الموقع' : 'Location'}</span>
+          </a>
+        </motion.div>
 
         {/* Romantic Couple Video (Seamless Background Removal - 100% Unobstructed) */}
         <RomanticCoupleVideo />
