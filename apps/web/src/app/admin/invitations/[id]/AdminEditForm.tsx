@@ -40,6 +40,7 @@ const TEMPLATES = [
   { id: 'sculpted-porcelain-arch', slug: 'sculpted-porcelain-arch', name: '🏛️ Sculpted Porcelain Arch (قوس البورسلين الملكي المنحوت 3D)' },
   { id: 'cathedral-grand-arch', slug: 'cathedral-grand-arch', name: '⛪ Cathedral Grand Arch (قوس الكاتدرائية الملكي والثريات المضيئة)' },
   { id: 'mughal-palace-portal', slug: 'mughal-palace-portal', name: '🕌 Mughal Palace Portal (بوابة القصر الملكية وشلال الزهور المتدلية)' },
+  { id: 'palace-doors-reveal', slug: 'palace-doors-reveal', name: '🚪 Palace Doors Reveal (بوابة القصر الملكية التفاعلية - دق 3 مرات)' },
 ];
 
 export default function AdminEditForm({ invitation, apiToken }: { invitation: any, apiToken: string }) {

@@ -45,7 +45,8 @@ export const defaultSettings = {
     'trifold-pocket-folio': '/preview?template=trifold-pocket-folio',
     'sculpted-porcelain-arch': '/preview?template=sculpted-porcelain-arch',
     'cathedral-grand-arch': '/preview?template=cathedral-grand-arch',
-    'mughal-palace-portal': '/preview?template=mughal-palace-portal'
+    'mughal-palace-portal': '/preview?template=mughal-palace-portal',
+    'palace-doors-reveal': '/preview?template=palace-doors-reveal'
   },
   previewImages: {}
 };

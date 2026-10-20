@@ -43,7 +43,7 @@ interface LandingSettings {
 
 // Category Mapping helper for rich filtration
 const getThemeCategory = (id: string): string => {
-  if (['mughal-palace-portal', 'cathedral-grand-arch', 'sculpted-porcelain-arch', 'palace-gates', 'royal-velvet', 'royal-scroll', 'trifold-pocket-folio'].includes(id)) {
+  if (['palace-doors-reveal', 'mughal-palace-portal', 'cathedral-grand-arch', 'sculpted-porcelain-arch', 'palace-gates', 'royal-velvet', 'royal-scroll', 'trifold-pocket-folio'].includes(id)) {
     return 'palace';
   }
   if (['golden-arabic', 'arabian-crescent-lantern', 'laser-gold-gatefold', 'celestial-stardust', 'celestial-constellations'].includes(id)) {
@@ -60,6 +60,7 @@ const getThemeCategory = (id: string): string => {
 
 // Top Priority display order
 const PRIORITY_ORDER = [
+  'palace-doors-reveal',
   'mughal-palace-portal',
   'cathedral-grand-arch',
   'sculpted-porcelain-arch',

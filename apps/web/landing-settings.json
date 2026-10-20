@@ -15,7 +15,8 @@
     "butterfly-elegance": "/preview?template=butterfly-elegance",
     "sculpted-porcelain-arch": "/preview?template=sculpted-porcelain-arch",
     "cathedral-grand-arch": "/preview?template=cathedral-grand-arch",
-    "mughal-palace-portal": "/preview?template=mughal-palace-portal"
+    "mughal-palace-portal": "/preview?template=mughal-palace-portal",
+    "palace-doors-reveal": "/preview?template=palace-doors-reveal"
   },
   "previewImages": {
     "classic-elegance": "https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=1000&auto=format&fit=crop",
@@ -27,6 +28,7 @@
     "butterfly-elegance": "https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=1000&auto=format&fit=crop",
     "sculpted-porcelain-arch": "/assets/templates/sculpted-porcelain-bg.jpg",
     "cathedral-grand-arch": "/assets/templates/cathedral-grand-bg.jpg",
-    "mughal-palace-portal": "/assets/templates/mughal-palace-bg.jpg"
+    "mughal-palace-portal": "/assets/templates/mughal-palace-bg.jpg",
+    "palace-doors-reveal": "/assets/templates/palace-doors-closed.jpg"
   }
 }

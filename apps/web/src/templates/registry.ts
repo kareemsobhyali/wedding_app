@@ -35,6 +35,7 @@ import { TrifoldPocketFolioTemplate } from './designs/trifold-pocket-folio';
 import { SculptedPorcelainArchTemplate } from './designs/sculpted-porcelain-arch';
 import { CathedralGrandArchTemplate } from './designs/cathedral-grand-arch';
 import { MughalPalacePortalTemplate } from './designs/mughal-palace-portal';
+import { PalaceDoorsRevealTemplate } from './designs/palace-doors-reveal';
 
 export interface RegisteredTemplate {
   component: React.FC<TemplateRenderContext>;
@@ -857,6 +858,25 @@ export const templateRegistry: Record<string, RegisteredTemplate> = {
         { key: 'venueHeading', label: 'عنوان قسم القاعة (VENUE)', type: 'text', defaultValue: 'VENUE' },
         { key: 'venueInsertedText', label: 'اسم قاعة الحفل', type: 'text', defaultValue: 'ROYAL PALACE BALLROOM' },
         { key: 'venueAddressText', label: 'عنوان القاعة', type: 'text', defaultValue: 'Grand Avenue, Royal Gardens' }
+      ]
+    }
+  },
+  'palace-doors-reveal': {
+    component: PalaceDoorsRevealTemplate,
+    metadata: {
+      id: 'palace-doors-reveal',
+      name: 'Palace Doors Reveal 🚪✨',
+      description: 'بوابة القصر الملكي التفاعلية: دق على الباب 3 مرات لتفتح الأبواب بمؤثرات صوتية وضوئية وتكشف قاعة الحفل وبطاقة الزفاف الفاخرة.',
+      previewImage: '/assets/templates/palace-doors-closed.jpg',
+      version: '1.0.0',
+      supportedFeatures: ['HERO', 'VENUE', 'MAPS', 'MUSIC', 'CUSTOM_MESSAGE', 'COUNTDOWN', 'SHARE'],
+      customFields: [
+        { key: 'bismillah', label: 'البسملة أعلى الباب', type: 'text', defaultValue: 'بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ' },
+        { key: 'cardSubtitle', label: 'العنوان الترحيبي', type: 'text', defaultValue: 'دعوة زفاف خاصة' },
+        { key: 'knockInstruction', label: 'نص التوجيه للنقر', type: 'text', defaultValue: 'دُقّوا على الباب ثلاث دقّاتٍ ليُفتح' },
+        { key: 'sacredQuote', label: 'الآية الكريمة أو العبارة الترحيبية', type: 'textarea', defaultValue: '«وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا وَجَعَلَ بَيْنَكُم مَّوَدَّةً وَرَحْمَةً»' },
+        { key: 'welcomeMessage', label: 'نص الدعوة الرسمي', type: 'textarea', defaultValue: 'يسرنا دعوتكم لمشاركتنا فرحة العمر وحضور حفل زفافنا الميمون، لتكتمل سعادتنا بوجودكم معنا.' },
+        { key: 'closingMessage', label: 'العبارة الختامية بالأسفل', type: 'text', defaultValue: 'بكم تكتمل فرحتنا وتزداد بهجتنا ✨' }
       ]
     }
   }
