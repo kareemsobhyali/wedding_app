@@ -136,15 +136,79 @@ const FallingRosePetals = () => {
   );
 };
 
-// Romantic Dancing Couple Video Component (Left-aligned, transparent background, watermark cropped)
+// True-Alpha Canvas Chroma-Key Video Component (100% Transparent Background, Watermark-Free, Mobile Compatible)
 const RomanticCoupleVideo = () => {
   const videoRef = useRef<HTMLVideoElement | null>(null);
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   useEffect(() => {
-    if (videoRef.current) {
-      videoRef.current.playbackRate = 0.95;
-      videoRef.current.play().catch(() => {});
-    }
+    const video = videoRef.current;
+    const canvas = canvasRef.current;
+    if (!video || !canvas) return;
+
+    let animId: number;
+    let isMounted = true;
+    const ctx = canvas.getContext('2d', { willReadFrequently: true });
+    if (!ctx) return;
+
+    // Canvas internal buffer resolution
+    const cw = 140;
+    const ch = 190;
+    canvas.width = cw;
+    canvas.height = ch;
+
+    const render = () => {
+      if (!isMounted) return;
+
+      if (video.readyState >= 2 && !video.paused) {
+        // Source video is 720 x 1280.
+        // We crop out the bottom 13% to cleanly remove the watermark:
+        const sw = video.videoWidth || 720;
+        const sh = (video.videoHeight || 1280) * 0.87;
+
+        // Draw cropped video frame
+        ctx.clearRect(0, 0, cw, ch);
+        ctx.drawImage(video, 0, 0, sw, sh, 0, 0, cw, ch);
+
+        try {
+          const imgData = ctx.getImageData(0, 0, cw, ch);
+          const data = imgData.data;
+          const len = data.length;
+
+          for (let i = 0; i < len; i += 4) {
+            const r = data[i];
+            const g = data[i + 1];
+            const b = data[i + 2];
+
+            // If pixel is white / light (brightness > 210)
+            if (r > 210 && g > 210 && b > 210) {
+              data[i + 3] = 0; // 100% Transparent Alpha!
+            } else {
+              // Tint dark lines into royal bronze to harmonize with palace marble (#4A3210)
+              const darkness = (255 - ((r + g + b) / 3)) / 255;
+              data[i] = 74;      // Bronze R
+              data[i + 1] = 50;  // Bronze G
+              data[i + 2] = 16;  // Bronze B
+              data[i + 3] = Math.min(255, Math.round(darkness * 320)); // Soft anti-aliased edge
+            }
+          }
+          ctx.putImageData(imgData, 0, 0);
+        } catch {
+          // Fallback if needed
+        }
+      }
+
+      animId = requestAnimationFrame(render);
+    };
+
+    video.playbackRate = 0.95;
+    video.play().catch(() => {});
+    animId = requestAnimationFrame(render);
+
+    return () => {
+      isMounted = false;
+      cancelAnimationFrame(animId);
+    };
   }, []);
 
   return (
@@ -157,9 +221,21 @@ const RomanticCoupleVideo = () => {
         }}
       />
 
-      {/* Left-Aligned Romantic Couple Video (Compact, Transparent Background) */}
+      {/* Hidden Source Video (Muted for AutoPlay, Decoded in Background) */}
+      <video
+        ref={videoRef}
+        src="/assets/templates/romantic-couple-video-2.mp4"
+        autoPlay
+        loop
+        muted
+        playsInline
+        preload="auto"
+        className="hidden"
+      />
+
+      {/* Left-Aligned True-Alpha Transparent Canvas (Zero White Background, Guaranteed on Mobile) */}
       <div 
-        className="absolute bottom-[2%] sm:bottom-[3%] left-[4%] sm:left-[6%] z-20 pointer-events-none flex flex-col items-center justify-end w-[125px] sm:w-[150px] h-[170px] sm:h-[200px] overflow-hidden select-none"
+        className="absolute bottom-[2%] sm:bottom-[3%] left-[3%] sm:left-[5%] z-20 pointer-events-none flex flex-col items-center justify-end select-none"
       >
         {/* Soft Warm Halo Beneath Dancing Couple */}
         <div 
@@ -169,23 +245,9 @@ const RomanticCoupleVideo = () => {
           }}
         />
 
-        {/* The Couple Video with Background Removed via Multiply Blend Mode & Bottom Watermark Cropped */}
-        <video
-          ref={videoRef}
-          src="/assets/templates/romantic-couple-video-2.mp4"
-          autoPlay
-          loop
-          muted
-          playsInline
-          preload="auto"
-          className="w-full h-[114%] object-cover"
-          style={{
-            objectPosition: 'center 15%',
-            mixBlendMode: 'multiply',
-            filter: 'contrast(1.15) brightness(1.02) sepia(0.2)',
-            maskImage: 'linear-gradient(to top, black 85%, transparent 100%)',
-            WebkitMaskImage: 'linear-gradient(to top, black 85%, transparent 100%)',
-          }}
+        <canvas
+          ref={canvasRef}
+          className="w-[115px] sm:w-[135px] h-[155px] sm:h-[185px] pointer-events-none select-none filter drop-shadow-[0_2px_4px_rgba(80,50,20,0.15)]"
         />
       </div>
     </>
