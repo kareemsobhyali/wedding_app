@@ -31,7 +31,7 @@ export const PalaceDoorsRevealTemplate: React.FC<TemplateRenderContext> = ({ dat
   const [doorVibrate, setDoorVibrate] = useState<boolean>(false);
   const [ripples, setRipples] = useState<Array<{ id: number; x: number; y: number }>>([]);
   
-  const initialGuestName = data.guestName || (typeof window !== 'undefined' ? (new URLSearchParams(window.location.search).get('to') || new URLSearchParams(window.location.search).get('guest') || new URLSearchParams(window.location.search).get('name') || '') : '');
+  const initialGuestName = data.guestName || '';
   const [isPlayingAudio, setIsPlayingAudio] = useState(false);
   const [showRsvpModal, setShowRsvpModal] = useState(false);
   const [rsvpSent, setRsvpSent] = useState(false);

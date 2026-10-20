@@ -287,6 +287,7 @@ export default async function AdminInvitationDetail({ params }: { params: { id: 
               groomName={inv.groomName}
               brideName={inv.brideName}
               isArabic={true}
+              initialAliases={(inv.customData as any)?.guestAliases || {}}
             />
           );
         })()}

@@ -86,3 +86,47 @@ export async function POST(
     return NextResponse.json({ message: 'Internal server error' }, { status: 500 });
   }
 }
+
+export async function DELETE(
+  req: NextRequest,
+  { params }: { params: { slug: string } }
+) {
+  try {
+    const inv = await findInvitationBySlug(params.slug);
+    if (!inv) {
+      return NextResponse.json({ message: 'Invitation not found' }, { status: 404 });
+    }
+
+    const { searchParams } = new URL(req.url);
+    const codeToDelete = searchParams.get('code')?.trim().toLowerCase();
+
+    if (!codeToDelete) {
+      return NextResponse.json({ message: 'Code is required' }, { status: 400 });
+    }
+
+    const custom = (inv.customData as Record<string, any>) || {};
+    const currentAliases: Record<string, string> = { ...(custom.guestAliases || {}) };
+
+    delete currentAliases[codeToDelete];
+
+    const updatedCustomData = {
+      ...custom,
+      guestAliases: currentAliases
+    };
+
+    await prisma.invitation.update({
+      where: { id: inv.id },
+      data: {
+        customData: updatedCustomData
+      }
+    });
+
+    return NextResponse.json({
+      success: true,
+      guestAliases: currentAliases
+    });
+  } catch (error) {
+    console.error('Error deleting guest alias:', error);
+    return NextResponse.json({ message: 'Internal server error' }, { status: 500 });
+  }
+}

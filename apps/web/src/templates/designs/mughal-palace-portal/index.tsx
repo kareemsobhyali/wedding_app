@@ -259,7 +259,7 @@ export const MughalPalacePortalTemplate: React.FC<TemplateRenderContext> = ({ da
   const [isPlayingAudio, setIsPlayingAudio] = useState(false);
   const [showRsvpModal, setShowRsvpModal] = useState(false);
   const [rsvpSent, setRsvpSent] = useState(false);
-  const initialGuestName = data.guestName || (typeof window !== 'undefined' ? (new URLSearchParams(window.location.search).get('to') || new URLSearchParams(window.location.search).get('guest') || new URLSearchParams(window.location.search).get('name') || '') : '');
+  const initialGuestName = data.guestName || '';
   const [rsvpData, setRsvpData] = useState({ name: initialGuestName, attendance: 'yes', guests: '1', note: '' });
 
   useEffect(() => {

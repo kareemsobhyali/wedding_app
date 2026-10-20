@@ -101,15 +101,8 @@ export function resolveGuestName(
 ): string | undefined {
   if (!searchParams) return undefined;
 
-  // 1. Check for Base64URL clean token (?v=...)
-  if (typeof searchParams.v === 'string' && searchParams.v.trim()) {
-    try {
-      const decoded = Buffer.from(searchParams.v.trim(), 'base64url').toString('utf8');
-      if (decoded && decoded.trim()) return decoded.trim();
-    } catch {}
-  }
-
-  // 2. Check for Alias or Direct Name in ?to= or ?guest= or ?name= or ?g=
+  // STRICT: Only registered/authorized codes from Admin Panel are allowed!
+  // Prevents clients from generating free personalized invites by modifying the URL.
   const rawParam = searchParams.to || searchParams.guest || searchParams.name || searchParams.g;
   if (typeof rawParam === 'string' && rawParam.trim()) {
     const rawVal = decodeURIComponent(rawParam.trim()).trim();
@@ -123,8 +116,8 @@ export function resolveGuestName(
       return guestAliases[rawVal.toLowerCase()];
     }
 
-    // Direct name
-    return rawVal;
+    // Unauthorized code / arbitrary URL parameter -> reject and return undefined
+    return undefined;
   }
 
   return undefined;
