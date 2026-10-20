@@ -51,9 +51,13 @@ export async function getPublicInvitation(slug: string) {
     }
 
     const media = inv.media || [];
-    const coverMedia = media.find((m) => m.role === 'COVER');
-    const audioMedia = media.find((m) => m.type === 'AUDIO');
-    const galleryMedia = media.filter((m) => m.role === 'GALLERY');
+    const coverMedia = media.find((m) => (m.role === 'COVER' || m.type === 'IMAGE') && !m.deletedAt);
+    const audioMedia = media.find((m) => m.type === 'AUDIO' && !m.deletedAt);
+    const galleryMedia = media.filter((m) => m.role === 'GALLERY' && !m.deletedAt);
+
+    const custom = (inv.customData as Record<string, any>) || {};
+    const coverUrl = coverMedia?.publicUrl || coverMedia?.storageKey || custom.coverImageUrl;
+    const audioUrl = audioMedia?.publicUrl || audioMedia?.storageKey || custom.musicUrl;
 
     return {
       type: 'FOUND' as const,
@@ -62,7 +66,7 @@ export async function getPublicInvitation(slug: string) {
         groomName: inv.groomName,
         brideName: inv.brideName,
         weddingDate: inv.weddingDate || new Date(),
-        weddingTime: (inv.customData as any)?.weddingTime || '',
+        weddingTime: custom.weddingTime || '',
         venueName: inv.venueName || '',
         venueAddress: inv.venueAddress || '',
         googleMapsUrl: inv.googleMapsUrl || '',
@@ -73,9 +77,9 @@ export async function getPublicInvitation(slug: string) {
         bridePhone: inv.bridePhone || '',
         caption: inv.caption || '',
         weddingMessage: inv.weddingMessage || '',
-        customData: (inv.customData as Record<string, any>) || {},
-        coverImage: coverMedia ? { url: coverMedia.publicUrl || coverMedia.storageKey, alt: 'Cover' } : undefined,
-        music: audioMedia ? { url: audioMedia.publicUrl || audioMedia.storageKey } : undefined,
+        customData: custom,
+        coverImage: coverUrl ? { url: coverUrl, alt: 'Cover' } : undefined,
+        music: audioUrl ? { url: audioUrl } : undefined,
         galleryImages: galleryMedia.map((m) => ({ url: m.publicUrl || m.storageKey, alt: 'Gallery Image' })),
         template: {
           id: inv.template?.id || '',

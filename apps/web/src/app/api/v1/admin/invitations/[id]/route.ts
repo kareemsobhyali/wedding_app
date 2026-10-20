@@ -55,7 +55,7 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
     const safeFields = [
       'groomName', 'brideName', 'customerPhone', 'weddingDate', 'weddingTime',
       'venueName', 'venueAddress', 'googleMapsUrl', 'caption', 'weddingMessage',
-      'groomPhone', 'bridePhone', 'countdownEnabled', 'expiresAt', 'customData'
+      'groomPhone', 'bridePhone', 'countdownEnabled', 'expiresAt'
     ];
 
     safeFields.forEach((field: string) => {
@@ -63,6 +63,20 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
         updateData[field] = body[field];
       }
     });
+
+    // Merge and persist customData, musicUrl, and coverImageUrl
+    const currentCustom = (existing.customData as Record<string, any>) || {};
+    const mergedCustom = {
+      ...currentCustom,
+      ...(body.customData || {})
+    };
+    if (body.musicUrl !== undefined) {
+      mergedCustom.musicUrl = body.musicUrl;
+    }
+    if (body.coverImageUrl !== undefined) {
+      mergedCustom.coverImageUrl = body.coverImageUrl;
+    }
+    updateData.customData = mergedCustom;
 
     if (body.weddingDate) updateData.weddingDate = new Date(body.weddingDate);
     if (body.expiresAt) updateData.expiresAt = new Date(body.expiresAt);
@@ -77,6 +91,84 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
     }
 
     const updated = await prisma.$transaction(async (tx) => {
+      // 1. Sync Audio / Music in Media Table
+      if (body.musicUrl !== undefined) {
+        const trimmedMusic = (body.musicUrl || '').trim();
+        if (trimmedMusic) {
+          const existingAudio = await tx.media.findFirst({
+            where: { invitationId: params.id, type: 'AUDIO', deletedAt: null }
+          });
+          if (existingAudio) {
+            await tx.media.update({
+              where: { id: existingAudio.id },
+              data: {
+                storageKey: trimmedMusic,
+                publicUrl: trimmedMusic,
+                isCurrent: true,
+                deletedAt: null
+              }
+            });
+          } else {
+            await tx.media.create({
+              data: {
+                invitationId: params.id,
+                type: 'AUDIO',
+                role: 'ORIGINAL',
+                storageKey: trimmedMusic,
+                publicUrl: trimmedMusic,
+                originalFilename: trimmedMusic.split('/').pop()?.split('?')[0] || 'music.mp3',
+                isCurrent: true
+              }
+            });
+          }
+        } else {
+          await tx.media.updateMany({
+            where: { invitationId: params.id, type: 'AUDIO', deletedAt: null },
+            data: { deletedAt: new Date(), isCurrent: false }
+          });
+        }
+      }
+
+      // 2. Sync Cover / Image in Media Table
+      if (body.coverImageUrl !== undefined) {
+        const trimmedCover = (body.coverImageUrl || '').trim();
+        if (trimmedCover) {
+          const existingCover = await tx.media.findFirst({
+            where: { invitationId: params.id, role: 'COVER', deletedAt: null }
+          });
+          if (existingCover) {
+            await tx.media.update({
+              where: { id: existingCover.id },
+              data: {
+                storageKey: trimmedCover,
+                publicUrl: trimmedCover,
+                type: 'IMAGE',
+                isCurrent: true,
+                deletedAt: null
+              }
+            });
+          } else {
+            await tx.media.create({
+              data: {
+                invitationId: params.id,
+                type: 'IMAGE',
+                role: 'COVER',
+                storageKey: trimmedCover,
+                publicUrl: trimmedCover,
+                originalFilename: trimmedCover.split('/').pop()?.split('?')[0] || 'cover.jpg',
+                isCurrent: true
+              }
+            });
+          }
+        } else {
+          await tx.media.updateMany({
+            where: { invitationId: params.id, role: 'COVER', deletedAt: null },
+            data: { deletedAt: new Date(), isCurrent: false }
+          });
+        }
+      }
+
+      // 3. Update Invitation Record
       const result = await tx.invitation.update({
         where: { id: params.id },
         data: {
@@ -85,7 +177,8 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
         },
         include: {
           slugs: { where: { isCurrent: true } },
-          template: true
+          template: true,
+          media: { where: { deletedAt: null }, orderBy: { sortOrder: 'asc' } }
         }
       });
 

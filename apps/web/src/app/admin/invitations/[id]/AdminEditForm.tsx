@@ -1,8 +1,9 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { getTemplateImplementation } from '../../../../templates/registry';
+import { Music, Image as ImageIcon, Upload, Trash2, Volume2 } from 'lucide-react';
 
 const TEMPLATES = [
   { id: 'c74c4c9e-f366-4fdf-92a1-12811853537d', slug: 'butterfly-elegance', name: '🦋 Butterfly Elegance (فراشة الأناقة)' },
@@ -43,9 +44,24 @@ const TEMPLATES = [
   { id: 'palace-doors-reveal', slug: 'palace-doors-reveal', name: '🚪 Palace Doors Reveal (بوابة القصر الملكية التفاعلية - دق 3 مرات)' },
 ];
 
+const getInitialMusic = (inv: any): string => {
+  const audio = inv?.media?.find((m: any) => m.type === 'AUDIO' && !m.deletedAt);
+  return audio?.publicUrl || audio?.storageKey || (inv?.customData as any)?.musicUrl || '';
+};
+
+const getInitialCover = (inv: any): string => {
+  const cover = inv?.media?.find((m: any) => (m.role === 'COVER' || m.type === 'IMAGE') && !m.deletedAt);
+  return cover?.publicUrl || cover?.storageKey || (inv?.customData as any)?.coverImageUrl || '';
+};
+
 export default function AdminEditForm({ invitation, apiToken }: { invitation: any, apiToken: string }) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const [uploadingAudio, setUploadingAudio] = useState(false);
+  const [uploadingImage, setUploadingImage] = useState(false);
+  const audioInputRef = useRef<HTMLInputElement>(null);
+  const imageInputRef = useRef<HTMLInputElement>(null);
+
   const [formData, setFormData] = useState({
     version: invitation.version,
     templateId: invitation.templateId || '',
@@ -61,6 +77,8 @@ export default function AdminEditForm({ invitation, apiToken }: { invitation: an
     bridePhone: invitation.bridePhone || '',
     expiresAt: invitation.expiresAt ? new Date(invitation.expiresAt).toISOString().slice(0, 16) : '',
     customData: invitation.customData || {},
+    musicUrl: getInitialMusic(invitation),
+    coverImageUrl: getInitialCover(invitation),
   });
 
   React.useEffect(() => {
@@ -79,6 +97,8 @@ export default function AdminEditForm({ invitation, apiToken }: { invitation: an
       bridePhone: invitation.bridePhone || '',
       expiresAt: invitation.expiresAt ? new Date(invitation.expiresAt).toISOString().slice(0, 16) : '',
       customData: invitation.customData || {},
+      musicUrl: getInitialMusic(invitation),
+      coverImageUrl: getInitialCover(invitation),
     });
   }, [invitation]);
 
@@ -91,6 +111,53 @@ export default function AdminEditForm({ invitation, apiToken }: { invitation: an
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>, type: 'audio' | 'image') => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const isAudio = type === 'audio';
+    if (isAudio) setUploadingAudio(true);
+    else setUploadingImage(true);
+
+    try {
+      const uploadData = new FormData();
+      uploadData.append('file', file);
+
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || '/api/v1';
+      const res = await fetch(`${apiUrl}/admin/upload`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${apiToken}`
+        },
+        body: uploadData
+      });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || 'فشل رفع الملف');
+
+      if (isAudio) {
+        setFormData(prev => ({
+          ...prev,
+          musicUrl: data.url,
+          customData: { ...(prev.customData || {}), musicUrl: data.url }
+        }));
+      } else {
+        setFormData(prev => ({
+          ...prev,
+          coverImageUrl: data.url,
+          customData: { ...(prev.customData || {}), coverImageUrl: data.url }
+        }));
+      }
+    } catch (err: any) {
+      alert(err.message || 'حدث خطأ أثناء رفع الملف');
+    } finally {
+      if (isAudio) setUploadingAudio(false);
+      else setUploadingImage(false);
+      // reset file input
+      e.target.value = '';
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -108,7 +175,13 @@ export default function AdminEditForm({ invitation, apiToken }: { invitation: an
         body: JSON.stringify({
           version: formData.version,
           templateId: formData.templateId,
-          customData: formData.customData,
+          customData: {
+            ...(formData.customData || {}),
+            musicUrl: formData.musicUrl,
+            coverImageUrl: formData.coverImageUrl,
+          },
+          musicUrl: formData.musicUrl,
+          coverImageUrl: formData.coverImageUrl,
           groomName: formData.groomName,
           brideName: formData.brideName,
           weddingDate: formData.weddingDate ? new Date(formData.weddingDate) : undefined,
@@ -144,6 +217,7 @@ export default function AdminEditForm({ invitation, apiToken }: { invitation: an
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
+      {/* 1. Theme / Template Selector */}
       <div>
         <label className="block text-sm font-medium mb-1 text-indigo-900 font-bold">Theme / Template</label>
         <select 
@@ -163,6 +237,7 @@ export default function AdminEditForm({ invitation, apiToken }: { invitation: an
         )}
       </div>
 
+      {/* 2. Names */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <label className="block text-sm font-medium">Groom Name</label>
@@ -174,6 +249,7 @@ export default function AdminEditForm({ invitation, apiToken }: { invitation: an
         </div>
       </div>
 
+      {/* 3. Wedding Date & Venue */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <label className="block text-sm font-medium">Wedding Date</label>
@@ -185,6 +261,129 @@ export default function AdminEditForm({ invitation, apiToken }: { invitation: an
         </div>
       </div>
 
+      {/* 4. Media & Sound Section (Audio / Music & Cover Image) */}
+      <div className="p-4 bg-gradient-to-br from-amber-50/60 to-orange-50/40 rounded-2xl border border-amber-200 shadow-xs space-y-4">
+        <div className="flex items-center justify-between border-b border-amber-200/70 pb-2">
+          <h3 className="font-bold text-base text-amber-950 flex items-center gap-2">
+            <Volume2 className="w-5 h-5 text-amber-700" />
+            <span>الوسائط والموسيقى وصورة الدعوة (Media & Audio)</span>
+          </h3>
+          <span className="text-xs bg-amber-100 text-amber-800 font-semibold px-2.5 py-0.5 rounded-full border border-amber-200">
+            صوت وصورة
+          </span>
+        </div>
+
+        {/* 4.1 Song / Music */}
+        <div className="space-y-1.5">
+          <label className="block text-sm font-bold text-gray-800 flex items-center gap-1.5">
+            <Music className="w-4 h-4 text-amber-600" />
+            <span>رابط أو ملف الأغنية / الموسيقى (Wedding Song / Music)</span>
+          </label>
+          <div className="flex flex-col sm:flex-row gap-2">
+            <input 
+              type="text" 
+              name="musicUrl" 
+              value={formData.musicUrl} 
+              onChange={e => setFormData({ ...formData, musicUrl: e.target.value })} 
+              placeholder="ضع رابط ملف صوتي (https://... أو /assets/...) أو اضغط رفع" 
+              className="flex-1 p-2.5 border rounded-lg bg-white text-sm focus:ring-2 focus:ring-amber-500 focus:outline-none" 
+            />
+            <label className="cursor-pointer px-4 py-2.5 bg-amber-600 hover:bg-amber-700 text-white rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 shrink-0 transition-all shadow-xs active:scale-95">
+              <Upload className="w-3.5 h-3.5" />
+              <span>{uploadingAudio ? 'جارٍ الرفع...' : 'رفع ملف صوتي'}</span>
+              <input 
+                ref={audioInputRef}
+                type="file" 
+                accept="audio/*" 
+                className="hidden" 
+                disabled={uploadingAudio}
+                onChange={e => handleFileUpload(e, 'audio')} 
+              />
+            </label>
+          </div>
+          <p className="text-xs text-gray-500">
+            يمكنك لصق رابط مباشر لملف MP3 أو رفع ملف صوتي من جهازك وسيتم تشغيله تلقائياً في خلفية الدعوة.
+          </p>
+
+          {/* Audio Player Preview */}
+          {formData.musicUrl && (
+            <div className="mt-2 p-3 bg-white rounded-xl border border-amber-200 shadow-2xs space-y-1.5">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold text-amber-900 flex items-center gap-1">
+                  <span>🎵 معاينة الصوت الحالي</span>
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setFormData({ ...formData, musicUrl: '' })}
+                  className="text-xs text-red-600 hover:text-red-700 font-semibold flex items-center gap-1"
+                >
+                  <Trash2 className="w-3 h-3" />
+                  <span>إزالة الأغنية</span>
+                </button>
+              </div>
+              <audio controls src={formData.musicUrl} className="w-full h-9" preload="metadata" />
+            </div>
+          )}
+        </div>
+
+        {/* 4.2 Cover Image / Photo */}
+        <div className="space-y-1.5 pt-2 border-t border-amber-100">
+          <label className="block text-sm font-bold text-gray-800 flex items-center gap-1.5">
+            <ImageIcon className="w-4 h-4 text-amber-600" />
+            <span>صورة الغلاف / صورة الدعوة (Cover Image / Photo)</span>
+          </label>
+          <div className="flex flex-col sm:flex-row gap-2">
+            <input 
+              type="text" 
+              name="coverImageUrl" 
+              value={formData.coverImageUrl} 
+              onChange={e => setFormData({ ...formData, coverImageUrl: e.target.value })} 
+              placeholder="ضع رابط صورة (https://... أو /assets/...) أو اضغط رفع" 
+              className="flex-1 p-2.5 border rounded-lg bg-white text-sm focus:ring-2 focus:ring-amber-500 focus:outline-none" 
+            />
+            <label className="cursor-pointer px-4 py-2.5 bg-amber-600 hover:bg-amber-700 text-white rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 shrink-0 transition-all shadow-xs active:scale-95">
+              <Upload className="w-3.5 h-3.5" />
+              <span>{uploadingImage ? 'جارٍ الرفع...' : 'رفع صورة'}</span>
+              <input 
+                ref={imageInputRef}
+                type="file" 
+                accept="image/*" 
+                className="hidden" 
+                disabled={uploadingImage}
+                onChange={e => handleFileUpload(e, 'image')} 
+              />
+            </label>
+          </div>
+          <p className="text-xs text-gray-500">
+            يمكنك لصق رابط صورة العروسين أو الغلاف، أو رفع صورة مباشرة من جهازك بجودة عالية.
+          </p>
+
+          {/* Image Thumbnail Preview */}
+          {formData.coverImageUrl && (
+            <div className="mt-2 flex items-center gap-3 p-2.5 bg-white rounded-xl border border-amber-200 shadow-2xs">
+              <img 
+                src={formData.coverImageUrl} 
+                alt="Cover Preview" 
+                className="w-16 h-16 object-cover rounded-lg border border-amber-200 shrink-0 shadow-2xs" 
+                onError={(e) => { (e.target as any).style.display = 'none'; }}
+              />
+              <div className="flex-1 min-w-0">
+                <p className="text-xs text-gray-600 font-mono truncate">{formData.coverImageUrl}</p>
+                <button
+                  type="button"
+                  onClick={() => setFormData({ ...formData, coverImageUrl: '' })}
+                  className="text-xs text-red-600 hover:text-red-700 font-semibold flex items-center gap-1 mt-1"
+                >
+                  <Trash2 className="w-3 h-3" />
+                  <span>إزالة الصورة</span>
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* 5. Expiration */}
       <div>
         <label className="block text-sm font-medium">تاريخ ووقت انتهاء الصلاحية (Expires At)</label>
         <input 
@@ -197,21 +396,25 @@ export default function AdminEditForm({ invitation, apiToken }: { invitation: an
         <p className="text-xs text-gray-500 mt-1">اتركه فارغاً إذا كنت تريد أن تظل الدعوة دائمة بدون تاريخ انتهاء.</p>
       </div>
 
+      {/* 6. Maps URL */}
       <div>
         <label className="block text-sm font-medium">Maps URL</label>
         <input type="url" name="googleMapsUrl" value={formData.googleMapsUrl} onChange={handleChange} className="w-full p-2 border rounded" />
       </div>
 
+      {/* 7. Caption */}
       <div>
         <label className="block text-sm font-medium">Custom Title (e.g. دعوة زفاف)</label>
         <input name="caption" value={formData.caption} onChange={handleChange} className="w-full p-2 border rounded" />
       </div>
 
+      {/* 8. Message */}
       <div>
         <label className="block text-sm font-medium">Custom Quote / Message</label>
         <textarea name="weddingMessage" value={formData.weddingMessage} onChange={handleChange} rows={3} className="w-full p-2 border rounded" />
       </div>
 
+      {/* 9. Template Custom Fields */}
       {customFields.length > 0 ? (
         <div className="pt-6 border-t mt-6 col-span-1 md:col-span-2 bg-indigo-50/50 p-5 rounded-2xl border border-indigo-100">
           <div className="flex items-center justify-between mb-4">
@@ -265,7 +468,7 @@ export default function AdminEditForm({ invitation, apiToken }: { invitation: an
         </div>
       ) : null}
 
-      <button type="submit" disabled={loading} className="px-4 py-2 bg-blue-600 text-white rounded font-bold disabled:opacity-50">
+      <button type="submit" disabled={loading} className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-bold disabled:opacity-50 transition-colors shadow-sm">
         {loading ? 'Saving...' : 'Save Changes'}
       </button>
     </form>

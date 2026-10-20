@@ -187,16 +187,16 @@ export default async function AdminInvitationDetail({ params }: { params: { id: 
                 contactButtonsEnabled: true,
                 customData: (inv.customData as Record<string, any>) || {},
                 galleryImages: inv.media
-                  .filter((m: any) => m.role === 'GALLERY' && (m.publicUrl || m.storageKey))
+                  .filter((m: any) => m.role === 'GALLERY' && (m.publicUrl || m.storageKey) && !m.deletedAt)
                   .map((m: any) => ({ url: (m.publicUrl || m.storageKey) as string, alt: 'Gallery Image' })),
                 music: (() => {
-                  const item = inv.media.find((m: any) => m.type === 'AUDIO');
-                  const url = item?.publicUrl || item?.storageKey;
+                  const item = inv.media.find((m: any) => m.type === 'AUDIO' && !m.deletedAt);
+                  const url = item?.publicUrl || item?.storageKey || (inv.customData as any)?.musicUrl;
                   return url ? { url } : undefined;
                 })(),
                 coverImage: (() => {
-                  const item = inv.media.find((m: any) => m.role === 'COVER');
-                  const url = item?.publicUrl || item?.storageKey;
+                  const item = inv.media.find((m: any) => (m.role === 'COVER' || m.type === 'IMAGE') && !m.deletedAt);
+                  const url = item?.publicUrl || item?.storageKey || (inv.customData as any)?.coverImageUrl;
                   return url ? { url, alt: 'Cover Image' } : undefined;
                 })(),
               }}
