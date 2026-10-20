@@ -94,3 +94,38 @@ export async function getPublicInvitation(slug: string) {
     return { type: 'NOT_FOUND' as const };
   }
 }
+
+export function resolveGuestName(
+  searchParams?: { [key: string]: string | string[] | undefined },
+  customData?: Record<string, any>
+): string | undefined {
+  if (!searchParams) return undefined;
+
+  // 1. Check for Base64URL clean token (?v=...)
+  if (typeof searchParams.v === 'string' && searchParams.v.trim()) {
+    try {
+      const decoded = Buffer.from(searchParams.v.trim(), 'base64url').toString('utf8');
+      if (decoded && decoded.trim()) return decoded.trim();
+    } catch {}
+  }
+
+  // 2. Check for Alias or Direct Name in ?to= or ?guest= or ?name= or ?g=
+  const rawParam = searchParams.to || searchParams.guest || searchParams.name || searchParams.g;
+  if (typeof rawParam === 'string' && rawParam.trim()) {
+    const rawVal = decodeURIComponent(rawParam.trim()).trim();
+    const guestAliases = (customData as any)?.guestAliases || {};
+
+    // Check exact alias or case-insensitive alias
+    if (guestAliases[rawVal]) {
+      return guestAliases[rawVal];
+    }
+    if (guestAliases[rawVal.toLowerCase()]) {
+      return guestAliases[rawVal.toLowerCase()];
+    }
+
+    // Direct name
+    return rawVal;
+  }
+
+  return undefined;
+}

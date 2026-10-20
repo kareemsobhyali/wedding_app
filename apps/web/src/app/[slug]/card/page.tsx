@@ -1,6 +1,6 @@
 import { notFound, redirect } from 'next/navigation';
 import { Metadata } from 'next';
-import { getPublicInvitation } from '../../../lib/invitations';
+import { getPublicInvitation, resolveGuestName } from '../../../lib/invitations';
 import ExpiredInvitationScreen from '../../../components/ExpiredInvitationScreen';
 import PrintableQrCard from '../../../components/PrintableQrCard';
 
@@ -19,8 +19,7 @@ export async function generateMetadata({ params, searchParams }: CardPageProps):
   }
 
   const { data } = result;
-  const rawGuest = searchParams?.to || searchParams?.guest || searchParams?.name;
-  const guestName = typeof rawGuest === 'string' ? decodeURIComponent(rawGuest).trim() : undefined;
+  const guestName = resolveGuestName(searchParams, data.customData);
 
   const title = guestName
     ? `بطاقة دعوة خاصة لـ ${guestName} | ${data.groomName} & ${data.brideName}`
@@ -52,8 +51,7 @@ export default async function InvitationCardPage({ params, searchParams }: CardP
   }
 
   const { data } = result;
-  const rawGuest = searchParams?.to || searchParams?.guest || searchParams?.name;
-  const guestName = typeof rawGuest === 'string' ? decodeURIComponent(rawGuest).trim() : undefined;
+  const guestName = resolveGuestName(searchParams, data.customData);
 
   const customLang = (data.customData as any)?.language;
   const isAr = customLang 

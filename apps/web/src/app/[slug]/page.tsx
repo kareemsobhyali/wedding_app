@@ -4,7 +4,7 @@ import { TemplateRenderContext } from '../../templates/types';
 import { getTemplateImplementation } from '../../templates/registry';
 import { formatEventDate } from '../../templates/utils/date';
 import { AnalyticsProvider } from '../../templates/utils/AnalyticsProvider';
-import { getPublicInvitation } from '../../lib/invitations';
+import { getPublicInvitation, resolveGuestName } from '../../lib/invitations';
 import ExpiredInvitationScreen from '../../components/ExpiredInvitationScreen';
 import UniversalInvitationOverlay from '../../components/UniversalInvitationOverlay';
 
@@ -47,8 +47,7 @@ export async function generateMetadata({ params, searchParams }: PageProps): Pro
 
   const { data } = result;
   const formattedDate = data.weddingDate ? formatEventDate(data.weddingDate, 'LTR') : '';
-  const rawGuest = searchParams?.to || searchParams?.guest || searchParams?.name;
-  const guestName = typeof rawGuest === 'string' ? decodeURIComponent(rawGuest).trim() : undefined;
+  const guestName = resolveGuestName(searchParams, data.customData);
   
   const title = guestName 
     ? `دعوة خاصة لـ ${guestName} | حفل زفاف ${data.groomName} & ${data.brideName}`
@@ -100,8 +99,7 @@ export default async function PublicInvitationPage({ params, searchParams }: Pag
     : /[\u0600-\u06FF]/.test(data.groomName || data.brideName || '');
   const direction: 'LTR' | 'RTL' = isArabic ? 'RTL' : 'LTR';
 
-  const rawGuest = searchParams?.to || searchParams?.guest || searchParams?.name;
-  const guestName = typeof rawGuest === 'string' ? decodeURIComponent(rawGuest).trim() : undefined;
+  const guestName = resolveGuestName(searchParams, data.customData);
 
   const renderContext: TemplateRenderContext = {
     mode: 'PUBLIC',
