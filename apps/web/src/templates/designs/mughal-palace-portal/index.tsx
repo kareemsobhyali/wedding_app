@@ -136,55 +136,59 @@ const FallingRosePetals = () => {
   );
 };
 
-// Romantic Couple Video Component (Pinterest Video with Background Seamlessly Blended)
+// Romantic Dancing Couple Video Component (Left-aligned, transparent background, watermark cropped)
 const RomanticCoupleVideo = () => {
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
   useEffect(() => {
     if (videoRef.current) {
-      videoRef.current.playbackRate = 0.95; // Romantic, graceful motion speed
+      videoRef.current.playbackRate = 0.95;
       videoRef.current.play().catch(() => {});
     }
   }, []);
 
   return (
-    <div 
-      className="absolute bottom-[1.5%] left-1/2 -translate-x-1/2 z-10 pointer-events-none flex flex-col items-center justify-end w-[240px] sm:w-[270px] h-[210px] sm:h-[235px] overflow-hidden select-none"
-    >
-      {/* Background Mask to cleanly conceal the static drawing in the palace wallpaper underneath */}
+    <>
+      {/* Background Mask to cleanly conceal the static drawing in the palace wallpaper center */}
       <div 
-        className="absolute inset-x-[-10px] bottom-[-4px] h-[115px] pointer-events-none rounded-full"
+        className="absolute bottom-[3.5%] left-1/2 -translate-x-1/2 w-[110px] h-[95px] pointer-events-none rounded-full"
         style={{
           background: 'radial-gradient(ellipse at 50% 60%, #FAF5ED 70%, rgba(250,245,237,0.85) 85%, transparent 100%)'
         }}
       />
 
-      {/* Romantic Golden Glow Beneath Couple */}
+      {/* Left-Aligned Romantic Couple Video (Compact, Transparent Background) */}
       <div 
-        className="absolute bottom-1 w-24 h-5 rounded-full pointer-events-none"
-        style={{
-          background: 'radial-gradient(ellipse at center, rgba(212,175,55,0.22) 0%, transparent 75%)'
-        }}
-      />
+        className="absolute bottom-[2%] sm:bottom-[3%] left-[4%] sm:left-[6%] z-20 pointer-events-none flex flex-col items-center justify-end w-[125px] sm:w-[150px] h-[170px] sm:h-[200px] overflow-hidden select-none"
+      >
+        {/* Soft Warm Halo Beneath Dancing Couple */}
+        <div 
+          className="absolute bottom-1 w-20 h-4 rounded-full pointer-events-none"
+          style={{
+            background: 'radial-gradient(ellipse at center, rgba(212,175,55,0.2) 0%, transparent 75%)'
+          }}
+        />
 
-      {/* The Couple Video with Background Removed via Multiply Blend Mode & Feathered Mask */}
-      <video
-        ref={videoRef}
-        src="/assets/templates/romantic-couple-video.mp4"
-        autoPlay
-        loop
-        muted
-        playsInline
-        preload="auto"
-        className="w-full h-full object-cover object-bottom"
-        style={{
-          mixBlendMode: 'multiply',
-          filter: 'contrast(1.12) brightness(1.02) saturate(1.1)',
-          maskImage: 'linear-gradient(to top, black 84%, rgba(0,0,0,0.5) 94%, transparent 100%)',
-          WebkitMaskImage: 'linear-gradient(to top, black 84%, rgba(0,0,0,0.5) 94%, transparent 100%)',
-        }}
-      />
-    </div>
+        {/* The Couple Video with Background Removed via Multiply Blend Mode & Bottom Watermark Cropped */}
+        <video
+          ref={videoRef}
+          src="/assets/templates/romantic-couple-video-2.mp4"
+          autoPlay
+          loop
+          muted
+          playsInline
+          preload="auto"
+          className="w-full h-[114%] object-cover"
+          style={{
+            objectPosition: 'center 15%',
+            mixBlendMode: 'multiply',
+            filter: 'contrast(1.15) brightness(1.02) sepia(0.2)',
+            maskImage: 'linear-gradient(to top, black 85%, transparent 100%)',
+            WebkitMaskImage: 'linear-gradient(to top, black 85%, transparent 100%)',
+          }}
+        />
+      </div>
+    </>
   );
 };
 
@@ -298,7 +302,7 @@ export const MughalPalacePortalTemplate: React.FC<TemplateRenderContext> = ({ da
       {/* Background Audio */}
       <audio 
         ref={audioRef} 
-        src={data.music?.url || '/assets/templates/romantic-couple-video.mp4'} 
+        src={data.music?.url || '/assets/templates/romantic-couple-video-2.mp4'} 
         loop 
         preload="auto" 
       />
