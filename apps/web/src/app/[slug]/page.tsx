@@ -6,6 +6,7 @@ import { formatEventDate } from '../../templates/utils/date';
 import { AnalyticsProvider } from '../../templates/utils/AnalyticsProvider';
 import { getPublicInvitation } from '../../lib/invitations';
 import ExpiredInvitationScreen from '../../components/ExpiredInvitationScreen';
+import UniversalInvitationOverlay from '../../components/UniversalInvitationOverlay';
 
 interface PageProps {
   params: { slug: string };
@@ -116,6 +117,11 @@ export default async function PublicInvitationPage({ params, searchParams }: Pag
   return (
     <AnalyticsProvider slug={params.slug} isPublic={true}>
       <TemplateComponent {...renderContext} />
+      <UniversalInvitationOverlay 
+        slug={params.slug}
+        guestName={guestName}
+        isArabic={isArabic}
+      />
     </AnalyticsProvider>
   );
 }
