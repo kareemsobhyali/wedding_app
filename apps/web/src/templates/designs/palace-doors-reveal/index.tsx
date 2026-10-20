@@ -546,21 +546,8 @@ export const PalaceDoorsRevealTemplate: React.FC<TemplateRenderContext> = ({ dat
                   <span>إعادة إغلاق الباب</span>
                 </button>
 
-                {/* Right controls: QR Card, Share & Music */}
+                {/* Right controls: Share & Music */}
                 <div className="flex items-center gap-2">
-                  {slug && (
-                    <a
-                      href={`/${slug}/card${initialGuestName ? `?to=${encodeURIComponent(initialGuestName)}` : ''}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      title={isArabicContent ? "بطاقة QR للطباعة" : "Printable QR Card"}
-                      className="px-2.5 py-1.5 rounded-full bg-black/60 hover:bg-black/80 backdrop-blur-md text-white border border-white/30 flex items-center gap-1 text-[11px] font-bold shadow-md active:scale-95 transition-all"
-                    >
-                      <QrCode className="w-3.5 h-3.5 text-[#DFBA73]" />
-                      <span className="hidden sm:inline">{isArabicContent ? "بطاقة QR" : "QR Card"}</span>
-                    </a>
-                  )}
-
                   <button
                     onClick={handleShare}
                     className="w-8 h-8 rounded-full bg-black/60 hover:bg-black/80 backdrop-blur-md text-white border border-white/30 flex items-center justify-center shadow-md active:scale-95 transition-all"
@@ -772,24 +759,14 @@ export const PalaceDoorsRevealTemplate: React.FC<TemplateRenderContext> = ({ dat
                       <Check className="w-5 h-5" />
                     </div>
                     <h4 className="font-bold text-sm text-gray-900 mb-1">{isArabicContent ? 'شكراً لك!' : 'Thank you!'}</h4>
-                    <p className="text-xs text-gray-600 mb-3">{isArabicContent ? 'تم تسجيل تأكيد حضورك بنجاح، ويسعدنا وجودك معنا.' : 'Your attendance has been confirmed successfully.'}</p>
-                    <div className="flex flex-col sm:flex-row items-center justify-center gap-2">
-                      {slug && (
-                        <a
-                          href={`/${slug}/rsvp`}
-                          className="w-full sm:w-auto px-4 py-1.5 bg-[#8C6D38] hover:bg-[#6E4D1D] text-white rounded-full text-xs font-bold transition-all text-center"
-                        >
-                          {isArabicContent ? '📋 عرض قائمة الحضور' : '📋 View Guest List'}
-                        </a>
-                      )}
-                      <button
-                        type="button"
-                        onClick={() => { setShowRsvpModal(false); setRsvpSent(false); }}
-                        className="w-full sm:w-auto px-4 py-1.5 bg-stone-200 hover:bg-stone-300 text-stone-700 rounded-full text-xs font-bold transition-all text-center"
-                      >
-                        {isArabicContent ? 'إغلاق' : 'Close'}
-                      </button>
-                    </div>
+                    <p className="text-xs text-gray-600 mb-4">{isArabicContent ? 'تم تسجيل تأكيد حضورك بنجاح، ويسعدنا وجودك معنا.' : 'Your attendance has been confirmed successfully.'}</p>
+                    <button
+                      type="button"
+                      onClick={() => { setShowRsvpModal(false); setRsvpSent(false); }}
+                      className="w-full sm:w-auto px-6 py-2 bg-[#8C6D38] hover:bg-[#6E4D1D] text-white rounded-full text-xs font-bold transition-all text-center shadow-sm active:scale-95"
+                    >
+                      {isArabicContent ? 'إغلاق' : 'Close'}
+                    </button>
                   </div>
                 ) : (
                   <form

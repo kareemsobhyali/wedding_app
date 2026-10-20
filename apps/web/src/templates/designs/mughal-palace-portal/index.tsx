@@ -398,18 +398,6 @@ export const MughalPalacePortalTemplate: React.FC<TemplateRenderContext> = ({ da
 
       {/* Floating Controls */}
       <div className="fixed top-3 right-3 sm:top-4 sm:right-4 z-40 flex items-center gap-2">
-        {slug && (
-          <a
-            href={`/${slug}/card${initialGuestName ? `?to=${encodeURIComponent(initialGuestName)}` : ''}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="h-10 px-3 rounded-full bg-white/90 backdrop-blur-md shadow-md border border-[#D4AF37]/50 flex items-center gap-1.5 text-xs font-bold text-[#8C6D38] hover:bg-[#8C6D38] hover:text-white transition-all transform hover:scale-105 active:scale-95"
-            title={isArabicContent ? "بطاقة QR للطباعة" : "Printable QR Card"}
-          >
-            <QrCode className="w-4 h-4 text-[#8C6D38]" />
-            <span className="hidden sm:inline">{isArabicContent ? "بطاقة QR" : "QR Card"}</span>
-          </a>
-        )}
         <button
           onClick={toggleAudio}
           className="w-10 h-10 rounded-full bg-white/90 backdrop-blur-md shadow-md border border-[#D4AF37]/50 flex items-center justify-center text-[#8C6D38] hover:bg-[#8C6D38] hover:text-white transition-all transform hover:scale-105 active:scale-95"
@@ -727,25 +715,15 @@ export const MughalPalacePortalTemplate: React.FC<TemplateRenderContext> = ({ da
                     <Check className="w-6 h-6" />
                   </div>
                   <h4 className="text-base font-bold text-stone-800" style={{ fontFamily: isArabicContent ? "'Aref Ruqaa', serif" : "inherit" }}>{isArabicContent ? 'تم تسجيل حضوركم بنجاح!' : 'Your RSVP has been confirmed!'}</h4>
-                  <p className="text-xs text-stone-500" style={{ fontFamily: isArabicContent ? "'Aref Ruqaa', serif" : "inherit" }}>{isArabicContent ? 'شكراً لكم، ننتظر تشريفكم بكل سعادة ومودة.' : 'Thank you! We look forward to celebrating together.'}</p>
+                  <p className="text-xs text-stone-500 mb-2" style={{ fontFamily: isArabicContent ? "'Aref Ruqaa', serif" : "inherit" }}>{isArabicContent ? 'شكراً لكم، ننتظر تشريفكم بكل سعادة ومودة.' : 'Thank you! We look forward to celebrating together.'}</p>
                   
-                  <div className="flex flex-col sm:flex-row items-center justify-center gap-2 pt-2">
-                    {slug && (
-                      <a
-                        href={`/${slug}/rsvp`}
-                        className="w-full sm:w-auto px-4 py-2 rounded-full bg-[#8C6D38] hover:bg-[#6E4D1D] text-white text-xs font-bold shadow-xs transition-all text-center"
-                      >
-                        {isArabicContent ? '📋 عرض قائمة الحضور' : '📋 View Guest List'}
-                      </a>
-                    )}
-                    <button
-                      type="button"
-                      onClick={() => { setShowRsvpModal(false); setRsvpSent(false); }}
-                      className="w-full sm:w-auto px-4 py-2 rounded-full bg-stone-200 hover:bg-stone-300 text-stone-700 text-xs font-bold transition-all text-center"
-                    >
-                      {isArabicContent ? 'إغلاق' : 'Close'}
-                    </button>
-                  </div>
+                  <button
+                    type="button"
+                    onClick={() => { setShowRsvpModal(false); setRsvpSent(false); }}
+                    className="w-full sm:w-auto px-6 py-2 rounded-full bg-[#8C6D38] hover:bg-[#6E4D1D] text-white text-xs font-bold shadow-xs transition-all text-center"
+                  >
+                    {isArabicContent ? 'إغلاق' : 'Close'}
+                  </button>
                 </div>
               ) : (
                 <form onSubmit={handleRsvpSubmit} className="space-y-3.5">
