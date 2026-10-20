@@ -1,384 +1,812 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Heart, Sparkles, Smartphone, BarChart3, Mail, MessageCircle, Camera, CheckCircle2 } from 'lucide-react';
+import { 
+  Heart, 
+  Sparkles, 
+  Smartphone, 
+  MessageCircle, 
+  Eye, 
+  Search, 
+  CheckCircle2, 
+  Clock, 
+  ShieldCheck, 
+  SlidersHorizontal,
+  Music,
+  MapPin,
+  Calendar,
+  Send,
+  Mail,
+  Camera
+} from 'lucide-react';
 
-export default function LandingClient({ settings, templatesList }: { settings: any, templatesList: any[] }) {
+interface TemplateItem {
+  id: string;
+  name: string;
+  description?: string;
+  previewImage?: string;
+  category?: string;
+  [key: string]: any;
+}
+
+interface LandingSettings {
+  siteName?: string;
+  heroTitle?: string;
+  heroSubtitle?: string;
+  aboutTitle?: string;
+  aboutText?: string;
+  contactWhatsApp?: string;
+  contactEmail?: string;
+  contactInstagram?: string;
+  demoLinks?: Record<string, string>;
+  previewImages?: Record<string, string>;
+  [key: string]: any;
+}
+
+// Category Mapping helper for rich filtration
+const getThemeCategory = (id: string): string => {
+  if (['mughal-palace-portal', 'cathedral-grand-arch', 'sculpted-porcelain-arch', 'palace-gates', 'royal-velvet', 'royal-scroll', 'trifold-pocket-folio'].includes(id)) {
+    return 'palace';
+  }
+  if (['golden-arabic', 'arabian-crescent-lantern', 'laser-gold-gatefold', 'celestial-stardust', 'celestial-constellations'].includes(id)) {
+    return 'arabic';
+  }
+  if (['floral-romance', 'botanical-rustic', 'blooming-garden-3d', 'vintage-calla-blooms', 'deckle-edge-cotton', 'heavenly-roses'].includes(id)) {
+    return 'floral';
+  }
+  if (['butterfly-elegance', 'wax-silk-reveal', 'luxury-flip-card', 'pearl-box', 'velvet-jewelry-box', 'vintage-vinyl-player', 'polaroid-photo-reel', 'boarding-pass-vip'].includes(id)) {
+    return '3d';
+  }
+  return 'modern';
+};
+
+// Top Priority display order
+const PRIORITY_ORDER = [
+  'mughal-palace-portal',
+  'cathedral-grand-arch',
+  'sculpted-porcelain-arch',
+  'butterfly-elegance',
+  'golden-arabic',
+  'classic-elegance',
+  'floral-romance',
+  'modern-minimalist',
+  'royal-velvet',
+  'blooming-garden-3d',
+  'wax-silk-reveal',
+  'laser-gold-gatefold',
+  'palace-gates',
+  'pearl-silk-minimalist',
+  'luxury-flip-card',
+  'arabian-crescent-lantern',
+  'vintage-calla-blooms',
+  'botanical-rustic',
+  'celestial-stardust'
+];
+
+export default function LandingClient({ 
+  settings, 
+  templatesList 
+}: { 
+  settings: LandingSettings; 
+  templatesList: TemplateItem[]; 
+}) {
   const [scrolled, setScrolled] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [searchQuery, setSearchQuery] = useState<string>('');
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
+      setScrolled(window.scrollY > 40);
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   const siteName = settings.siteName || "دعوتي Daawati";
+  const rawWhatsApp = settings.contactWhatsApp || "+201000000000";
+  const cleanPhone = rawWhatsApp.replace(/[^0-9]/g, '');
+
+  // Helper to build WhatsApp Direct Order URL with Theme Name pre-filled
+  const getThemeWhatsAppUrl = (themeName: string) => {
+    const message = encodeURIComponent(`مرحباً، أود طلب وتجهيز تصميم دعوة زفاف بثيم: (${themeName}) 💍✨`);
+    return `https://wa.me/${cleanPhone}?text=${message}`;
+  };
+
+  // Helper for general inquiries
+  const generalWhatsAppUrl = `https://wa.me/${cleanPhone}?text=${encodeURIComponent('مرحباً، أود الاستفسار عن تفاصيل دعوات الزفاف الإلكترونية 💍✨')}`;
+
+  // Sort & Filter Templates
+  const sortedAndFilteredTemplates = useMemo(() => {
+    // 1. Sort by Priority
+    const sorted = [...templatesList].sort((a, b) => {
+      const indexA = PRIORITY_ORDER.indexOf(a.id);
+      const indexB = PRIORITY_ORDER.indexOf(b.id);
+      const rankA = indexA === -1 ? 999 : indexA;
+      const rankB = indexB === -1 ? 999 : indexB;
+      return rankA - rankB;
+    });
+
+    // 2. Filter by Category & Search Query
+    return sorted.filter((tpl) => {
+      const cat = getThemeCategory(tpl.id);
+      const matchesCategory = selectedCategory === 'all' || cat === selectedCategory;
+      const matchesSearch = !searchQuery.trim() || 
+        tpl.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (tpl.description && tpl.description.toLowerCase().includes(searchQuery.toLowerCase()));
+      return matchesCategory && matchesSearch;
+    });
+  }, [templatesList, selectedCategory, searchQuery]);
+
+  // Categories config
+  const categories = [
+    { id: 'all', label: 'جميع الثيمات', count: templatesList.length },
+    { id: 'palace', label: 'أقواس وقصور ملكية 🏛️' },
+    { id: 'arabic', label: 'طابع عربي وذهبي ⚜️' },
+    { id: 'floral', label: 'ورود وطبيعة 🌸' },
+    { id: '3d', label: 'تفاعلي ومجسم 3D 🦋' },
+    { id: 'modern', label: 'عصري وناعم ✨' },
+  ];
 
   return (
-    <main className="min-h-screen bg-[#FDFBF7] font-cairo text-gray-800 overflow-hidden" dir="rtl">
+    <main className="min-h-screen bg-[#FAF7F2] font-cairo text-[#38260F] overflow-x-hidden selection:bg-[#EBDCC0] selection:text-[#38260F]" dir="rtl">
 
-      
-      
-      {/* Navbar - Glassmorphism */}
+      {/* ========================================================= */}
+      {/* 1. Header / Navbar - Royal Boutique Glassmorphism */}
+      {/* ========================================================= */}
       <motion.header 
-        initial={{ y: -100 }}
+        initial={{ y: -70 }}
         animate={{ y: 0 }}
-        transition={{ duration: 0.8, ease: "easeOut" }}
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'bg-white/80 backdrop-blur-md shadow-sm py-3' : 'bg-transparent py-6'}`}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+          scrolled 
+            ? 'bg-white/90 backdrop-blur-md shadow-md py-3 border-b border-[#EADCC5]/70' 
+            : 'bg-transparent py-5'
+        }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
-          <div className="font-bold text-3xl text-[#8E6E53] tracking-wider flex items-center gap-2">
-            <Heart className="w-6 h-6 text-[#D4A373]" fill="currentColor" />
-            {siteName}
-          </div>
-          <nav className="hidden md:flex space-x-8 space-x-reverse">
-            <a href="#about" className="text-gray-600 hover:text-[#D4A373] font-semibold transition-colors">عن المنصة</a>
-            <a href="#features" className="text-gray-600 hover:text-[#D4A373] font-semibold transition-colors">المميزات</a>
-            <a href="#templates" className="text-gray-600 hover:text-[#D4A373] font-semibold transition-colors">الثيمات</a>
-            <a href="#contact" className="text-gray-600 hover:text-[#D4A373] font-semibold transition-colors">تواصل معنا</a>
+          
+          {/* Logo & Brand */}
+          <Link href="/" className="flex items-center gap-2 group cursor-pointer">
+            <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-[#8C6D38] via-[#C5A059] to-[#DFBA73] p-0.5 shadow-sm group-hover:scale-105 transition-transform">
+              <div className="w-full h-full bg-[#FAF7F2] rounded-[14px] flex items-center justify-center">
+                <Heart className="w-5 h-5 text-[#8C6D38] fill-[#C5A059]/30" />
+              </div>
+            </div>
+            <div className="flex flex-col">
+              <span className="font-extrabold text-xl sm:text-2xl text-[#3D2810] tracking-tight" style={{ fontFamily: "'Aref Ruqaa', 'Cairo', serif" }}>
+                {siteName}
+              </span>
+              <span className="text-[10px] text-[#8C6D38] font-bold tracking-widest -mt-1 uppercase">
+                Luxury Digital Invitations
+              </span>
+            </div>
+          </Link>
+
+          {/* Navigation Links */}
+          <nav className="hidden md:flex items-center space-x-7 space-x-reverse text-sm font-bold text-[#634827]">
+            <a href="#templates" className="hover:text-[#8C6D38] transition-colors py-1">الثيمات المتاحة</a>
+            <a href="#how-it-works" className="hover:text-[#8C6D38] transition-colors py-1">طريقة الطلب</a>
+            <a href="#features" className="hover:text-[#8C6D38] transition-colors py-1">مميزات الدعوة</a>
+            <a href="#faq" className="hover:text-[#8C6D38] transition-colors py-1">الأسئلة الشائعة</a>
           </nav>
-          <a href="#contact" className="px-6 py-2.5 bg-gradient-to-r from-[#D4A373] to-[#BC8A5F] text-white rounded-full font-bold hover:shadow-lg hover:shadow-[#D4A373]/30 transition-all transform hover:-translate-y-0.5">
-            اطلب دعوتك الآن
-          </a>
+
+          {/* Quick WhatsApp Action Button */}
+          <div className="flex items-center gap-3">
+            <a 
+              href={generalWhatsAppUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-4 sm:px-5 py-2.5 rounded-full bg-gradient-to-r from-[#25D366] to-[#128C7E] text-white text-xs sm:text-sm font-bold shadow-md hover:shadow-lg hover:shadow-[#25D366]/25 transition-all transform hover:-translate-y-0.5 flex items-center gap-2"
+            >
+              <MessageCircle className="w-4 h-4 fill-white/20 shrink-0" />
+              <span>تواصل عبر واتساب</span>
+            </a>
+          </div>
         </div>
       </motion.header>
 
-      {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden bg-gradient-to-b from-[#FFF5F0] to-[#FDFBF7]">
-        {/* Animated Background Elements */}
+
+      {/* ========================================================= */}
+      {/* 2. Hero Section - Royal Luxury Boutique */}
+      {/* ========================================================= */}
+      <section className="relative pt-32 pb-16 md:pt-40 md:pb-24 overflow-hidden bg-gradient-to-b from-[#FFFDF9] via-[#FAF7F2] to-[#FAF7F2]">
+        
+        {/* Decorative Golden Ambient Glows */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <motion.div 
-            animate={{ y: [0, -20, 0], opacity: [0.3, 0.6, 0.3] }} 
-            transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute top-1/4 right-1/4 w-64 h-64 bg-[#FFE8D6] rounded-full mix-blend-multiply filter blur-3xl opacity-50"
-          />
-          <motion.div 
-            animate={{ y: [0, 20, 0], opacity: [0.3, 0.6, 0.3] }} 
-            transition={{ duration: 7, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-            className="absolute bottom-1/3 left-1/4 w-72 h-72 bg-[#FDE2E4] rounded-full mix-blend-multiply filter blur-3xl opacity-50"
-          />
+          <div className="absolute top-10 right-1/4 w-96 h-96 bg-[#F5E6CD]/50 rounded-full blur-3xl opacity-70" />
+          <div className="absolute top-28 left-1/4 w-80 h-80 bg-[#E8D5B5]/40 rounded-full blur-3xl opacity-60" />
+          <div className="absolute -bottom-20 left-1/2 -translate-x-1/2 w-[700px] h-40 bg-[#DFBA73]/20 rounded-full blur-3xl" />
         </div>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center flex flex-col items-center">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1, delay: 0.2 }}
-            className="mb-6 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/60 border border-[#D4A373]/30 text-[#8E6E53] text-sm font-bold shadow-sm backdrop-blur-sm"
-          >
-            <Sparkles className="w-4 h-4 text-[#D4A373]" />
-            <span>البداية لزفافك المثالي</span>
-          </motion.div>
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 relative z-10 text-center flex flex-col items-center">
           
+          {/* Top Royal Pill */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.8 }}
+            className="mb-5 inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/90 border border-[#D5C7B2]/70 text-[#8C6D38] text-xs font-bold shadow-sm backdrop-blur-sm"
+          >
+            <Sparkles className="w-4 h-4 text-[#C5A059]" />
+            <span>دعوات زفاف إلكترونية تفاعلية فاخرة</span>
+          </motion.div>
+
+          {/* Main Hero Headline */}
           <motion.h1 
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 25 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="text-4xl sm:text-6xl md:text-7xl font-extrabold text-[#38260F] mb-6 leading-[1.25] tracking-tight max-w-4xl"
+            style={{ fontFamily: "'Aref Ruqaa', 'Cairo', serif" }}
+          >
+            {settings.heroTitle || 'دعوات زفاف فاخرة تليق بليلة العمر'}
+          </motion.h1>
+
+          {/* Subtitle */}
+          <motion.p 
+            initial={{ opacity: 0, y: 25 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
-            className="text-5xl md:text-7xl font-extrabold text-[#4A4036] mb-8 leading-[1.2]"
+            className="text-base sm:text-xl text-[#6B5338] mb-10 max-w-2xl mx-auto leading-relaxed font-medium"
           >
-            {settings.heroTitle}
-          </motion.h1>
-          
-          <motion.p 
-            initial={{ opacity: 0, y: 30 }}
+            {settings.heroSubtitle || 'اختر ثيمك المفضل من مجموعتنا الحصرية، شاهده حياً على هاتفك، واطلبه مباشرة عبر الواتساب لتجهيزه بأعلى درجات الأناقة والسرعة.'}
+          </motion.p>
+
+          {/* Main CTA Buttons */}
+          <motion.div 
+            initial={{ opacity: 0, y: 25 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.6 }}
-            className="text-lg md:text-2xl text-gray-600 mb-12 max-w-3xl mx-auto leading-relaxed"
+            className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full sm:w-auto mb-14"
           >
-            {settings.heroSubtitle}
-          </motion.p>
-          
-          <motion.div 
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.8 }}
-            className="flex flex-col sm:flex-row justify-center gap-5 w-full sm:w-auto"
-          >
-            <a href="#contact" className="px-10 py-4 bg-gradient-to-r from-[#D4A373] to-[#BC8A5F] text-white rounded-full font-bold text-lg hover:shadow-xl hover:shadow-[#D4A373]/40 transition-all transform hover:-translate-y-1 flex items-center justify-center gap-2">
-              تواصل معنا للطلب
-              <Sparkles className="w-5 h-5" />
+            <a 
+              href="#templates" 
+              className="w-full sm:w-auto px-9 py-4 rounded-full bg-gradient-to-r from-[#8C6D38] via-[#A88448] to-[#6E4E26] text-white font-bold text-base shadow-xl shadow-[#8C6D38]/25 hover:shadow-[#8C6D38]/40 hover:brightness-110 transition-all transform hover:-translate-y-0.5 flex items-center justify-center gap-2"
+            >
+              <span>استعرض تشكيلة الثيمات ⚜️</span>
             </a>
-            <a href="#templates" className="px-10 py-4 bg-white text-[#8E6E53] rounded-full font-bold text-lg hover:bg-gray-50 transition-all border border-[#D4A373]/30 shadow-sm flex items-center justify-center">
-              استعرض الثيمات
+
+            <a 
+              href={generalWhatsAppUrl} 
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full sm:w-auto px-8 py-4 rounded-full bg-white text-[#4A3210] font-bold text-base border border-[#D5C7B2] hover:bg-[#FAF5ED] shadow-sm transition-all transform hover:-translate-y-0.5 flex items-center justify-center gap-2"
+            >
+              <MessageCircle className="w-5 h-5 text-[#25D366]" />
+              <span>تحدث معنا عبر واتساب</span>
             </a>
           </motion.div>
-        </div>
-      </section>
 
-      {/* About Section */}
-      <section id="about" className="py-24 bg-white relative">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <motion.h2 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-3xl md:text-4xl font-bold text-[#4A4036] mb-8"
-          >
-            {settings.aboutTitle}
-          </motion.h2>
-          <motion.p 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.2 }}
-            className="text-lg md:text-xl text-gray-600 leading-relaxed"
-          >
-            {settings.aboutText}
-          </motion.p>
-        </div>
-      </section>
-
-      {/* Features Section */}
-      <section id="features" className="py-24 bg-[#FDFBF7]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              { icon: Smartphone, title: 'متجاوب وسريع', desc: 'دعوات تعمل بامتياز على جميع الشاشات والأجهزة المحمولة بلمسة عصرية.' },
-              { icon: Sparkles, title: 'تصاميم فاخرة', desc: 'قوالب وثيمات تم تصميمها بعناية فائقة لتليق بفخامة مناسبتك.' },
-              { icon: BarChart3, title: 'إدارة وإحصائيات', desc: 'تابع من سيحضر حفل زفافك واعرف عدد المشاهدات بضغطة زر.' }
-            ].map((feature, i) => (
-              <motion.div 
-                key={i}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.2 }}
-                className="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow text-center"
-              >
-                <div className="w-16 h-16 mx-auto bg-[#FFE8D6] rounded-2xl flex items-center justify-center mb-6 text-[#D4A373]">
-                  <feature.icon className="w-8 h-8" />
-                </div>
-                <h3 className="text-xl font-bold text-[#4A4036] mb-4">{feature.title}</h3>
-                <p className="text-gray-600">{feature.desc}</p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      
-      {/* How it Works Section */}
-      <section className="py-24 bg-white border-t border-gray-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <motion.h2 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-3xl md:text-4xl font-bold text-[#4A4036] mb-16"
-          >
-            كيف تصمم دعوتك معنا؟
-          </motion.h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 relative">
-            {/* Connecting Line */}
-            <div className="hidden md:block absolute top-12 left-1/6 right-1/6 h-0.5 bg-gradient-to-r from-transparent via-[#D4A373]/30 to-transparent"></div>
-            
-            {[
-              { step: '1', title: 'اختر ثيمك المفضل', desc: 'تصفح تشكيلة الثيمات الفاخرة واختر التصميم الذي يناسب ذوقك' },
-              { step: '2', title: 'تواصل معنا', desc: 'أرسل لنا بيانات زفافك (الأسماء، الموعد، المكان) عبر الواتساب' },
-              { step: '3', title: 'استلم دعوتك', desc: 'سنقوم بتجهيز الدعوة وإرسال رابطها الخاص لك في أسرع وقت' }
-            ].map((s, i) => (
-              <motion.div 
-                key={i}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.2 }}
-                className="relative z-10 flex flex-col items-center"
-              >
-                <div className="w-24 h-24 bg-gradient-to-br from-[#D4A373] to-[#BC8A5F] rounded-full flex items-center justify-center text-white text-3xl font-bold mb-6 shadow-xl shadow-[#D4A373]/20 border-4 border-white">
-                  {s.step}
-                </div>
-                <h3 className="text-xl font-bold text-[#4A4036] mb-4">{s.title}</h3>
-                <p className="text-gray-600 max-w-xs">{s.desc}</p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-
-      {/* Templates Showcase */}
-      <section id="templates" className="py-32 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-20">
-            <motion.h2 
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="text-4xl font-bold text-[#4A4036] mb-6"
-            >
-              تشكيلة الثيمات الفاخرة
-            </motion.h2>
-            <motion.p 
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.2 }}
-              className="text-gray-600 text-lg max-w-2xl mx-auto"
-            >
-              اختر الثيم الذي يعكس ذوقك الرفيع ويناسب طابع حفل زفافك. جميع الثيمات قابلة للتخصيص بالكامل.
-            </motion.p>
-          </div>
-          
-          <div className="flex overflow-x-auto gap-4 md:gap-8 pb-12 snap-x snap-mandatory px-4 md:px-8 custom-scrollbar">
-            {templatesList.map((tpl, i) => (
-              <motion.div 
-                key={tpl.id}
-                initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-100px" }}
-                transition={{ delay: i * 0.1, duration: 0.6 }}
-                className="bg-[#FDFBF7] rounded-[2rem] shadow-sm border border-gray-100 overflow-hidden hover:shadow-2xl hover:shadow-[#D4A373]/20 transition-all duration-500 group flex flex-col w-[85vw] sm:w-[350px] md:w-[400px] shrink-0 snap-center"
-              >
-                <div className="h-64 sm:h-80 md:h-[450px] relative bg-gray-200 overflow-hidden w-full">
-                  <img 
-                    src={settings.previewImages?.[tpl.id] || tpl.previewImage || '/assets/templates/placeholder-couple.jpg'} 
-                    alt={tpl.name}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-in-out"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#4A4036]/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                  
-                  <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 opacity-0 group-hover:opacity-100 transition-all duration-500 translate-y-4 group-hover:translate-y-0 p-6 bg-black/50 backdrop-blur-sm">
-                    <a 
-                      href={settings.demoLinks?.[tpl.id] || `/preview?template=${tpl.id}`} 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="w-full max-w-xs text-center py-3 bg-white text-[#8E6E53] rounded-full font-bold hover:bg-gray-50 shadow-xl transition-transform hover:scale-105 flex items-center justify-center gap-2"
-                    >
-                      <span>👁️ معاينة الثيم حياً</span>
-                    </a>
-                    <Link 
-                      href={`/create?template=${tpl.id}`} 
-                      className="w-full max-w-xs text-center py-3 bg-gradient-to-r from-[#D4A373] to-[#BC8A5F] text-white rounded-full font-bold shadow-xl transition-transform hover:scale-105 flex items-center justify-center gap-2"
-                    >
-                      <span>✨ تصميم دعوتك بهذا الثيم</span>
-                    </Link>
-                  </div>
-                </div>
-                <div className="p-6 text-center flex-1 flex flex-col justify-between">
-                  <div className="mb-4">
-                    <h3 className="text-2xl font-bold text-[#4A4036] mb-2">{tpl.name}</h3>
-                    <p className="text-gray-500 text-sm leading-relaxed">{tpl.description}</p>
-                  </div>
-                  <div className="flex items-center gap-2 pt-2 border-t border-gray-100">
-                    <a 
-                      href={settings.demoLinks?.[tpl.id] || `/preview?template=${tpl.id}`} 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="flex-1 py-2.5 px-3 bg-[#F4EBE1] hover:bg-[#EADBC8] text-[#8E6E53] rounded-xl text-sm font-bold transition-all text-center"
-                    >
-                      معاينة الديمو
-                    </a>
-                    <Link 
-                      href={`/create?template=${tpl.id}`} 
-                      className="flex-1 py-2.5 px-3 bg-[#8E6E53] hover:bg-[#725740] text-white rounded-xl text-sm font-bold transition-all text-center"
-                    >
-                      اختيار الثيم
-                    </Link>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="py-24 relative overflow-hidden bg-[#4A4036] text-white">
-        <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')]"></div>
-        <div className="max-w-5xl mx-auto px-4 text-center relative z-10">
-          <motion.h2 
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            className="text-4xl md:text-5xl font-bold mb-8 text-[#FFE8D6]"
-          >
-            هل أنت مستعد لإنشاء دعوتك؟
-          </motion.h2>
-          <motion.p 
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.2 }}
-            className="text-xl text-gray-300 mb-10"
-          >
-            خطوات بسيطة تفصلك عن إبهار ضيوفك بدعوة لا تُنسى.
-          </motion.p>
+          {/* Quick Value Metrics / Trust Badges */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.4 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1, delay: 0.8 }}
+            className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-6 w-full max-w-4xl pt-6 border-t border-[#E8DCC8]/70"
           >
-            <a href="#contact" className="inline-block px-12 py-5 bg-[#D4A373] text-white rounded-full font-bold text-xl hover:bg-[#BC8A5F] hover:shadow-2xl hover:shadow-[#D4A373]/50 transition-all transform hover:-translate-y-1">
-              اطلب الآن
-            </a>
+            <div className="flex flex-col items-center p-3 rounded-2xl bg-white/70 border border-[#EFE5D5]">
+              <span className="text-xl sm:text-2xl font-extrabold text-[#8C6D38]">+35</span>
+              <span className="text-xs font-bold text-[#6B5338]">ثيم حصري فاخر</span>
+            </div>
+            <div className="flex flex-col items-center p-3 rounded-2xl bg-white/70 border border-[#EFE5D5]">
+              <span className="text-xl sm:text-2xl font-extrabold text-[#8C6D38]">24 ساعة</span>
+              <span className="text-xs font-bold text-[#6B5338]">تسليم سريع ومباشر</span>
+            </div>
+            <div className="flex flex-col items-center p-3 rounded-2xl bg-white/70 border border-[#EFE5D5]">
+              <span className="text-xl sm:text-2xl font-extrabold text-[#8C6D38]">100%</span>
+              <span className="text-xs font-bold text-[#6B5338]">متوافق مع كل الهواتف</span>
+            </div>
+            <div className="flex flex-col items-center p-3 rounded-2xl bg-white/70 border border-[#EFE5D5]">
+              <span className="text-xl sm:text-2xl font-extrabold text-[#8C6D38]">مفتوحة</span>
+              <span className="text-xs font-bold text-[#6B5338]">تعديلات حتى الرضا التام</span>
+            </div>
           </motion.div>
+
         </div>
       </section>
 
-      {/* Contact Section & Footer */}
-      <footer id="contact" className="bg-[#FDFBF7] pt-24 pb-12 border-t border-gray-100">
+
+      {/* ========================================================= */}
+      {/* 3. Core Section: THEMES SHOWCASE (Direct WhatsApp + Preview) */}
+      {/* ========================================================= */}
+      <section id="templates" className="py-20 bg-white relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
-            <div className="lg:col-span-2">
-              <div className="font-bold text-3xl text-[#8E6E53] tracking-wider flex items-center gap-2 mb-6">
-                <Heart className="w-6 h-6 text-[#D4A373]" fill="currentColor" />
-                {siteName}
+          
+          {/* Section Header */}
+          <div className="text-center max-w-3xl mx-auto mb-10">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#FAF0D7] text-[#8C6D38] text-xs font-bold mb-3 border border-[#E5C987]/60">
+              <Sparkles className="w-3.5 h-3.5" />
+              <span>المجموعة الكاملة لعام 2026</span>
+            </div>
+            <h2 
+              className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#38260F] mb-4"
+              style={{ fontFamily: "'Aref Ruqaa', 'Cairo', serif" }}
+            >
+              تشكيلة الثيمات الحصرية
+            </h2>
+            <p className="text-sm sm:text-base text-gray-600 leading-relaxed">
+              اختر التصميم الذي يعبر عن ذوقك، اضغط على <strong>معاينة حية</strong> لتجربته كما سيراه ضيوفك، ثم اضغط على <strong>اطلب بالواتساب</strong> لإرسال طلبك مباشرة.
+            </p>
+          </div>
+
+          {/* Filter Bar & Live Search */}
+          <div className="bg-[#FAF7F2] p-4 sm:p-5 rounded-3xl border border-[#EADBCA] shadow-sm mb-10">
+            <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+              
+              {/* Category Filter Tabs */}
+              <div className="flex items-center gap-1.5 overflow-x-auto w-full md:w-auto pb-2 md:pb-0 scrollbar-none">
+                {categories.map((cat) => {
+                  const isActive = selectedCategory === cat.id;
+                  return (
+                    <button
+                      key={cat.id}
+                      onClick={() => setSelectedCategory(cat.id)}
+                      className={`px-4 py-2 rounded-2xl text-xs sm:text-sm font-bold whitespace-nowrap transition-all flex items-center gap-1.5 ${
+                        isActive 
+                          ? 'bg-[#8C6D38] text-white shadow-md' 
+                          : 'bg-white hover:bg-gray-100 text-gray-700 border border-gray-200'
+                      }`}
+                    >
+                      <span>{cat.label}</span>
+                      {cat.count !== undefined && (
+                        <span className={`text-[11px] px-1.5 py-0.2 rounded-full ${isActive ? 'bg-white/20 text-white' : 'bg-gray-100 text-gray-500'}`}>
+                          {cat.count}
+                        </span>
+                      )}
+                    </button>
+                  );
+                })}
               </div>
-              <p className="text-gray-500 leading-relaxed max-w-sm">
-                نحن هنا لنجعل يوم زفافك أكثر تميزاً من خلال دعوات إلكترونية تجمع بين الأصالة والحداثة.
+
+              {/* Real-time Theme Search Input */}
+              <div className="relative w-full md:w-72 shrink-0">
+                <input
+                  type="text"
+                  placeholder="ابحث باسم الثيم..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full bg-white rounded-2xl py-2 px-4 pr-10 text-xs sm:text-sm border border-gray-200 focus:outline-none focus:border-[#8C6D38] transition-all text-right shadow-xs"
+                />
+                <Search className="w-4 h-4 text-gray-400 absolute top-1/2 -translate-y-1/2 right-3 pointer-events-none" />
+                {searchQuery && (
+                  <button 
+                    onClick={() => setSearchQuery('')}
+                    className="absolute top-1/2 -translate-y-1/2 left-3 text-xs text-gray-400 hover:text-gray-600 font-bold"
+                  >
+                    ✕
+                  </button>
+                )}
+              </div>
+
+            </div>
+          </div>
+
+          {/* Results Summary if filtered */}
+          {(selectedCategory !== 'all' || searchQuery) && (
+            <div className="flex items-center justify-between mb-6 px-2 text-xs font-bold text-gray-500">
+              <span>عرض {sortedAndFilteredTemplates.length} ثيم متطابق</span>
+              <button 
+                onClick={() => { setSelectedCategory('all'); setSearchQuery(''); }}
+                className="text-[#8C6D38] hover:underline"
+              >
+                إعادة ضبط الفلاتر ↺
+              </button>
+            </div>
+          )}
+
+          {/* Templates Grid - Royal Smartphone Cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+            <AnimatePresence mode="popLayout">
+              {sortedAndFilteredTemplates.map((tpl, i) => {
+                const demoUrl = settings.demoLinks?.[tpl.id] || `/preview?template=${tpl.id}`;
+                const previewImg = settings.previewImages?.[tpl.id] || tpl.previewImage || '/assets/templates/placeholder-couple.jpg';
+                const whatsappUrl = getThemeWhatsAppUrl(tpl.name);
+                const isFeatured = ['mughal-palace-portal', 'cathedral-grand-arch', 'butterfly-elegance'].includes(tpl.id);
+
+                return (
+                  <motion.div
+                    key={tpl.id}
+                    layout
+                    initial={{ opacity: 0, y: 25 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.95 }}
+                    transition={{ duration: 0.4, delay: Math.min(i * 0.05, 0.4) }}
+                    className="bg-[#FAF7F2] rounded-[28px] p-3.5 border border-[#EADBCA] shadow-sm hover:shadow-xl hover:border-[#D5C7B2] transition-all duration-300 group flex flex-col justify-between"
+                  >
+                    
+                    {/* Mockup Display Box */}
+                    <div className="relative rounded-[22px] overflow-hidden aspect-[9/13] bg-neutral-200 mb-3.5 border border-[#EAE0D1]">
+                      <img 
+                        src={previewImg} 
+                        alt={tpl.name}
+                        loading="lazy"
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                        onError={(e) => {
+                          (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=800';
+                        }}
+                      />
+
+                      {/* Top Badges */}
+                      <div className="absolute top-3 right-3 flex items-center gap-1.5 z-10">
+                        {isFeatured && (
+                          <span className="px-2.5 py-1 rounded-full bg-white/95 backdrop-blur-md text-[#8C6D38] text-[11px] font-bold shadow-xs border border-[#E5C987]">
+                            ⭐ الأكثر طلباً
+                          </span>
+                        )}
+                      </div>
+
+                      {/* Top Left Indicator */}
+                      <div className="absolute top-3 left-3 z-10">
+                        <span className="px-2 py-0.5 rounded-md bg-[#38260F]/80 backdrop-blur-md text-white text-[10px] font-bold">
+                          معاينة مباشرة
+                        </span>
+                      </div>
+
+                      {/* Gradient Bottom Shadow */}
+                      <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-black/80 via-black/30 to-transparent pointer-events-none" />
+
+                      {/* Bottom Info inside phone preview */}
+                      <div className="absolute inset-x-0 bottom-0 p-3 text-white text-center z-10">
+                        <span className="text-[11px] font-semibold text-white/90 block">
+                          تأثيرات حركية • موسيقى • عد تنازلي • خريطة
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Card Content & Action Buttons */}
+                    <div className="px-1.5 flex-1 flex flex-col justify-between">
+                      
+                      <div className="mb-3.5">
+                        <h3 className="font-extrabold text-lg text-[#38260F] mb-1 line-clamp-1 group-hover:text-[#8C6D38] transition-colors">
+                          {tpl.name}
+                        </h3>
+                        <p className="text-xs text-gray-600 line-clamp-2 leading-relaxed">
+                          {tpl.description || 'تصميم راقٍ ومميز لحفل زفافك يجمع بين الجمال العصري وسهولة مشاركة الرابط مع ضيوفك.'}
+                        </p>
+                      </div>
+
+                      {/* THE 2 CORE BUTTONS: (Preview & WhatsApp Order) */}
+                      <div className="grid grid-cols-2 gap-2 pt-3 border-t border-[#EADBCA]/70">
+                        
+                        {/* 1. Live Demo Preview */}
+                        <a
+                          href={demoUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="py-2.5 px-2 sm:px-3 rounded-xl bg-white hover:bg-[#F2ECE1] border border-[#D5C7B2]/80 text-[#543914] font-bold text-xs flex items-center justify-center gap-1.5 transition-all text-center shadow-xs active:scale-95"
+                        >
+                          <Eye className="w-3.5 h-3.5 text-[#8C6D38] shrink-0" />
+                          <span>معاينة حية</span>
+                        </a>
+
+                        {/* 2. Direct WhatsApp Order with Pre-filled Name */}
+                        <a
+                          href={whatsappUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="py-2.5 px-2 sm:px-3 rounded-xl bg-gradient-to-r from-[#25D366] to-[#128C7E] hover:brightness-105 active:scale-95 text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-md shadow-[#25D366]/20 transition-all text-center"
+                        >
+                          <MessageCircle className="w-3.5 h-3.5 fill-white/20 shrink-0" />
+                          <span>اطلب بالواتساب</span>
+                        </a>
+
+                      </div>
+
+                    </div>
+
+                  </motion.div>
+                );
+              })}
+            </AnimatePresence>
+          </div>
+
+          {/* Empty State */}
+          {sortedAndFilteredTemplates.length === 0 && (
+            <div className="text-center py-16 bg-[#FAF7F2] rounded-3xl border border-dashed border-gray-300">
+              <span className="text-4xl mb-3 block">🔍</span>
+              <h3 className="font-bold text-lg text-gray-800 mb-1">لم يتم العثور على ثيمات مطابقة للبحث</h3>
+              <p className="text-xs text-gray-500 mb-4">جرب البحث بكلمات أخرى أو تصفح جميع الثيمات</p>
+              <button
+                onClick={() => { setSelectedCategory('all'); setSearchQuery(''); }}
+                className="px-5 py-2 rounded-full bg-[#8C6D38] text-white text-xs font-bold shadow-sm"
+              >
+                عرض جميع الثيمات
+              </button>
+            </div>
+          )}
+
+        </div>
+      </section>
+
+
+      {/* ========================================================= */}
+      {/* 4. How It Works Section: 3 Clear Steps */}
+      {/* ========================================================= */}
+      <section id="how-it-works" className="py-24 bg-[#FAF7F2] border-t border-[#EADBCA]/70 relative">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white border border-[#D5C7B2] text-[#8C6D38] text-xs font-bold mb-3 shadow-xs">
+            <span>سهل • سريع • بدون تعقيد</span>
+          </div>
+          
+          <h2 
+            className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#38260F] mb-4"
+            style={{ fontFamily: "'Aref Ruqaa', 'Cairo', serif" }}
+          >
+            كيف تطلب دعوتك معنا؟
+          </h2>
+          <p className="text-sm sm:text-base text-gray-600 max-w-xl mx-auto mb-16">
+            خطوات بسيطة وسريعة لتجهيز بطاقتك الإلكترونية الفاخرة وإبهار ضيوفك.
+          </p>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
+            
+            {/* Step 1 */}
+            <div className="bg-white p-8 rounded-3xl border border-[#EADBCA] shadow-sm flex flex-col items-center relative z-10 hover:-translate-y-1 transition-transform">
+              <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-[#8C6D38] to-[#C5A059] text-white font-extrabold text-2xl flex items-center justify-center mb-6 shadow-md shadow-[#8C6D38]/20">
+                1
+              </div>
+              <h3 className="font-extrabold text-xl text-[#38260F] mb-3">اختر الثيم المفضل</h3>
+              <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">
+                تصفح تشكيلة الثيمات واضغط على "معاينة حية" لتشاهد تفاصيل الدعوة والمؤثرات كما ستظهر للضيوف.
               </p>
             </div>
-            
-            <div>
-              <h4 className="font-bold text-[#4A4036] text-lg mb-6">تواصل معنا</h4>
-              <ul className="space-y-4">
-                {settings.contactWhatsApp && (
-                  <li>
-                    <a href={`https://wa.me/${settings.contactWhatsApp.replace(/[^0-9]/g, '')}`} target="_blank" className="flex items-center gap-3 text-gray-600 hover:text-[#D4A373] transition-colors">
-                      <MessageCircle className="w-5 h-5" />
-                      <span dir="ltr">{settings.contactWhatsApp}</span>
-                    </a>
-                  </li>
-                )}
-                {settings.contactEmail && (
-                  <li>
-                    <a href={`mailto:${settings.contactEmail}`} className="flex items-center gap-3 text-gray-600 hover:text-[#D4A373] transition-colors">
-                      <Mail className="w-5 h-5" />
-                      <span>{settings.contactEmail}</span>
-                    </a>
-                  </li>
-                )}
-                {settings.contactInstagram && (
-                  <li>
-                    <a href={settings.contactInstagram} target="_blank" className="flex items-center gap-3 text-gray-600 hover:text-[#D4A373] transition-colors">
-                      <Camera className="w-5 h-5" />
-                      <span>انستقرام</span>
-                    </a>
-                  </li>
-                )}
-              </ul>
+
+            {/* Step 2 */}
+            <div className="bg-white p-8 rounded-3xl border border-[#EADBCA] shadow-sm flex flex-col items-center relative z-10 hover:-translate-y-1 transition-transform">
+              <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-[#25D366] to-[#128C7E] text-white font-extrabold text-2xl flex items-center justify-center mb-6 shadow-md shadow-[#25D366]/20">
+                2
+              </div>
+              <h3 className="font-extrabold text-xl text-[#38260F] mb-3">تواصل عبر واتساب</h3>
+              <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">
+                اضغط على "اطلب بالواتساب"، وستُفتح لك محادثة فورية مع اسم الثيم جاهزاً، ثم أرسل لنا تفاصيل زفافك (الأسماء، الموعد، المكان).
+              </p>
             </div>
 
-            <div>
-              <h4 className="font-bold text-[#4A4036] text-lg mb-6">روابط سريعة</h4>
-              <ul className="space-y-4">
-                <li><a href="#contact" className="text-gray-600 hover:text-[#D4A373] transition-colors">اطلب دعوتك</a></li>
-                <li><Link href="/admin-login" className="text-gray-600 hover:text-[#D4A373] transition-colors">تسجيل دخول الإدارة</Link></li>
-              </ul>
+            {/* Step 3 */}
+            <div className="bg-white p-8 rounded-3xl border border-[#EADBCA] shadow-sm flex flex-col items-center relative z-10 hover:-translate-y-1 transition-transform">
+              <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-[#8C6D38] to-[#DFBA73] text-white font-extrabold text-2xl flex items-center justify-center mb-6 shadow-md shadow-[#8C6D38]/20">
+                3
+              </div>
+              <h3 className="font-extrabold text-xl text-[#38260F] mb-3">استلم رابط دعوتك</h3>
+              <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">
+                نجهز لك الدعوة باحترافية ونرسل لك رابطاً خاصاً جاهزاً للإرسال عبر واتساب ووسائل التواصل بكل سهولة.
+              </p>
             </div>
+
           </div>
+
+        </div>
+      </section>
+
+
+      {/* ========================================================= */}
+      {/* 5. Features & Benefits Section */}
+      {/* ========================================================= */}
+      <section id="features" className="py-24 bg-white border-t border-[#EADBCA]/70">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           
-          <div className="pt-8 border-t border-gray-200 text-center text-gray-400">
+          <div className="text-center max-w-3xl mx-auto mb-16">
+            <h2 
+              className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#38260F] mb-4"
+              style={{ fontFamily: "'Aref Ruqaa', 'Cairo', serif" }}
+            >
+              لماذا تختار دعوتك معنا؟
+            </h2>
+            <p className="text-sm sm:text-base text-gray-600">
+              نجمع بين أحدث التقنيات وأرقى اللمسات الجمالية لنمنح ضيوفك تجربة لا تُنسى.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            
+            <div className="p-8 rounded-3xl bg-[#FAF7F2] border border-[#EADBCA] flex flex-col items-start text-right">
+              <div className="w-14 h-14 rounded-2xl bg-white flex items-center justify-center mb-5 text-[#8C6D38] shadow-xs border border-[#EADBCA]">
+                <Smartphone className="w-7 h-7" />
+              </div>
+              <h3 className="font-bold text-xl text-[#38260F] mb-3">متوافق 100% مع الهواتف</h3>
+              <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">
+                صُممت الدعوات لتعمل بسلاسة فائقة ودون أي تأخير على كافة أجهزة الآيفون والأندرويد بمظهر سينمائي مبهر.
+              </p>
+            </div>
+
+            <div className="p-8 rounded-3xl bg-[#FAF7F2] border border-[#EADBCA] flex flex-col items-start text-right">
+              <div className="w-14 h-14 rounded-2xl bg-white flex items-center justify-center mb-5 text-[#8C6D38] shadow-xs border border-[#EADBCA]">
+                <Clock className="w-7 h-7" />
+              </div>
+              <h3 className="font-bold text-xl text-[#38260F] mb-3">سرعة فائقة في التجهيز</h3>
+              <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">
+                ندرك أهمية الوقت؛ فريقنا يجهز لك رابط الدعوة المخصص خلال 24 ساعة فقط وبدقة عالية.
+              </p>
+            </div>
+
+            <div className="p-8 rounded-3xl bg-[#FAF7F2] border border-[#EADBCA] flex flex-col items-start text-right">
+              <div className="w-14 h-14 rounded-2xl bg-white flex items-center justify-center mb-5 text-[#8C6D38] shadow-xs border border-[#EADBCA]">
+                <ShieldCheck className="w-7 h-7" />
+              </div>
+              <h3 className="font-bold text-xl text-[#38260F] mb-3">تعديلات غير محدودة</h3>
+              <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">
+                راحة بالك هي أولويتنا؛ نعدل النصوص والبيانات حتى تصل إلى النتيجة المثالية التي ترضيك تماماً.
+              </p>
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+
+
+      {/* ========================================================= */}
+      {/* 6. FAQ Section */}
+      {/* ========================================================= */}
+      <section id="faq" className="py-24 bg-[#FAF7F2] border-t border-[#EADBCA]/70">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6">
+          <div className="text-center mb-14">
+            <h2 
+              className="text-3xl sm:text-4xl font-extrabold text-[#38260F] mb-3"
+              style={{ fontFamily: "'Aref Ruqaa', 'Cairo', serif" }}
+            >
+              الأسئلة الشائعة
+            </h2>
+            <p className="text-sm text-gray-600">إجابات سريعة على أهم الاستفسارات التي قد تخطر ببالك</p>
+          </div>
+
+          <div className="space-y-4">
+            
+            <div className="p-6 rounded-2xl bg-white border border-[#EADBCA] shadow-xs">
+              <h4 className="font-bold text-base text-[#38260F] mb-2">كيف يستلم ضيوفي رابط الدعوة؟</h4>
+              <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">
+                نرسل لك رابطاً إلكترونياً فريداً وخفيفاً يمكنك نسخه ومشاركته مباشرة عبر الواتساب، الرسائل النصية، أو أي وسيلة تفضلها.
+              </p>
+            </div>
+
+            <div className="p-6 rounded-2xl bg-white border border-[#EADBCA] shadow-xs">
+              <h4 className="font-bold text-base text-[#38260F] mb-2">هل يمكن إضافة موقع القاعة عبر خرائط قوقل؟</h4>
+              <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">
+                نعم بالتأكيد! جميع الثيمات تحتوي على زر مخصص للموقع ينقل ضيوفك مباشرة إلى تطبيق خرائط قوقل للوصول بسهولة.
+              </p>
+            </div>
+
+            <div className="p-6 rounded-2xl bg-white border border-[#EADBCA] shadow-xs">
+              <h4 className="font-bold text-base text-[#38260F] mb-2">هل يمكن إضافة موسيقى خاصة أو صوت شيلة؟</h4>
+              <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">
+                نعم، يمكننا تضمين أي مقطع صوتي أو موسيقى هادئة مفضلة لديك تبدأ مع فتح الدعوة بنعومة.
+              </p>
+            </div>
+
+            <div className="p-6 rounded-2xl bg-white border border-[#EADBCA] shadow-xs">
+              <h4 className="font-bold text-base text-[#38260F] mb-2">ماذا لو أردت تغيير موعد أو مكان الحفل بعد استلام الرابط؟</h4>
+              <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">
+                يمكن تحديث البيانات فوراً من طرفنا في أي وقت دون الحاجة لتغيير الرابط المرسل للضيوف.
+              </p>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+
+      {/* ========================================================= */}
+      {/* 7. Bottom CTA Banner */}
+      {/* ========================================================= */}
+      <section className="py-20 relative overflow-hidden bg-gradient-to-r from-[#4A3210] via-[#543914] to-[#38260F] text-white">
+        <div className="max-w-4xl mx-auto px-4 text-center relative z-10">
+          <h2 
+            className="text-3xl sm:text-5xl font-extrabold mb-5 text-[#FAF0D7] leading-tight"
+            style={{ fontFamily: "'Aref Ruqaa', 'Cairo', serif" }}
+          >
+            جاهز لإبهار ضيوفك بدعوة زفاف استثنائية؟
+          </h2>
+          <p className="text-sm sm:text-lg text-gray-300 mb-8 max-w-xl mx-auto">
+            تواصل معنا عبر الواتساب وسنساعدك في اختيار الثيم الأنسب وتجهيز دعوتك بأسرع وقت.
+          </p>
+          <a 
+            href={generalWhatsAppUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2.5 px-9 py-4 rounded-full bg-gradient-to-r from-[#25D366] to-[#128C7E] hover:brightness-110 active:scale-95 text-white font-extrabold text-base shadow-xl transition-all"
+          >
+            <MessageCircle className="w-5 h-5 fill-white/20" />
+            <span>ابدأ الآن عبر الواتساب</span>
+          </a>
+        </div>
+      </section>
+
+
+      {/* ========================================================= */}
+      {/* 8. Footer */}
+      {/* ========================================================= */}
+      <footer id="contact" className="bg-[#FAF7F2] pt-16 pb-12 border-t border-[#EADBCA]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-6 pb-10 border-b border-[#EADBCA]">
+            
+            {/* Logo */}
+            <div className="flex items-center gap-2">
+              <Heart className="w-6 h-6 text-[#8C6D38] fill-[#C5A059]/40" />
+              <span className="font-extrabold text-2xl text-[#3D2810]" style={{ fontFamily: "'Aref Ruqaa', 'Cairo', serif" }}>
+                {siteName}
+              </span>
+            </div>
+
+            {/* Socials & Contacts */}
+            <div className="flex items-center gap-4 text-xs font-bold text-gray-600">
+              {settings.contactWhatsApp && (
+                <a 
+                  href={`https://wa.me/${cleanPhone}`} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-1.5 hover:text-[#25D366] transition-colors"
+                >
+                  <MessageCircle className="w-4 h-4" />
+                  <span dir="ltr">{settings.contactWhatsApp}</span>
+                </a>
+              )}
+              {settings.contactEmail && (
+                <a 
+                  href={`mailto:${settings.contactEmail}`}
+                  className="flex items-center gap-1.5 hover:text-[#8C6D38] transition-colors"
+                >
+                  <Mail className="w-4 h-4" />
+                  <span>{settings.contactEmail}</span>
+                </a>
+              )}
+              {settings.contactInstagram && (
+                <a 
+                  href={settings.contactInstagram}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-1.5 hover:text-[#E1306C] transition-colors"
+                >
+                  <Camera className="w-4 h-4" />
+                  <span>انستغرام</span>
+                </a>
+              )}
+            </div>
+
+            {/* Admin Link */}
+            <div>
+              <Link 
+                href="/admin-login" 
+                className="text-xs text-gray-400 hover:text-gray-700 transition-colors"
+              >
+                تسجيل دخول الإدارة
+              </Link>
+            </div>
+
+          </div>
+
+          <div className="pt-6 text-center text-xs text-gray-400">
             <p>جميع الحقوق محفوظة &copy; {new Date().getFullYear()} {siteName}</p>
           </div>
         </div>
       </footer>
+
+
+      {/* ========================================================= */}
+      {/* 9. Floating WhatsApp Button (Instant Accessibility) */}
+      {/* ========================================================= */}
+      <div className="fixed bottom-6 left-6 z-50">
+        <a 
+          href={generalWhatsAppUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="تواصل معنا عبر واتساب"
+          className="group relative flex items-center justify-center w-14 h-14 rounded-full bg-gradient-to-r from-[#25D366] to-[#128C7E] text-white shadow-2xl hover:scale-110 active:scale-95 transition-all duration-300"
+        >
+          {/* Subtle Radar Wave */}
+          <span className="absolute inset-0 rounded-full bg-[#25D366] opacity-30 animate-ping pointer-events-none" />
+          
+          <MessageCircle className="w-7 h-7 fill-white/20" />
+
+          {/* Tooltip on Hover */}
+          <span className="absolute left-16 whitespace-nowrap bg-white text-gray-800 text-xs font-bold py-1.5 px-3 rounded-xl shadow-lg border border-gray-100 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+            اطلب أو استفسر عبر واتساب 💬
+          </span>
+        </a>
+      </div>
+
     </main>
   );
 }
