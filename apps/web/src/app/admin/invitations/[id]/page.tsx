@@ -17,7 +17,8 @@ async function fetchInvitation(id: string) {
       include: {
         slugs: { orderBy: { createdAt: 'desc' } },
         template: true,
-        media: { where: { deletedAt: null }, orderBy: { sortOrder: 'asc' } }
+        media: { where: { deletedAt: null }, orderBy: { sortOrder: 'asc' } },
+        rsvps: { orderBy: { createdAt: 'desc' } }
       }
     });
 
@@ -150,6 +151,87 @@ export default async function AdminInvitationDetail({ params }: { params: { id: 
           currentSlug={inv.slugs?.find((s: any) => s.isCurrent)?.slug || inv.slugs?.[0]?.slug || ''} 
           apiToken={cookieStore.get("admin_session")?.value || ''} 
         />
+
+        {/* RSVP Management & Public Link Card */}
+        {(() => {
+          const currentSlug = inv.slugs?.find((s: any) => s.isCurrent)?.slug || inv.slugs?.[0]?.slug || '';
+          const rsvps = (inv as any).rsvps || [];
+          const attending = rsvps.filter((r: any) => r.attendance === 'yes');
+          const declined = rsvps.filter((r: any) => r.attendance === 'no');
+          const totalGuests = attending.reduce((sum: number, r: any) => sum + (r.guestsCount || 1), 0);
+
+          return (
+            <div className="bg-white p-6 shadow rounded border border-emerald-100">
+              <div className="flex items-center justify-between border-b pb-3 mb-4">
+                <div>
+                  <h2 className="font-bold text-lg text-emerald-950 flex items-center gap-2">
+                    <span>📋 سجل تأكيدات الحضور (RSVP)</span>
+                  </h2>
+                  <p className="text-xs text-gray-500 mt-0.5">
+                    متابعة الردود وإجمالي عدد الضيوف المدعوين
+                  </p>
+                </div>
+                {currentSlug && (
+                  <a
+                    href={`/${currentSlug}/rsvp`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-bold transition-all shadow-xs flex items-center gap-1.5"
+                  >
+                    <span>فتح صفحة الحضور العامة ↗</span>
+                  </a>
+                )}
+              </div>
+
+              {/* Quick KPI stats */}
+              <div className="grid grid-cols-3 gap-3 mb-4 text-center">
+                <div className="bg-emerald-50 p-3 rounded-xl border border-emerald-200">
+                  <span className="text-xs text-emerald-800 font-bold block">المؤكدين</span>
+                  <span className="text-xl font-extrabold text-emerald-700 leading-tight">{attending.length}</span>
+                </div>
+                <div className="bg-amber-50 p-3 rounded-xl border border-amber-200">
+                  <span className="text-xs text-[#8C6D38] font-bold block">إجمالي الأفراد</span>
+                  <span className="text-xl font-extrabold text-[#543914] leading-tight">{totalGuests}</span>
+                </div>
+                <div className="bg-stone-50 p-3 rounded-xl border border-stone-200">
+                  <span className="text-xs text-stone-600 font-bold block">المعتذرين</span>
+                  <span className="text-xl font-extrabold text-stone-700 leading-tight">{declined.length}</span>
+                </div>
+              </div>
+
+              {/* Recent RSVPs Mini-List */}
+              {rsvps.length === 0 ? (
+                <p className="text-xs text-gray-400 text-center py-2">
+                  لم يتم تسجيل أي ردود حضور لهذه الدعوة بعد.
+                </p>
+              ) : (
+                <div className="space-y-2 max-h-48 overflow-y-auto pr-1">
+                  {rsvps.slice(0, 5).map((r: any) => (
+                    <div key={r.id} className="flex items-center justify-between text-xs p-2 rounded-lg bg-gray-50 border border-gray-100">
+                      <div>
+                        <span className="font-bold text-gray-800">{r.name}</span>
+                        {r.attendance === 'yes' && r.guestsCount > 1 && (
+                          <span className="text-gray-500 mr-1.5">({r.guestsCount} أفراد)</span>
+                        )}
+                        {r.notes && <p className="text-[11px] text-gray-500 italic mt-0.5">&quot;{r.notes}&quot;</p>}
+                      </div>
+                      <span className={`px-2 py-0.5 rounded-full font-bold text-[10px] ${
+                        r.attendance === 'yes' ? 'bg-emerald-100 text-emerald-800' : 'bg-stone-100 text-stone-600'
+                      }`}>
+                        {r.attendance === 'yes' ? 'حاضر' : 'معتذر'}
+                      </span>
+                    </div>
+                  ))}
+                  {rsvps.length > 5 && (
+                    <p className="text-[11px] text-center text-gray-500 pt-1">
+                      + {rsvps.length - 5} ردود إضافية (اضغط على فتح صفحة الحضور لعرض الكل)
+                    </p>
+                  )}
+                </div>
+              )}
+            </div>
+          );
+        })()}
 
         <div className="bg-white p-6 shadow rounded border">
           <h2 className="font-bold text-lg border-b pb-2 mb-4">State Transitions</h2>

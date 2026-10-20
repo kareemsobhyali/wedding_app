@@ -93,7 +93,10 @@ export default async function PublicInvitationPage({ params }: PageProps) {
   const renderContext: TemplateRenderContext = {
     mode: 'PUBLIC',
     direction,
-    data: data as any,
+    data: {
+      ...data,
+      slug: params.slug
+    } as any,
     metadata
   };
 

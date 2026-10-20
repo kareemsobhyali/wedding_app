@@ -162,6 +162,38 @@ export const PalaceDoorsRevealTemplate: React.FC<TemplateRenderContext> = ({ dat
     }
   };
 
+  const slug = (data as any).slug || (typeof window !== 'undefined' ? window.location.pathname.split('/')[1] : '');
+
+  const handleRsvpSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!rsvpData.name.trim()) return;
+
+    try {
+      if (slug) {
+        await fetch(`/api/v1/public/invitations/${slug}/rsvp`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name: rsvpData.name,
+            attendance: rsvpData.attendance,
+            guestsCount: parseInt(rsvpData.guests, 10) || 1,
+            notes: rsvpData.note
+          })
+        });
+      }
+    } catch (err) {
+      console.error('Error submitting RSVP:', err);
+    }
+
+    setRsvpSent(true);
+    confetti({
+      particleCount: 70,
+      spread: 80,
+      origin: { y: 0.5 },
+      colors: ['#D4AF37', '#FFF', '#C5A059']
+    });
+  };
+
   const handleShare = () => {
     if (navigator.share) {
       navigator.share({
@@ -696,19 +728,27 @@ export const PalaceDoorsRevealTemplate: React.FC<TemplateRenderContext> = ({ dat
                     </div>
                     <h4 className="font-bold text-sm text-gray-900 mb-1">{isArabicContent ? 'شكراً لك!' : 'Thank you!'}</h4>
                     <p className="text-xs text-gray-600 mb-3">{isArabicContent ? 'تم تسجيل تأكيد حضورك بنجاح، ويسعدنا وجودك معنا.' : 'Your attendance has been confirmed successfully.'}</p>
-                    <button
-                      onClick={() => { setShowRsvpModal(false); setRsvpSent(false); }}
-                      className="px-5 py-1.5 bg-[#8C6D38] text-white rounded-full text-xs font-bold"
-                    >
-                      {isArabicContent ? 'إغلاق' : 'Close'}
-                    </button>
+                    <div className="flex flex-col sm:flex-row items-center justify-center gap-2">
+                      {slug && (
+                        <a
+                          href={`/${slug}/rsvp`}
+                          className="w-full sm:w-auto px-4 py-1.5 bg-[#8C6D38] hover:bg-[#6E4D1D] text-white rounded-full text-xs font-bold transition-all text-center"
+                        >
+                          {isArabicContent ? '📋 عرض قائمة الحضور' : '📋 View Guest List'}
+                        </a>
+                      )}
+                      <button
+                        type="button"
+                        onClick={() => { setShowRsvpModal(false); setRsvpSent(false); }}
+                        className="w-full sm:w-auto px-4 py-1.5 bg-stone-200 hover:bg-stone-300 text-stone-700 rounded-full text-xs font-bold transition-all text-center"
+                      >
+                        {isArabicContent ? 'إغلاق' : 'Close'}
+                      </button>
+                    </div>
                   </div>
                 ) : (
                   <form
-                    onSubmit={(e) => {
-                      e.preventDefault();
-                      setRsvpSent(true);
-                    }}
+                    onSubmit={handleRsvpSubmit}
                     className="space-y-2.5"
                   >
                     <div>

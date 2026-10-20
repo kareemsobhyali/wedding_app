@@ -175,6 +175,7 @@ model Invitation {
   media               Media[]
   analytics           AnalyticsEvent[]
   draftSessions       DraftSession[]
+  rsvps               InvitationRsvp[]
 
   @@index([status])
   @@index([customerPhone])
@@ -276,4 +277,23 @@ model AppSetting {
   type      String   // e.g. STRING, BOOLEAN, NUMBER, JSON
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+
+model InvitationRsvp {
+  id           String     @id @default(uuid())
+  invitationId String
+  name         String
+  attendance   String     // 'yes' | 'no'
+  guestsCount  Int        @default(1)
+  phone        String?
+  notes        String?
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  invitation   Invitation @relation(fields: [invitationId], references: [id], onDelete: Cascade)
+
+  @@index([invitationId])
+  @@index([attendance])
+  @@index([createdAt])
 }
