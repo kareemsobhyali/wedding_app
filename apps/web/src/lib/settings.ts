@@ -10,6 +10,7 @@ export const defaultSettings = {
   contactWhatsApp: '+201000000000',
   contactEmail: 'contact@domain.com',
   contactInstagram: '',
+  contactTikTok: '',
   demoLinks: {
     'butterfly-elegance': '/preview?template=butterfly-elegance',
     'golden-arabic': '/preview?template=golden-arabic',

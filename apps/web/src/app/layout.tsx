@@ -1,9 +1,19 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
 
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  themeColor: "#FAF7F2",
+};
+
 export const metadata: Metadata = {
-  title: "Wedding SaaS Platform",
-  description: "Create your beautiful wedding invitation",
+  title: "دعوتي | Daawati - دعوات زفاف إلكترونية تفاعلية فاخرة",
+  description: "منصة دعوات الزفاف الإلكترونية الفاخرة، ثيمات تفاعلية ثلاثية الأبعاد، بطاقات مخصصة للضيوف، وتأكيد الحضور الذكي.",
+  icons: {
+    icon: "/favicon.ico",
+  },
 };
 
 export default function RootLayout({
@@ -12,8 +22,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body>{children}</body>
+    <html lang="ar" dir="rtl">
+      <head>
+        <meta name="format-detection" content="telephone=no, date=no, address=no, email=no, url=no" />
+      </head>
+      <body className="bg-[#FAF7F2] text-[#38260F] antialiased selection:bg-[#EBDCC0] selection:text-[#38260F]">
+        {children}
+      </body>
     </html>
   );
 }

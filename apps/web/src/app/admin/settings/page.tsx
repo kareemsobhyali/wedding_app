@@ -56,41 +56,12 @@ export default function AdminSettingsPage() {
   if (loading) return <div className="p-8">Loading settings...</div>;
 
   const templateIds = [
-    'butterfly-elegance',
-    'golden-arabic',
-    'classic-elegance',
-    'modern-minimalist',
-    'floral-romance',
-    'botanical-rustic',
-    'royal-velvet',
-    'palace-gates',
-    'celestial-stardust',
-    'pearl-box',
-    'story-vogue-editorial',
-    'story-royal-emerald',
-    'story-boho-terracotta',
-    'wax-silk-reveal',
-    'arabian-crescent-lantern',
-    'laser-gold-gatefold',
-    'vintage-calla-blooms',
-    'blooming-garden-3d',
-    'pearl-silk-minimalist',
-    'luxury-flip-card',
-    'boarding-pass-vip',
-    'luxury-booklet-editorial',
-    'royal-scroll',
-    'velvet-jewelry-box',
-    'vintage-vinyl-player',
-    'polaroid-photo-reel',
-    'celestial-constellations',
-    'classic-lined-envelope',
-    'deckle-edge-cotton',
-    'vellum-silk-wrap',
-    'acrylic-glass-card',
-    'trifold-pocket-folio',
-    'sculpted-porcelain-arch',
+    'palace-doors-reveal',
+    'mughal-palace-portal',
     'cathedral-grand-arch',
-    'mughal-palace-portal'
+    'sculpted-porcelain-arch',
+    'butterfly-elegance',
+    'golden-arabic'
   ];
 
   return (
@@ -188,7 +159,7 @@ export default function AdminSettingsPage() {
                 placeholder="contact@domain.com"
               />
             </div>
-            <div className="md:col-span-2">
+            <div>
               <label className="block text-sm font-bold mb-1">Instagram URL</label>
               <input 
                 className="w-full border p-2 rounded" 
@@ -196,6 +167,16 @@ export default function AdminSettingsPage() {
                 onChange={e => setSettings({...settings, contactInstagram: e.target.value})}
                 dir="ltr"
                 placeholder="https://instagram.com/..."
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-bold mb-1">TikTok URL</label>
+              <input 
+                className="w-full border p-2 rounded" 
+                value={settings.contactTikTok || ''} 
+                onChange={e => setSettings({...settings, contactTikTok: e.target.value})}
+                dir="ltr"
+                placeholder="https://tiktok.com/@..."
               />
             </div>
           </div>
