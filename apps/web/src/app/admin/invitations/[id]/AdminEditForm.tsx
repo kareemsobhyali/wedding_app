@@ -30,6 +30,28 @@ const getInitialLanguage = (inv: any): 'ar' | 'en' => {
   return /[\u0600-\u06FF]/.test(inv?.groomName || inv?.brideName || '') ? 'ar' : 'en';
 };
 
+const safeToDateString = (dateVal: any): string => {
+  if (!dateVal) return '';
+  try {
+    const d = new Date(dateVal);
+    if (isNaN(d.getTime())) return '';
+    return d.toISOString().split('T')[0];
+  } catch {
+    return '';
+  }
+};
+
+const safeToDateTimeString = (dateVal: any): string => {
+  if (!dateVal) return '';
+  try {
+    const d = new Date(dateVal);
+    if (isNaN(d.getTime())) return '';
+    return d.toISOString().slice(0, 16);
+  } catch {
+    return '';
+  }
+};
+
 export default function AdminEditForm({ invitation, apiToken }: { invitation: any, apiToken: string }) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
@@ -43,7 +65,7 @@ export default function AdminEditForm({ invitation, apiToken }: { invitation: an
     templateId: invitation.templateId || '',
     groomName: invitation.groomName || '',
     brideName: invitation.brideName || '',
-    weddingDate: invitation.weddingDate ? new Date(invitation.weddingDate).toISOString().split('T')[0] : '',
+    weddingDate: safeToDateString(invitation.weddingDate),
     venueName: invitation.venueName || '',
     venueAddress: invitation.venueAddress || '',
     googleMapsUrl: invitation.googleMapsUrl || '',
@@ -51,7 +73,7 @@ export default function AdminEditForm({ invitation, apiToken }: { invitation: an
     weddingMessage: invitation.weddingMessage || '',
     groomPhone: invitation.groomPhone || '',
     bridePhone: invitation.bridePhone || '',
-    expiresAt: invitation.expiresAt ? new Date(invitation.expiresAt).toISOString().slice(0, 16) : '',
+    expiresAt: safeToDateTimeString(invitation.expiresAt),
     customData: invitation.customData || {},
     language: getInitialLanguage(invitation),
     musicUrl: getInitialMusic(invitation),
@@ -64,7 +86,7 @@ export default function AdminEditForm({ invitation, apiToken }: { invitation: an
       templateId: invitation.templateId || '',
       groomName: invitation.groomName || '',
       brideName: invitation.brideName || '',
-      weddingDate: invitation.weddingDate ? new Date(invitation.weddingDate).toISOString().split('T')[0] : '',
+      weddingDate: safeToDateString(invitation.weddingDate),
       venueName: invitation.venueName || '',
       venueAddress: invitation.venueAddress || '',
       googleMapsUrl: invitation.googleMapsUrl || '',
@@ -72,7 +94,7 @@ export default function AdminEditForm({ invitation, apiToken }: { invitation: an
       weddingMessage: invitation.weddingMessage || '',
       groomPhone: invitation.groomPhone || '',
       bridePhone: invitation.bridePhone || '',
-      expiresAt: invitation.expiresAt ? new Date(invitation.expiresAt).toISOString().slice(0, 16) : '',
+      expiresAt: safeToDateTimeString(invitation.expiresAt),
       customData: invitation.customData || {},
       language: getInitialLanguage(invitation),
       musicUrl: getInitialMusic(invitation),

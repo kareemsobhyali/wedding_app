@@ -28,8 +28,9 @@ import {
 export const dynamic = 'force-dynamic';
 
 async function fetchInvitation(id: string) {
+  let inv = null;
   try {
-    const inv = await prisma.invitation.findUnique({
+    inv = await prisma.invitation.findUnique({
       where: { id },
       include: {
         slugs: { orderBy: { createdAt: 'desc' } },
@@ -38,13 +39,14 @@ async function fetchInvitation(id: string) {
         rsvps: { orderBy: { createdAt: 'desc' } }
       }
     });
-
-    if (!inv) notFound();
-    return inv;
   } catch (err) {
     console.error('Error fetching invitation:', err);
+  }
+
+  if (!inv) {
     notFound();
   }
+  return inv;
 }
 
 async function fetchAnalytics(id: string) {
@@ -197,7 +199,7 @@ export default async function AdminInvitationDetail({ params }: { params: { id: 
               <div>
                 <span className="text-gray-500 block mb-1 font-bold">تاريخ الإنشاء:</span>
                 <span className="text-sm font-semibold text-[#38260F]">
-                  {new Date(inv.createdAt).toLocaleDateString('ar-EG', { dateStyle: 'medium', timeStyle: 'short' })}
+                  {new Date(inv.createdAt).toLocaleString('ar-EG', { dateStyle: 'medium', timeStyle: 'short' })}
                 </span>
               </div>
             </div>
@@ -242,7 +244,7 @@ export default async function AdminInvitationDetail({ params }: { params: { id: 
           {/* 4. Validity Manager */}
           <AdminValidityManager 
             invitationId={inv.id}
-            currentExpiresAt={inv.expiresAt ? inv.expiresAt.toISOString() : null}
+            currentExpiresAt={inv.expiresAt ? (inv.expiresAt instanceof Date ? inv.expiresAt.toISOString() : String(inv.expiresAt)) : null}
             apiToken={apiToken}
           />
 
@@ -398,16 +400,16 @@ export default async function AdminInvitationDetail({ params }: { params: { id: 
                         countdownEnabled: inv.countdownEnabled,
                         contactButtonsEnabled: true,
                         customData: (inv.customData as Record<string, any>) || {},
-                        galleryImages: inv.media
+                        galleryImages: (inv.media || [])
                           .filter((m: any) => m.role === 'GALLERY' && (m.publicUrl || m.storageKey) && !m.deletedAt)
                           .map((m: any) => ({ url: (m.publicUrl || m.storageKey) as string, alt: 'Gallery Image' })),
                         music: (() => {
-                          const item = inv.media.find((m: any) => m.type === 'AUDIO' && !m.deletedAt);
+                          const item = (inv.media || []).find((m: any) => m.type === 'AUDIO' && !m.deletedAt);
                           const url = item?.publicUrl || item?.storageKey || (inv.customData as any)?.musicUrl;
                           return url ? { url } : undefined;
                         })(),
                         coverImage: (() => {
-                          const item = inv.media.find((m: any) => (m.role === 'COVER' || m.type === 'IMAGE') && !m.deletedAt);
+                          const item = (inv.media || []).find((m: any) => (m.role === 'COVER' || m.type === 'IMAGE') && !m.deletedAt);
                           const url = item?.publicUrl || item?.storageKey || (inv.customData as any)?.coverImageUrl;
                           return url ? { url, alt: 'Cover Image' } : undefined;
                         })(),
