@@ -20,11 +20,9 @@ import {
   LayoutGrid,
   ChevronDown,
   Menu,
-  X,
-  Palette,
-  Check
+  X
 } from 'lucide-react';
-import BrandLogo, { BrandLogoIcon, LogoVariant } from '../components/BrandLogo';
+import BrandLogo from '../components/BrandLogo';
 import { InstagramIcon, TikTokIcon, WhatsAppIcon } from '../components/SocialIcons';
 
 interface TemplateItem {
@@ -46,7 +44,6 @@ interface LandingSettings {
   contactEmail?: string;
   contactInstagram?: string;
   contactTikTok?: string;
-  logoVariant?: LogoVariant;
   demoLinks?: Record<string, string>;
   previewImages?: Record<string, string>;
   [key: string]: any;
@@ -89,10 +86,6 @@ export default function LandingClient({
   const [activeIndex, setActiveIndex] = useState<number>(0);
   const [viewMode, setViewMode] = useState<'slider' | 'grid'>('slider');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  
-  // Interactive Logo Selector (allows client/admin to test logo proposals live)
-  const [currentLogoVariant, setCurrentLogoVariant] = useState<LogoVariant>(settings.logoVariant || 'royal-crown');
-  const [logoModalOpen, setLogoModalOpen] = useState(false);
 
   // FAQ Accordion State
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
@@ -231,29 +224,6 @@ export default function LandingClient({
     }
   ];
 
-  const logoProposals: { id: LogoVariant; title: string; desc: string }[] = [
-    {
-      id: 'royal-crown',
-      title: 'التاج الملكي وخاتمان متداخلان',
-      desc: 'طابع ملكي كلاسيكي يرمز لاتحاد العروسين بتاج مذهب وشعلة ماسية متلألئة.'
-    },
-    {
-      id: 'monogram-wreath',
-      title: 'طغراء الحرف العربي وإكليل الزيتون',
-      desc: 'طابع عربي أصيل مستوحى من خطوط الرقعة والديواني مع أغصان الزيتون الذهبية.'
-    },
-    {
-      id: 'palace-arch',
-      title: 'بوابة القصر والأقواس المعمارية',
-      desc: 'مستوحى من بوابات وأقواس القصور الفاخرة وقلب ألماسي معلق بالمنتصف.'
-    },
-    {
-      id: 'modern-minimal',
-      title: 'المينيمال الفاخر (كارتييه ستايل)',
-      desc: 'تصميم هندسي فخم بخطوط نقية مستوحى من أرقى دور المجوهرات العالمية.'
-    }
-  ];
-
   return (
     <main className="min-h-screen bg-[#FAF7F2] font-cairo text-[#38260F] overflow-x-hidden selection:bg-[#EBDCC0] selection:text-[#38260F]" dir="rtl">
 
@@ -276,22 +246,11 @@ export default function LandingClient({
           <div className="flex items-center gap-2">
             <Link href="/" className="cursor-pointer">
               <BrandLogo 
-                variant={currentLogoVariant} 
                 siteName={siteName} 
                 size="md" 
                 showSubtitle={true}
               />
             </Link>
-
-            {/* Quick Logo Switcher Pill for Testing Options */}
-            <button
-              onClick={() => setLogoModalOpen(true)}
-              className="hidden lg:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#FAF0D7] hover:bg-[#F2E0B5] text-[#8C6D38] text-[11px] font-bold border border-[#DFBA73]/50 transition-all"
-              title="اختر شكل اللوجو المناسب للموقع"
-            >
-              <Palette className="w-3.5 h-3.5" />
-              <span>اقتراحات اللوجو (4)</span>
-            </button>
           </div>
 
           {/* Navigation Links (Desktop) */}
@@ -392,15 +351,6 @@ export default function LandingClient({
               >
                 الأسئلة الشائعة ❓
               </a>
-
-              {/* Logo Switcher for Mobile */}
-              <button
-                onClick={() => { setMobileMenuOpen(false); setLogoModalOpen(true); }}
-                className="w-full text-right py-2 px-3 rounded-xl bg-[#FAF0D7] text-[#8C6D38] font-bold text-xs flex items-center justify-between"
-              >
-                <span>معاينة اقتراحات اللوجو (4)</span>
-                <Palette className="w-4 h-4" />
-              </button>
             </motion.div>
           )}
         </AnimatePresence>
@@ -1118,7 +1068,6 @@ export default function LandingClient({
             {/* Logo */}
             <div className="flex items-center gap-2">
               <BrandLogo 
-                variant={currentLogoVariant} 
                 siteName={siteName} 
                 size="md" 
                 showSubtitle={true}
@@ -1240,90 +1189,6 @@ export default function LandingClient({
         </div>
 
       </div>
-
-
-      {/* ========================================================= */}
-      {/* 10. Interactive Logo Proposal Modal (Preview 4 Variations Live) */}
-      {/* ========================================================= */}
-      <AnimatePresence>
-        {logoModalOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-            <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              className="bg-white rounded-3xl p-6 sm:p-8 max-w-xl w-full border border-[#EADBCA] shadow-2xl relative text-right"
-            >
-              <button
-                onClick={() => setLogoModalOpen(false)}
-                className="absolute top-4 left-4 w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-600 flex items-center justify-center font-bold"
-              >
-                ✕
-              </button>
-
-              <div className="text-center mb-6">
-                <span className="text-xs font-bold text-[#8C6D38] px-3 py-1 rounded-full bg-[#FAF0D7] border border-[#DFBA73]/50">
-                  تصاميم لوجو حصرية للموقع
-                </span>
-                <h3 className="text-2xl font-black text-[#38260F] mt-2" style={{ fontFamily: "'Aref Ruqaa', 'Cairo', serif" }}>
-                  اختر ستايل اللوجو المفضل لديك
-                </h3>
-                <p className="text-xs text-gray-600 mt-1">
-                  اضغط على أي تصميم لمعاينته مباشرة في أعلى الموقع.
-                </p>
-              </div>
-
-              <div className="space-y-3">
-                {logoProposals.map((prop) => {
-                  const isSelected = currentLogoVariant === prop.id;
-                  return (
-                    <div
-                      key={prop.id}
-                      onClick={() => {
-                        setCurrentLogoVariant(prop.id);
-                      }}
-                      className={`p-3.5 sm:p-4 rounded-2xl border-2 transition-all cursor-pointer flex items-center justify-between gap-3 ${
-                        isSelected 
-                          ? 'border-[#8C6D38] bg-[#FAF7F2] shadow-md ring-1 ring-[#8C6D38]' 
-                          : 'border-gray-200 hover:border-[#DFBA73] bg-white'
-                      }`}
-                    >
-                      <div className="flex items-center gap-3">
-                        <div className="p-2 rounded-xl bg-white border border-[#EADBCA] shadow-xs">
-                          <BrandLogoIcon variant={prop.id} className="w-8 h-8 sm:w-10 sm:h-10" />
-                        </div>
-                        <div>
-                          <h4 className="font-extrabold text-sm sm:text-base text-[#38260F]">{prop.title}</h4>
-                          <p className="text-[11px] text-gray-500 leading-relaxed">{prop.desc}</p>
-                        </div>
-                      </div>
-
-                      <div className="shrink-0">
-                        {isSelected ? (
-                          <div className="w-6 h-6 rounded-full bg-[#8C6D38] text-white flex items-center justify-center">
-                            <Check className="w-4 h-4" />
-                          </div>
-                        ) : (
-                          <div className="w-6 h-6 rounded-full border-2 border-gray-300" />
-                        )}
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-
-              <div className="mt-6 flex justify-end">
-                <button
-                  onClick={() => setLogoModalOpen(false)}
-                  className="w-full py-3 rounded-full bg-[#8C6D38] text-white font-bold text-sm hover:brightness-110 transition-all shadow-md"
-                >
-                  تأكيد واختيار هذا اللوجو ✨
-                </button>
-              </div>
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
 
     </main>
   );

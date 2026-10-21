@@ -12,7 +12,8 @@ export const metadata: Metadata = {
   title: "دعوتي | Daawati - دعوات زفاف إلكترونية تفاعلية فاخرة",
   description: "منصة دعوات الزفاف الإلكترونية الفاخرة، ثيمات تفاعلية ثلاثية الأبعاد، بطاقات مخصصة للضيوف، وتأكيد الحضور الذكي.",
   icons: {
-    icon: "/favicon.ico",
+    icon: "/assets/branding/daawati-logo.jpg",
+    apple: "/assets/branding/daawati-logo.jpg",
   },
 };
 
