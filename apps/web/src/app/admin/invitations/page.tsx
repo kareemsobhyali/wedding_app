@@ -1,19 +1,19 @@
 import React from 'react';
 import { cookies } from 'next/headers';
-import Link from 'next/link';
 import QuickCreateModal from './QuickCreateModal';
-
+import AdminInvitationsTable from './AdminInvitationsTable';
 import { prisma } from '@/lib/prisma';
 import { InvitationStatus, Prisma } from '@prisma/client';
+import { Search, Mail, Sparkles, Filter } from 'lucide-react';
 
 export const dynamic = 'force-dynamic';
 
 async function fetchInvitations(searchParams: any) {
-  const fallback = { items: [], pagination: { page: 1, limit: 20, total: 0, totalPages: 0 } };
+  const fallback = { items: [], pagination: { page: 1, limit: 100, total: 0, totalPages: 0 } };
 
   try {
     const page = Math.max(1, parseInt(searchParams?.page || '1', 10));
-    const limit = Math.min(100, Math.max(1, parseInt(searchParams?.limit || '20', 10)));
+    const limit = Math.min(100, Math.max(1, parseInt(searchParams?.limit || '100', 10)));
     const search = searchParams?.search || undefined;
     const status = searchParams?.status || undefined;
     const sort = searchParams?.sort || 'createdAt';
@@ -53,7 +53,7 @@ async function fetchInvitations(searchParams: any) {
     ]);
 
     return {
-      items,
+      items: JSON.parse(JSON.stringify(items)),
       pagination: {
         page,
         limit,
@@ -70,74 +70,95 @@ async function fetchInvitations(searchParams: any) {
 export default async function AdminInvitationsListPage({ searchParams }: { searchParams: any }) {
   const data = await fetchInvitations(searchParams);
   const { items, pagination } = data;
+  const apiToken = cookies().get('admin_session')?.value || '';
 
-  const getStatusBadge = (inv: any) => {
-    const isExpired = inv.status === 'EXPIRED' || (inv.expiresAt && new Date() > new Date(inv.expiresAt));
-    if (isExpired) {
-      return <span className="px-2 py-1 bg-red-100 text-red-800 text-xs rounded-full font-bold">EXPIRED ⛔</span>;
-    }
-    switch(inv.status) {
-      case 'ACTIVE': return <span className="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">ACTIVE</span>;
-      case 'PENDING_REVIEW': return <span className="px-2 py-1 bg-yellow-100 text-yellow-800 text-xs rounded-full">PENDING</span>;
-      case 'DRAFT': return <span className="px-2 py-1 bg-gray-100 text-gray-800 text-xs rounded-full">DRAFT</span>;
-      default: return <span className="px-2 py-1 bg-stone-100 text-stone-800 text-xs rounded-full">{inv.status}</span>;
-    }
-  }
+  const activeStatus = searchParams?.status || 'ALL';
 
   return (
-    <div className="p-4 sm:p-8 max-w-full overflow-hidden">
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-2xl sm:text-3xl font-bold">Invitations</h1>
-        <QuickCreateModal apiToken={cookies().get('admin_session')?.value || ''} />
-      </div>
-
-      <div className="bg-white shadow rounded-lg border border-gray-100 overflow-hidden">
-        <div className="p-4 border-b flex flex-col sm:flex-row gap-4">
-          <form className="flex-1 flex gap-2">
-            <input 
-              name="search" 
-              defaultValue={searchParams.search}
-              placeholder="Search by phone, name, or slug..." 
-              className="flex-1 p-2 border rounded"
-            />
-            <button className="px-4 py-2 bg-stone-900 text-white rounded font-bold">Search</button>
-          </form>
+    <div className="space-y-6">
+      
+      {/* Page Title & Add Button Bar */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-[#EADBCA]">
+        <div className="flex items-center gap-3">
+          <div className="w-12 h-12 rounded-2xl bg-[#FAF0D7] text-[#8C6D38] flex items-center justify-center border border-[#DFBA73]/40 shadow-xs">
+            <Mail className="w-6 h-6" />
+          </div>
+          <div>
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-[#38260F]" style={{ fontFamily: "'Aref Ruqaa', serif" }}>
+              إدارة دعوات الزفاف
+            </h1>
+            <p className="text-xs text-gray-500 font-medium">
+              إجمالي {pagination.total} دعوة مسجلة في المنصة
+            </p>
+          </div>
         </div>
 
-        <div className="overflow-x-auto w-full">
-          <table className="w-full text-left min-w-[600px]">
-          <thead className="bg-gray-50 border-b">
-            <tr>
-              <th className="p-4 font-semibold text-sm">Couple</th>
-              <th className="p-4 font-semibold text-sm">Phone</th>
-              <th className="p-4 font-semibold text-sm">Status</th>
-              <th className="p-4 font-semibold text-sm">Wedding Date</th>
-              <th className="p-4 font-semibold text-sm">Actions</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y">
-            {items.map((inv: any) => (
-              <tr key={inv.id} className="hover:bg-gray-50">
-                <td className="p-4">
-                  <p className="font-bold">{inv.groomName} & {inv.brideName}</p>
-                  <p className="text-xs text-gray-500">/{inv.slugs[0]?.slug}</p>
-                </td>
-                <td className="p-4 text-sm text-gray-600">{inv.customerPhone}</td>
-                <td className="p-4">{getStatusBadge(inv)}</td>
-                <td className="p-4 text-sm text-gray-600">
-                  {inv.weddingDate ? new Date(inv.weddingDate).toISOString().split('T')[0] : 'N/A'}
-                </td>
-                <td className="p-4">
-                  <Link href={`/admin/invitations/${inv.id}`} className="text-blue-600 hover:underline font-semibold text-sm">
-                    Manage
-                  </Link>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        </div>
+        <QuickCreateModal apiToken={apiToken} />
       </div>
+
+      {/* Filter and Search Bar */}
+      <div className="bg-white rounded-2xl p-3 sm:p-4 border border-[#EADBCA] shadow-xs flex flex-col md:flex-row items-center justify-between gap-3">
+        
+        {/* Status Filter Tabs */}
+        <div className="flex items-center gap-1.5 overflow-x-auto w-full md:w-auto pb-1 md:pb-0 scrollbar-none text-xs font-bold">
+          <a
+            href="/admin/invitations"
+            className={`px-3.5 py-2 rounded-xl transition-all whitespace-nowrap ${
+              activeStatus === 'ALL'
+                ? 'bg-[#8C6D38] text-white shadow-xs'
+                : 'bg-[#FAF7F2] text-[#6E4E26] hover:bg-[#F2ECE1] border border-[#EADBCA]'
+            }`}
+          >
+            الكل ({pagination.total})
+          </a>
+          <a
+            href="/admin/invitations?status=ACTIVE"
+            className={`px-3.5 py-2 rounded-xl transition-all whitespace-nowrap ${
+              activeStatus === 'ACTIVE'
+                ? 'bg-emerald-600 text-white shadow-xs'
+                : 'bg-[#FAF7F2] text-gray-600 hover:bg-[#F2ECE1] border border-[#EADBCA]'
+            }`}
+          >
+            نشطة
+          </a>
+          <a
+            href="/admin/invitations?status=PENDING_REVIEW"
+            className={`px-3.5 py-2 rounded-xl transition-all whitespace-nowrap ${
+              activeStatus === 'PENDING_REVIEW'
+                ? 'bg-amber-600 text-white shadow-xs'
+                : 'bg-[#FAF7F2] text-gray-600 hover:bg-[#F2ECE1] border border-[#EADBCA]'
+            }`}
+          >
+            قيد المراجعة
+          </a>
+          <a
+            href="/admin/invitations?status=EXPIRED"
+            className={`px-3.5 py-2 rounded-xl transition-all whitespace-nowrap ${
+              activeStatus === 'EXPIRED'
+                ? 'bg-red-600 text-white shadow-xs'
+                : 'bg-[#FAF7F2] text-gray-600 hover:bg-[#F2ECE1] border border-[#EADBCA]'
+            }`}
+          >
+            منتهية الصلاحية
+          </a>
+        </div>
+
+        {/* Search Input */}
+        <form className="w-full md:w-72 relative">
+          <input 
+            name="search" 
+            defaultValue={searchParams?.search || ''}
+            placeholder="بحث بالاسم، الهاتف، أو الرابط..." 
+            className="w-full bg-[#FAF7F2] border border-[#EADBCA] focus:bg-white focus:border-[#8C6D38] rounded-xl py-2 px-3 pr-8 text-xs sm:text-sm outline-none transition-all shadow-xs"
+          />
+          <Search className="w-4 h-4 text-gray-400 absolute top-1/2 -translate-y-1/2 right-2.5 pointer-events-none" />
+        </form>
+
+      </div>
+
+      {/* Invitations Table & Mobile Cards */}
+      <AdminInvitationsTable initialItems={items} apiToken={apiToken} />
+
     </div>
   );
 }

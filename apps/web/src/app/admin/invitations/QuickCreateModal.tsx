@@ -1,6 +1,8 @@
 'use client';
+
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { Plus, X, Sparkles, Calendar, Phone, User, Globe, Clock, Check } from 'lucide-react';
 
 export default function QuickCreateModal({ apiToken }: { apiToken: string }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -49,13 +51,13 @@ export default function QuickCreateModal({ apiToken }: { apiToken: string }) {
         },
         body: JSON.stringify(payload)
       });
-      if (!res.ok) throw new Error('Failed to create invitation');
+      if (!res.ok) throw new Error('فشل إنشاء الدعوة');
       const data = await res.json();
       const id = data.data?.id || data.id;
       setIsOpen(false);
       router.push(`/admin/invitations/${id}`);
     } catch (err: any) {
-      alert(err.message || 'Error creating invitation');
+      alert(err.message || 'حدث خطأ أثناء إنشاء الدعوة');
       setLoading(false);
     }
   };
@@ -64,70 +66,158 @@ export default function QuickCreateModal({ apiToken }: { apiToken: string }) {
     <>
       <button 
         onClick={() => setIsOpen(true)}
-        className="px-4 py-2 bg-indigo-600 text-white rounded font-bold hover:bg-indigo-700 w-full sm:w-auto"
+        className="px-4 sm:px-5 py-2.5 rounded-full bg-gradient-to-r from-[#8C6D38] to-[#5C4520] hover:brightness-110 active:scale-95 text-white font-extrabold text-xs sm:text-sm shadow-md shadow-[#8C6D38]/25 flex items-center justify-center gap-2 transition-all w-full sm:w-auto"
       >
-        + Quick Add
+        <Plus className="w-4 h-4" />
+        <span>+ إضافة دعوة جديدة</span>
       </button>
 
       {isOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-md">
-            <h2 className="text-2xl font-bold mb-4">Quick Add Invitation</h2>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium mb-1">Groom Name</label>
-                <input required className="w-full border rounded p-2" value={formData.groomName} onChange={e => setFormData({...formData, groomName: e.target.value})} />
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-1">Bride Name</label>
-                <input required className="w-full border rounded p-2" value={formData.brideName} onChange={e => setFormData({...formData, brideName: e.target.value})} />
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-1">Customer Phone</label>
-                <input required className="w-full border rounded p-2" value={formData.customerPhone} onChange={e => setFormData({...formData, customerPhone: e.target.value})} />
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-1">Wedding Date</label>
-                <input type="date" required className="w-full border rounded p-2" value={formData.weddingDate} onChange={e => setFormData({...formData, weddingDate: e.target.value})} />
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-xs flex items-end sm:items-center justify-center p-0 sm:p-4 z-50 animate-in fade-in duration-200">
+          <div className="bg-white rounded-t-[32px] sm:rounded-3xl shadow-2xl p-5 sm:p-7 w-full max-w-lg border border-[#EADBCA] max-h-[90vh] overflow-y-auto text-right">
+            
+            {/* Header */}
+            <div className="flex items-center justify-between pb-4 mb-4 border-b border-[#F2ECE1]">
+              <div className="flex items-center gap-2">
+                <div className="w-9 h-9 rounded-xl bg-[#FAF0D7] text-[#8C6D38] flex items-center justify-center">
+                  <Sparkles className="w-5 h-5" />
+                </div>
+                <div>
+                  <h2 className="text-xl font-extrabold text-[#38260F]" style={{ fontFamily: "'Aref Ruqaa', serif" }}>
+                    إنشاء دعوة زفاف جديدة
+                  </h2>
+                  <p className="text-[11px] text-gray-500">أدخل البيانات الأساسية وسيتولى النظام تجهيز الرابط فوراً</p>
+                </div>
               </div>
 
-              {/* Language Selector */}
+              <button
+                onClick={() => setIsOpen(false)}
+                className="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-500 flex items-center justify-center transition-colors"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            {/* Form */}
+            <form onSubmit={handleSubmit} className="space-y-4">
+              
+              {/* Couple Names */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs font-bold text-[#5C4520] mb-1.5 flex items-center gap-1">
+                    <User className="w-3.5 h-3.5 text-[#8C6D38]" />
+                    <span>اسم العريس *</span>
+                  </label>
+                  <input 
+                    required 
+                    className="w-full bg-[#FAF7F2] border border-[#EADBCA] focus:border-[#8C6D38] focus:bg-white rounded-xl p-2.5 text-sm outline-none transition-all" 
+                    placeholder="مثال: كريم"
+                    value={formData.groomName} 
+                    onChange={e => setFormData({...formData, groomName: e.target.value})} 
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-[#5C4520] mb-1.5 flex items-center gap-1">
+                    <User className="w-3.5 h-3.5 text-[#8C6D38]" />
+                    <span>اسم العروس *</span>
+                  </label>
+                  <input 
+                    required 
+                    className="w-full bg-[#FAF7F2] border border-[#EADBCA] focus:border-[#8C6D38] focus:bg-white rounded-xl p-2.5 text-sm outline-none transition-all" 
+                    placeholder="مثال: ليلي"
+                    value={formData.brideName} 
+                    onChange={e => setFormData({...formData, brideName: e.target.value})} 
+                  />
+                </div>
+              </div>
+
+              {/* Customer Phone */}
               <div>
-                <label className="block text-sm font-medium mb-1 text-indigo-900 font-bold">لغة الدعوة واتجاه العرض (Language)</label>
+                <label className="block text-xs font-bold text-[#5C4520] mb-1.5 flex items-center gap-1">
+                  <Phone className="w-3.5 h-3.5 text-[#8C6D38]" />
+                  <span>رقم هاتف العميل (واتساب) *</span>
+                </label>
+                <input 
+                  required 
+                  dir="ltr"
+                  className="w-full bg-[#FAF7F2] border border-[#EADBCA] focus:border-[#8C6D38] focus:bg-white rounded-xl p-2.5 text-sm outline-none transition-all text-left font-mono" 
+                  placeholder="+201000000000"
+                  value={formData.customerPhone} 
+                  onChange={e => setFormData({...formData, customerPhone: e.target.value})} 
+                />
+              </div>
+
+              {/* Wedding Date */}
+              <div>
+                <label className="block text-xs font-bold text-[#5C4520] mb-1.5 flex items-center gap-1">
+                  <Calendar className="w-3.5 h-3.5 text-[#8C6D38]" />
+                  <span>تاريخ حفل الزفاف *</span>
+                </label>
+                <input 
+                  type="date" 
+                  required 
+                  className="w-full bg-[#FAF7F2] border border-[#EADBCA] focus:border-[#8C6D38] focus:bg-white rounded-xl p-2.5 text-sm outline-none transition-all font-mono" 
+                  value={formData.weddingDate} 
+                  onChange={e => setFormData({...formData, weddingDate: e.target.value})} 
+                />
+              </div>
+
+              {/* Language & Direction */}
+              <div>
+                <label className="block text-xs font-bold text-[#5C4520] mb-1.5 flex items-center gap-1">
+                  <Globe className="w-3.5 h-3.5 text-[#8C6D38]" />
+                  <span>لغة الدعوة واتجاه العرض</span>
+                </label>
                 <select 
-                  className="w-full border rounded p-2 bg-indigo-50/50 font-medium"
+                  className="w-full bg-[#FAF7F2] border border-[#EADBCA] focus:border-[#8C6D38] focus:bg-white rounded-xl p-2.5 text-sm font-semibold outline-none transition-all"
                   value={formData.language} 
                   onChange={e => setFormData({...formData, language: e.target.value})}
                 >
-                  <option value="ar">🇸🇦 العربية (Arabic - RTL)</option>
-                  <option value="en">🇬🇧 English (الإنجليزية - LTR)</option>
+                  <option value="ar">العربية (من اليمين لليسار RTL)</option>
+                  <option value="en">الإنجليزية (English LTR)</option>
                 </select>
               </div>
 
-              {/* Validity Selector */}
+              {/* Validity Period */}
               <div>
-                <label className="block text-sm font-medium mb-1 text-indigo-900 font-bold">مدة الصلاحية (Validity Expiration)</label>
+                <label className="block text-xs font-bold text-[#5C4520] mb-1.5 flex items-center gap-1">
+                  <Clock className="w-3.5 h-3.5 text-[#8C6D38]" />
+                  <span>مدة صلاحية الرابط</span>
+                </label>
                 <select 
-                  className="w-full border rounded p-2 bg-indigo-50/50 font-medium"
+                  className="w-full bg-[#FAF7F2] border border-[#EADBCA] focus:border-[#8C6D38] focus:bg-white rounded-xl p-2.5 text-sm font-semibold outline-none transition-all"
                   value={formData.validityType} 
                   onChange={e => setFormData({...formData, validityType: e.target.value})}
                 >
-                  <option value="days_30">📅 دعوة رسمية (صالحة لمدة 30 يوم)</option>
-                  <option value="days_60">📅 دعوة رسمية (صالحة لمدة 60 يوم)</option>
-                  <option value="minutes_30">⏱️ رابط تجريبي للعميل (30 دقيقة فقط)</option>
-                  <option value="minutes_60">⏱️ رابط تجريبي للعميل (60 دقيقة فقط)</option>
-                  <option value="unlimited">♾️ مفتوح دائماً بدون انتهاء</option>
+                  <option value="days_30">شهر واحد (30 يوماً - الموصى به)</option>
+                  <option value="days_60">شهران (60 يوماً)</option>
+                  <option value="unlimited">مفتوح بدون انتهاء صلاحية</option>
+                  <option value="minutes_30">تجربة سريعة (30 دقيقة)</option>
+                  <option value="minutes_60">تجربة سريعة (ساعة واحدة)</option>
                 </select>
-                <p className="text-[11px] text-gray-500 mt-1">يمكنك تعديل مدة الصلاحية لاحقاً بالدقائق أو الأيام في أي وقت.</p>
               </div>
-              
-              <div className="flex justify-end gap-2 pt-4 border-t mt-4">
-                <button type="button" onClick={() => setIsOpen(false)} className="px-4 py-2 border rounded text-gray-700">Cancel</button>
-                <button type="submit" disabled={loading} className="px-4 py-2 bg-indigo-600 text-white rounded font-bold">
-                  {loading ? 'Creating...' : 'Create & Edit'}
+
+              {/* Actions */}
+              <div className="pt-4 flex items-center justify-end gap-3 border-t border-[#F2ECE1]">
+                <button
+                  type="button"
+                  onClick={() => setIsOpen(false)}
+                  className="px-4 py-2.5 rounded-xl border border-gray-300 text-gray-700 hover:bg-gray-100 text-xs font-bold transition-all"
+                >
+                  إلغاء
+                </button>
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#8C6D38] to-[#5C4520] hover:brightness-110 active:scale-95 text-white font-extrabold text-xs sm:text-sm shadow-md transition-all flex items-center gap-2 disabled:opacity-50"
+                >
+                  {loading ? 'جاري الإنشاء...' : 'حفظ ومتابعة التعديل ✨'}
                 </button>
               </div>
+
             </form>
+
           </div>
         </div>
       )}

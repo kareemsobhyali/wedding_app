@@ -8,6 +8,22 @@ import { cookies } from 'next/headers';
 import { notFound } from 'next/navigation';
 import { prisma } from '@/lib/prisma';
 import { getTemplateImplementation } from '../../../../templates/registry';
+import Link from 'next/link';
+import { 
+  ArrowRight, 
+  ExternalLink, 
+  QrCode, 
+  Users, 
+  Eye, 
+  Music, 
+  MapPin, 
+  Share2, 
+  Calendar, 
+  Phone, 
+  Clock, 
+  Sparkles,
+  Smartphone
+} from 'lucide-react';
 
 export const dynamic = 'force-dynamic';
 
@@ -81,6 +97,7 @@ async function fetchAnalytics(id: string) {
 
 export default async function AdminInvitationDetail({ params }: { params: { id: string } }) {
   const cookieStore = cookies();
+  const apiToken = cookieStore.get("admin_session")?.value || '';
   
   const [inv, analytics] = await Promise.all([
     fetchInvitation(params.id),
@@ -90,198 +107,227 @@ export default async function AdminInvitationDetail({ params }: { params: { id: 
   const registeredTemplate = inv.template ? getTemplateImplementation(inv.template.slug) : null;
   const TemplateComponent = registeredTemplate?.component;
   const metadata = registeredTemplate?.metadata;
+  const currentSlug = inv.slugs?.find((s: any) => s.isCurrent)?.slug || inv.slugs?.[0]?.slug || '';
 
   return (
-    <div className="p-4 md:p-8 max-w-7xl mx-auto flex flex-col lg:flex-row gap-8 overflow-hidden">
-      {/* Admin Controls Panel */}
-      <div className="w-full lg:w-1/2 space-y-6 max-w-full overflow-hidden">
-        <div className="flex justify-between items-center">
-          <h1 className="text-2xl sm:text-3xl font-bold">Manage Invitation</h1>
-          <span className="px-3 py-1 bg-gray-200 rounded-full font-semibold text-sm">{inv.status}</span>
+    <div className="space-y-6">
+      
+      {/* Top Breadcrumb & Action Bar */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[#EADBCA]">
+        <div className="flex items-center gap-3">
+          <Link
+            href="/admin/invitations"
+            className="w-10 h-10 rounded-xl bg-white border border-[#EADBCA] hover:bg-[#FAF7F2] text-gray-700 flex items-center justify-center transition-colors shadow-2xs"
+            title="الرجوع لقائمة الدعوات"
+          >
+            <ArrowRight className="w-5 h-5" />
+          </Link>
+          <div>
+            <div className="flex items-center gap-2">
+              <h1 className="text-2xl sm:text-3xl font-extrabold text-[#38260F]" style={{ fontFamily: "'Aref Ruqaa', serif" }}>
+                {inv.groomName}  &  {inv.brideName}
+              </h1>
+              <span className={`px-2.5 py-0.5 rounded-full text-[11px] font-extrabold border ${
+                inv.status === 'ACTIVE' 
+                  ? 'bg-emerald-100 text-emerald-800 border-emerald-200' 
+                  : 'bg-amber-100 text-amber-800 border-amber-200'
+              }`}>
+                {inv.status}
+              </span>
+            </div>
+            <p className="text-xs text-gray-500 font-mono mt-0.5">
+              ID: {inv.id}
+            </p>
+          </div>
         </div>
 
-        {analytics && (
-          <div className="bg-white p-6 shadow rounded border border-indigo-100">
-            <h2 className="font-bold text-lg border-b pb-2 mb-4 text-indigo-900">Analytics (All Time)</h2>
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <p className="text-xs text-gray-500 uppercase font-bold tracking-wider">Total Views</p>
-                <p className="text-2xl font-bold">{analytics.totalViews}</p>
-              </div>
-              <div>
-                <p className="text-xs text-gray-500 uppercase font-bold tracking-wider">Unique Visitors</p>
-                <p className="text-2xl font-bold">{analytics.uniqueVisitors}</p>
-              </div>
-              <div>
-                <p className="text-xs text-gray-500 uppercase font-bold tracking-wider">Music Plays</p>
-                <p className="text-xl font-bold text-stone-700">{analytics.musicPlays}</p>
-              </div>
-              <div>
-                <p className="text-xs text-gray-500 uppercase font-bold tracking-wider">Map Clicks</p>
-                <p className="text-xl font-bold text-stone-700">{analytics.mapClicks}</p>
-              </div>
-              <div>
-                <p className="text-xs text-gray-500 uppercase font-bold tracking-wider">Contacts</p>
-                <p className="text-xl font-bold text-stone-700">{analytics.groomContactClicks + analytics.brideContactClicks}</p>
-              </div>
-              <div>
-                <p className="text-xs text-gray-500 uppercase font-bold tracking-wider">Shares</p>
-                <p className="text-xl font-bold text-stone-700">{analytics.shares}</p>
-              </div>
-            </div>
-            {analytics.lastVisit && (
-              <p className="text-xs text-gray-400 mt-4">Last Visit: {new Date(analytics.lastVisit).toLocaleString()}</p>
-            )}
+        {/* Quick External Links (Live Demo & QR Card) */}
+        {currentSlug && (
+          <div className="flex items-center gap-2">
+            <a
+              href={`/${currentSlug}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-4 py-2 rounded-xl bg-stone-900 hover:bg-stone-800 text-white font-bold text-xs flex items-center gap-1.5 shadow-sm transition-all"
+            >
+              <ExternalLink className="w-3.5 h-3.5" />
+              <span>معاينة الدعوة</span>
+            </a>
+
+            <a
+              href={`/${currentSlug}/card`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-4 py-2 rounded-xl bg-gradient-to-r from-[#8C6D38] to-[#5C4520] hover:brightness-110 text-white font-bold text-xs flex items-center gap-1.5 shadow-sm transition-all"
+            >
+              <QrCode className="w-3.5 h-3.5" />
+              <span>كارت QR للطباعة</span>
+            </a>
           </div>
         )}
+      </div>
 
-        <div className="bg-white p-6 shadow rounded border">
-          <h2 className="font-bold text-lg border-b pb-2 mb-4">Customer Info</h2>
-          <p><strong>Phone:</strong> {inv.customerPhone}</p>
-          <p><strong>Created:</strong> {new Date(inv.createdAt).toLocaleString()}</p>
-        </div>
+      {/* Main Responsive Grid Layout */}
+      <div className="flex flex-col xl:flex-row gap-6 sm:gap-8 items-start">
+        
+        {/* Controls Column (Full width on Mobile, 7/12 on XL) */}
+        <div className="w-full xl:w-7/12 space-y-6">
 
-        <AdminValidityManager 
-          invitationId={inv.id}
-          currentExpiresAt={inv.expiresAt ? inv.expiresAt.toISOString() : null}
-          apiToken={cookieStore.get("admin_session")?.value || ''}
-        />
+          {/* 1. State Transitions & Actions (With Delete Option) */}
+          <div className="bg-white p-5 sm:p-6 rounded-3xl border border-[#EADBCA] shadow-xs">
+            <h2 className="font-extrabold text-base text-[#38260F] mb-3 pb-2 border-b border-[#F2ECE1] flex items-center gap-2">
+              <Sparkles className="w-4 h-4 text-[#8C6D38]" />
+              <span>حالة الدعوة والإجراءات السريعة</span>
+            </h2>
+            <AdminActionButtons invitationId={inv.id} apiToken={apiToken} />
+          </div>
 
-        <SlugEditor 
-          invitationId={inv.id} 
-          currentSlug={inv.slugs?.find((s: any) => s.isCurrent)?.slug || inv.slugs?.[0]?.slug || ''} 
-          apiToken={cookieStore.get("admin_session")?.value || ''} 
-        />
-
-        {/* RSVP Management & Public Link Card */}
-        {(() => {
-          const currentSlug = inv.slugs?.find((s: any) => s.isCurrent)?.slug || inv.slugs?.[0]?.slug || '';
-          const rsvps = (inv as any).rsvps || [];
-          const attending = rsvps.filter((r: any) => r.attendance === 'yes');
-          const declined = rsvps.filter((r: any) => r.attendance === 'no');
-          const totalGuests = attending.reduce((sum: number, r: any) => sum + (r.guestsCount || 1), 0);
-
-          return (
-            <div className="bg-white p-6 shadow rounded border border-emerald-100">
-              <div className="flex items-center justify-between border-b pb-3 mb-4">
-                <div>
-                  <h2 className="font-bold text-lg text-emerald-950 flex items-center gap-2">
-                    <span>📋 سجل تأكيدات الحضور (RSVP)</span>
-                  </h2>
-                  <p className="text-xs text-gray-500 mt-0.5">
-                    متابعة الردود وإجمالي عدد الضيوف المدعوين
-                  </p>
-                </div>
-                {currentSlug && (
-                  <a
-                    href={`/${currentSlug}/rsvp`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-bold transition-all shadow-xs flex items-center gap-1.5"
-                  >
-                    <span>فتح صفحة الحضور العامة ↗</span>
-                  </a>
-                )}
+          {/* 2. Customer Info & Summary */}
+          <div className="bg-white p-5 sm:p-6 rounded-3xl border border-[#EADBCA] shadow-xs">
+            <h2 className="font-extrabold text-base text-[#38260F] mb-3 pb-2 border-b border-[#F2ECE1]">
+              بيانات العميل والتاريخ
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+              <div>
+                <span className="text-gray-500 block mb-1 font-bold">هاتف العميل (واتساب):</span>
+                <span className="font-mono text-sm font-extrabold text-[#38260F]" dir="ltr">
+                  {inv.customerPhone}
+                </span>
               </div>
+              <div>
+                <span className="text-gray-500 block mb-1 font-bold">تاريخ الإنشاء:</span>
+                <span className="text-sm font-semibold text-[#38260F]">
+                  {new Date(inv.createdAt).toLocaleDateString('ar-EG', { dateStyle: 'medium', timeStyle: 'short' })}
+                </span>
+              </div>
+            </div>
+          </div>
 
-              {/* Quick KPI stats */}
-              <div className="grid grid-cols-3 gap-3 mb-4 text-center">
-                <div className="bg-emerald-50 p-3 rounded-xl border border-emerald-200">
-                  <span className="text-xs text-emerald-800 font-bold block">المؤكدين</span>
-                  <span className="text-xl font-extrabold text-emerald-700 leading-tight">{attending.length}</span>
+          {/* 3. Analytics (If Available) */}
+          {analytics && (
+            <div className="bg-white p-5 sm:p-6 rounded-3xl border border-[#EADBCA] shadow-xs">
+              <h2 className="font-extrabold text-base text-[#38260F] mb-4 pb-2 border-b border-[#F2ECE1] flex items-center gap-2">
+                <Users className="w-4 h-4 text-[#8C6D38]" />
+                <span>إحصائيات تفاعل الضيوف</span>
+              </h2>
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 text-center">
+                <div className="bg-[#FAF7F2] p-3 rounded-2xl border border-[#EADBCA]/60">
+                  <span className="text-[11px] text-gray-500 block font-bold">إجمالي الزيارات</span>
+                  <span className="text-xl font-black text-[#38260F]">{analytics.totalViews}</span>
                 </div>
-                <div className="bg-amber-50 p-3 rounded-xl border border-amber-200">
-                  <span className="text-xs text-[#8C6D38] font-bold block">إجمالي الأفراد</span>
-                  <span className="text-xl font-extrabold text-[#543914] leading-tight">{totalGuests}</span>
+                <div className="bg-[#FAF7F2] p-3 rounded-2xl border border-[#EADBCA]/60">
+                  <span className="text-[11px] text-gray-500 block font-bold">الزوار الفريدون</span>
+                  <span className="text-xl font-black text-[#38260F]">{analytics.uniqueVisitors}</span>
                 </div>
-                <div className="bg-stone-50 p-3 rounded-xl border border-stone-200">
-                  <span className="text-xs text-stone-600 font-bold block">المعتذرين</span>
-                  <span className="text-xl font-extrabold text-stone-700 leading-tight">{declined.length}</span>
+                <div className="bg-[#FAF7F2] p-3 rounded-2xl border border-[#EADBCA]/60">
+                  <span className="text-[11px] text-gray-500 block font-bold">تشغيل الموسيقى</span>
+                  <span className="text-xl font-black text-[#8C6D38]">{analytics.musicPlays}</span>
+                </div>
+                <div className="bg-[#FAF7F2] p-3 rounded-2xl border border-[#EADBCA]/60">
+                  <span className="text-[11px] text-gray-500 block font-bold">موقع القاعة</span>
+                  <span className="text-xl font-black text-[#8C6D38]">{analytics.mapClicks}</span>
+                </div>
+                <div className="bg-[#FAF7F2] p-3 rounded-2xl border border-[#EADBCA]/60">
+                  <span className="text-[11px] text-gray-500 block font-bold">التواصل المباشر</span>
+                  <span className="text-xl font-black text-[#8C6D38]">{analytics.groomContactClicks + analytics.brideContactClicks}</span>
+                </div>
+                <div className="bg-[#FAF7F2] p-3 rounded-2xl border border-[#EADBCA]/60">
+                  <span className="text-[11px] text-gray-500 block font-bold">المشاركات</span>
+                  <span className="text-xl font-black text-[#8C6D38]">{analytics.shares}</span>
                 </div>
               </div>
+            </div>
+          )}
 
-              {/* Recent RSVPs Mini-List */}
-              {rsvps.length === 0 ? (
-                <p className="text-xs text-gray-400 text-center py-2">
-                  لم يتم تسجيل أي ردود حضور لهذه الدعوة بعد.
-                </p>
-              ) : (
-                <div className="space-y-2 max-h-48 overflow-y-auto pr-1">
-                  {rsvps.slice(0, 5).map((r: any) => (
-                    <div key={r.id} className="flex items-center justify-between text-xs p-2 rounded-lg bg-gray-50 border border-gray-100">
-                      <div>
-                        <span className="font-bold text-gray-800">{r.name}</span>
-                        {r.attendance === 'yes' && r.guestsCount > 1 && (
-                          <span className="text-gray-500 mr-1.5">({r.guestsCount} أفراد)</span>
-                        )}
-                        {r.notes && <p className="text-[11px] text-gray-500 italic mt-0.5">&quot;{r.notes}&quot;</p>}
-                      </div>
-                      <span className={`px-2 py-0.5 rounded-full font-bold text-[10px] ${
-                        r.attendance === 'yes' ? 'bg-emerald-100 text-emerald-800' : 'bg-stone-100 text-stone-600'
-                      }`}>
-                        {r.attendance === 'yes' ? 'حاضر' : 'معتذر'}
-                      </span>
-                    </div>
-                  ))}
-                  {rsvps.length > 5 && (
-                    <p className="text-[11px] text-center text-gray-500 pt-1">
-                      + {rsvps.length - 5} ردود إضافية (اضغط على فتح صفحة الحضور لعرض الكل)
+          {/* 4. Validity Manager */}
+          <AdminValidityManager 
+            invitationId={inv.id}
+            currentExpiresAt={inv.expiresAt ? inv.expiresAt.toISOString() : null}
+            apiToken={apiToken}
+          />
+
+          {/* 5. Slug Editor */}
+          <SlugEditor 
+            invitationId={inv.id} 
+            currentSlug={currentSlug} 
+            apiToken={apiToken} 
+          />
+
+          {/* 6. RSVP Management */}
+          {(() => {
+            const rsvps = (inv as any).rsvps || [];
+            const attending = rsvps.filter((r: any) => r.attendance === 'yes');
+            const declined = rsvps.filter((r: any) => r.attendance === 'no');
+            const totalGuests = attending.reduce((sum: number, r: any) => sum + (r.guestsCount || 1), 0);
+
+            return (
+              <div className="bg-white p-5 sm:p-6 rounded-3xl border border-emerald-100 shadow-xs">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#F2ECE1] pb-3 mb-4">
+                  <div>
+                    <h2 className="font-extrabold text-base text-emerald-950 flex items-center gap-2">
+                      <span>📋 تأكيدات الحضور (RSVP)</span>
+                    </h2>
+                    <p className="text-xs text-gray-500 mt-0.5">
+                      متابعة الردود وتصدير قائمة المدعوين
                     </p>
+                  </div>
+                  {currentSlug && (
+                    <a
+                      href={`/${currentSlug}/rsvp`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold transition-all shadow-xs flex items-center justify-center gap-1.5"
+                    >
+                      <span>فتح شاشة الحضور العامة ↗</span>
+                    </a>
                   )}
                 </div>
-              )}
-            </div>
-          );
-        })()}
 
-        {/* Printable Luxury QR Card */}
-        {(() => {
-          const currentSlug = inv.slugs?.find((s: any) => s.isCurrent)?.slug || inv.slugs?.[0]?.slug || '';
-          if (!currentSlug) return null;
-
-          return (
-            <div className="bg-white p-5 shadow rounded border border-amber-200">
-              <div className="flex items-center justify-between mb-3">
-                <div className="flex items-center gap-2.5">
-                  <div className="w-8 h-8 rounded-lg bg-amber-100 text-amber-800 flex items-center justify-center font-bold text-base">
-                    🖨️
+                <div className="grid grid-cols-3 gap-3 mb-4 text-center">
+                  <div className="bg-emerald-50 p-3 rounded-2xl border border-emerald-200">
+                    <span className="text-xs text-emerald-800 font-bold block">المؤكدين</span>
+                    <span className="text-xl font-black text-emerald-700 leading-tight">{attending.length}</span>
                   </div>
-                  <div>
-                    <h2 className="font-bold text-sm text-stone-900">بطاقة QR الفاخرة للطباعة والتنزيل</h2>
-                    <p className="text-xs text-stone-500">بطاقة 4x6 جاهزة للتنزيل بجودة فائقة (PNG) أو الطباعة الورقية الفورية</p>
+                  <div className="bg-amber-50 p-3 rounded-2xl border border-amber-200">
+                    <span className="text-xs text-[#8C6D38] font-bold block">إجمالي الأفراد</span>
+                    <span className="text-xl font-black text-[#543914] leading-tight">{totalGuests}</span>
+                  </div>
+                  <div className="bg-stone-50 p-3 rounded-2xl border border-stone-200">
+                    <span className="text-xs text-stone-600 font-bold block">المعتذرين</span>
+                    <span className="text-xl font-black text-stone-700 leading-tight">{declined.length}</span>
                   </div>
                 </div>
+
+                {rsvps.length === 0 ? (
+                  <p className="text-xs text-gray-400 text-center py-2">
+                    لم يسجل أي ضيف رده حتى الآن.
+                  </p>
+                ) : (
+                  <div className="space-y-2 max-h-48 overflow-y-auto pr-1">
+                    {rsvps.slice(0, 5).map((r: any) => (
+                      <div key={r.id} className="flex items-center justify-between text-xs p-2.5 rounded-xl bg-gray-50 border border-gray-100">
+                        <div>
+                          <span className="font-bold text-gray-800">{r.name}</span>
+                          {r.attendance === 'yes' && r.guestsCount > 1 && (
+                            <span className="text-gray-500 mr-1.5">({r.guestsCount} أفراد)</span>
+                          )}
+                          {r.notes && <p className="text-[11px] text-gray-500 italic mt-0.5">&quot;{r.notes}&quot;</p>}
+                        </div>
+                        <span className={`px-2 py-0.5 rounded-full font-bold text-[10px] ${
+                          r.attendance === 'yes' ? 'bg-emerald-100 text-emerald-800' : 'bg-stone-100 text-stone-600'
+                        }`}>
+                          {r.attendance === 'yes' ? 'حاضر' : 'معتذر'}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
+            );
+          })()}
 
-              <div className="flex items-center gap-2">
-                <a
-                  href={`/${currentSlug}/card`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex-1 py-2 px-3 bg-[#8C6D38] hover:bg-[#6E4D1D] text-white rounded-lg text-xs font-bold text-center transition-all shadow-sm flex items-center justify-center gap-1.5"
-                >
-                  <span>فتح بطاقة QR والطباعة (PNG / Print)</span>
-                  <span>↗</span>
-                </a>
-                <a
-                  href={`/${currentSlug}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="py-2 px-3 bg-stone-100 hover:bg-stone-200 text-stone-700 rounded-lg text-xs font-bold text-center transition-all"
-                >
-                  معاينة الدعوة ↗
-                </a>
-              </div>
-            </div>
-          );
-        })()}
-
-        {/* Personalized Invites Generator */}
-        {(() => {
-          const currentSlug = inv.slugs?.find((s: any) => s.isCurrent)?.slug || inv.slugs?.[0]?.slug || '';
-          if (!currentSlug) return null;
-
-          return (
+          {/* 7. Personalized Guest Links Generator */}
+          {currentSlug && (
             <PersonalizedLinksGenerator 
               slug={currentSlug}
               groomName={inv.groomName}
@@ -289,72 +335,98 @@ export default async function AdminInvitationDetail({ params }: { params: { id: 
               isArabic={true}
               initialAliases={(inv.customData as any)?.guestAliases || {}}
             />
-          );
-        })()}
-
-        <div className="bg-white p-6 shadow rounded border">
-          <h2 className="font-bold text-lg border-b pb-2 mb-4">State Transitions</h2>
-          <AdminActionButtons invitationId={inv.id} apiToken={cookieStore.get("admin_session")?.value || ''} />
-        </div>
-
-        <div className="bg-white p-6 shadow rounded border">
-          <h2 className="font-bold text-lg border-b pb-2 mb-4">Edit Data</h2>
-          <AdminEditForm invitation={inv} apiToken={cookieStore.get("admin_session")?.value || ''} />
-        </div>
-      </div>
-
-      {/* Preview Panel */}
-      <div className="w-1/2">
-        <h2 className="font-bold text-xl mb-4">Preview</h2>
-        <div className="bg-white shadow rounded border overflow-hidden relative" style={{ height: '800px', transform: 'scale(1)', transformOrigin: 'top left' }}>
-          {TemplateComponent ? (() => {
-            const customLang = (inv.customData as any)?.language;
-            const isAr = customLang 
-              ? customLang === 'ar' 
-              : /[\u0600-\u06FF]/.test(inv.groomName || inv.brideName || '');
-            const direction: 'LTR' | 'RTL' = isAr ? 'RTL' : 'LTR';
-
-            return (
-              <TemplateComponent 
-                mode="PREVIEW"
-                direction={direction}
-                metadata={metadata!}
-                data={{
-                groomName: inv.groomName,
-                brideName: inv.brideName,
-                weddingDate: inv.weddingDate || new Date(),
-                weddingTime: (inv.customData as any)?.weddingTime || '',
-                venueName: inv.venueName,
-                venueAddress: inv.venueAddress || '',
-                googleMapsUrl: inv.googleMapsUrl || '',
-                caption: inv.caption || '',
-                weddingMessage: inv.weddingMessage || '',
-                groomPhone: inv.groomPhone || '',
-                bridePhone: inv.bridePhone || '',
-                countdownEnabled: inv.countdownEnabled,
-                contactButtonsEnabled: true,
-                customData: (inv.customData as Record<string, any>) || {},
-                galleryImages: inv.media
-                  .filter((m: any) => m.role === 'GALLERY' && (m.publicUrl || m.storageKey) && !m.deletedAt)
-                  .map((m: any) => ({ url: (m.publicUrl || m.storageKey) as string, alt: 'Gallery Image' })),
-                music: (() => {
-                  const item = inv.media.find((m: any) => m.type === 'AUDIO' && !m.deletedAt);
-                  const url = item?.publicUrl || item?.storageKey || (inv.customData as any)?.musicUrl;
-                  return url ? { url } : undefined;
-                })(),
-                coverImage: (() => {
-                  const item = inv.media.find((m: any) => (m.role === 'COVER' || m.type === 'IMAGE') && !m.deletedAt);
-                  const url = item?.publicUrl || item?.storageKey || (inv.customData as any)?.coverImageUrl;
-                  return url ? { url, alt: 'Cover Image' } : undefined;
-                })(),
-              }}
-            />
-            );
-          })() : (
-            <div className="p-12 text-center text-gray-500">No template assigned or template missing</div>
           )}
+
+          {/* 8. Full Edit Data Form */}
+          <div className="bg-white p-5 sm:p-6 rounded-3xl border border-[#EADBCA] shadow-xs">
+            <h2 className="font-extrabold text-base text-[#38260F] mb-4 pb-2 border-b border-[#F2ECE1]">
+              تعديل بيانات الدعوة والثيم
+            </h2>
+            <AdminEditForm invitation={inv} apiToken={apiToken} />
+          </div>
+
         </div>
+
+        {/* Preview Column (Full width on Mobile, 5/12 on XL) */}
+        <div className="w-full xl:w-5/12 xl:sticky xl:top-6 space-y-4">
+          <div className="flex items-center justify-between">
+            <h2 className="font-extrabold text-lg text-[#38260F] flex items-center gap-2">
+              <Smartphone className="w-5 h-5 text-[#8C6D38]" />
+              <span>معاينة حية للدعوة</span>
+            </h2>
+            {currentSlug && (
+              <a
+                href={`/${currentSlug}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-xs font-bold text-[#8C6D38] hover:underline flex items-center gap-1"
+              >
+                <span>فتح في نافذة كاملة</span>
+                <ExternalLink className="w-3.5 h-3.5" />
+              </a>
+            )}
+          </div>
+
+          {/* Smartphone Mockup Frame */}
+          <div className="w-full max-w-sm mx-auto bg-stone-900 rounded-[44px] p-3 shadow-2xl border-4 border-stone-800">
+            <div className="w-full rounded-[36px] overflow-hidden bg-[#FAF7F2] relative aspect-[9/16] shadow-inner">
+              {TemplateComponent ? (() => {
+                const customLang = (inv.customData as any)?.language;
+                const isAr = customLang 
+                  ? customLang === 'ar' 
+                  : /[\u0600-\u06FF]/.test(inv.groomName || inv.brideName || '');
+                const direction: 'LTR' | 'RTL' = isAr ? 'RTL' : 'LTR';
+
+                return (
+                  <div className="w-full h-full overflow-y-auto scrollbar-none">
+                    <TemplateComponent 
+                      mode="PREVIEW"
+                      direction={direction}
+                      metadata={metadata!}
+                      data={{
+                        groomName: inv.groomName,
+                        brideName: inv.brideName,
+                        weddingDate: inv.weddingDate || new Date(),
+                        weddingTime: (inv.customData as any)?.weddingTime || '',
+                        venueName: inv.venueName,
+                        venueAddress: inv.venueAddress || '',
+                        googleMapsUrl: inv.googleMapsUrl || '',
+                        caption: inv.caption || '',
+                        weddingMessage: inv.weddingMessage || '',
+                        groomPhone: inv.groomPhone || '',
+                        bridePhone: inv.bridePhone || '',
+                        countdownEnabled: inv.countdownEnabled,
+                        contactButtonsEnabled: true,
+                        customData: (inv.customData as Record<string, any>) || {},
+                        galleryImages: inv.media
+                          .filter((m: any) => m.role === 'GALLERY' && (m.publicUrl || m.storageKey) && !m.deletedAt)
+                          .map((m: any) => ({ url: (m.publicUrl || m.storageKey) as string, alt: 'Gallery Image' })),
+                        music: (() => {
+                          const item = inv.media.find((m: any) => m.type === 'AUDIO' && !m.deletedAt);
+                          const url = item?.publicUrl || item?.storageKey || (inv.customData as any)?.musicUrl;
+                          return url ? { url } : undefined;
+                        })(),
+                        coverImage: (() => {
+                          const item = inv.media.find((m: any) => (m.role === 'COVER' || m.type === 'IMAGE') && !m.deletedAt);
+                          const url = item?.publicUrl || item?.storageKey || (inv.customData as any)?.coverImageUrl;
+                          return url ? { url, alt: 'Cover Image' } : undefined;
+                        })(),
+                      }}
+                    />
+                  </div>
+                );
+              })() : (
+                <div className="p-8 text-center text-gray-500 flex flex-col items-center justify-center h-full">
+                  <Sparkles className="w-8 h-8 text-gray-300 mb-2" />
+                  <p className="text-xs">لم يتم تحديد ثيم أو الثيم غير متاح</p>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+
       </div>
+
     </div>
   );
 }
