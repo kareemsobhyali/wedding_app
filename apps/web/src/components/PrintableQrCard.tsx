@@ -185,10 +185,16 @@ export default function PrintableQrCard({
       ctx.lineWidth = 3;
       ctx.strokeRect(qrBoxX, qrBoxY, qrBoxSize, qrBoxSize);
 
-      // Convert SVG QR code from DOM to Image
-      const svgElement = cardRef.current?.querySelector('svg');
+      // Convert SVG QR code from DOM to Image (Explicitly targeting QR wrapper, not other icons)
+      const qrWrapper = cardRef.current?.querySelector('#wedding-qr-code-wrapper');
+      const svgElement = qrWrapper?.querySelector('svg');
       if (svgElement) {
-        const svgString = new XMLSerializer().serializeToString(svgElement);
+        // Clone and assign high-res dimensions for crisp rasterization
+        const clonedSvg = svgElement.cloneNode(true) as SVGSVGElement;
+        clonedSvg.setAttribute('width', '800');
+        clonedSvg.setAttribute('height', '800');
+
+        const svgString = new XMLSerializer().serializeToString(clonedSvg);
         const svgBlob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' });
         const URL = window.URL || window.webkitURL || window;
         const blobURL = URL.createObjectURL(svgBlob);
@@ -376,7 +382,7 @@ export default function PrintableQrCard({
         {/* 4. The Centerpiece - QR Code Box */}
         <div className="my-2 flex flex-col items-center">
           <div className="p-3 bg-white rounded-2xl border-2 border-[#D4AF37] shadow-xl relative group">
-            <div className="p-1 bg-white rounded-xl">
+            <div id="wedding-qr-code-wrapper" className="p-1 bg-white rounded-xl">
               <QRCode
                 value={inviteUrl}
                 size={180}
