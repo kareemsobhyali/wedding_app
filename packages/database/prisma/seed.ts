@@ -28,18 +28,22 @@ async function main() {
 
   // 2. Templates
   const templatesData = [
-    { name: 'Butterfly Elegance 🦋', slug: 'butterfly-elegance', description: 'تصميم ملكي بمظروف ينفتح وفراشة ثلاثية الأبعاد تطير بنعومة.', sortOrder: 1 },
-    { name: 'Heavenly Roses 🌹', slug: 'heavenly-roses', description: 'ورود زهرية ناعمة مع تفاصيل زجاجية فاخرة وجدول الفعاليات.', sortOrder: 2 },
-    { name: 'Golden Arabic ⚜️', slug: 'golden-arabic', description: 'طابع عربي أصيل ببريق الذهب وقصتنا ومحطات الحب والزفاف.', sortOrder: 3 },
-    { name: 'Classic Elegance ✨', slug: 'classic-elegance', description: 'أناقة كلاسيكية فاخرة بالأسود والذهب الملكي والقصاصات الاحتفالية.', sortOrder: 4 },
-    { name: 'Modern Minimalist 🖤', slug: 'modern-minimalist', description: 'تصميم عصري بسيط بخطوط جريئة وتناغم هادئ.', sortOrder: 5 },
-    { name: 'Floral Romance 🌸', slug: 'floral-romance', description: 'درجات الوردي الباستيل الرقيقة مع بتلات متساقطة وقصة التعارف.', sortOrder: 6 },
-    { name: 'Botanical Rustic 🌿', slug: 'botanical-rustic', description: 'طابع الورق الطبيعي المعتق وأغصان الزيتون وختم الشمع الأحمر.', sortOrder: 7 },
-    { name: 'Royal Velvet 🎀', slug: 'royal-velvet', description: 'مخمل ملكي زمردي فاخر مع شريط ساتان ذهبي ينفك بنعومة ومونوغرام مذهب.', sortOrder: 8 },
-    { name: 'Grand Palace Gates 🏰', slug: 'palace-gates', description: 'بوابات قصر ذهبية ثلاثية الأبعاد تنفتح لتكشف عن قاعة ملكية ساحرة.', sortOrder: 9 },
-    { name: 'Celestial Stardust 🌌', slug: 'celestial-stardust', description: 'سماء النجوم والفلك الليلي مع هلال ذهبي متوهج وأبراج فلكية.', sortOrder: 10 },
-    { name: 'Pearl & Jasmine Box 🦪', slug: 'pearl-box', description: 'صندوق دعوة أبيض لؤلؤي مبطن بالحرير العاجي وأزهار الياسمين وعقدة لؤلؤ.', sortOrder: 11 },
+    { name: 'Palace Doors Reveal 🚪✨', slug: 'palace-doors-reveal', description: 'بوابة القصر الملكي التفاعلية: دق على الباب 3 مرات لتفتح الأبواب بمؤثرات صوتية وضوئية وتكشف قاعة الحفل وبطاقة الزفاف الفاخرة.', sortOrder: 1 },
+    { name: 'Mughal Palace Portal 🕌', slug: 'mughal-palace-portal', description: 'بوابة القصر الملكية بأقواس الحجر المنحوتة وأعمدة الرخام المذهبة وشلال الزهور المتدلية مع تساقط البتلات.', sortOrder: 2 },
+    { name: 'Cathedral Grand Arch ⛪', slug: 'cathedral-grand-arch', description: 'تصميم ملكي فاخر، ثريات كريستال معلقة وفوانيس بلهب شموع متحرك واقعي وبطاقات مراسم الحفل.', sortOrder: 3 },
+    { name: 'Sculpted Porcelain Arch 🏛️', slug: 'sculpted-porcelain-arch', description: 'إطار البورسلين المنحوت 3D والورود البيضاء واللؤلؤ مع تفاصيل العائلات وجدول المواعيد المذهب.', sortOrder: 4 },
+    { name: 'Butterfly Elegance 🦋', slug: 'butterfly-elegance', description: 'تصميم ملكي فاخر بمظروف ينفتح وفراشة ثلاثية الأبعاد تطير بنعومة وأناقة.', sortOrder: 5 },
+    { name: 'Golden Arabic ⚜️', slug: 'golden-arabic', description: 'طابع عربي أصيل ببريق الذهب وقصص اللقاء والخطوبة والزفاف.', sortOrder: 6 },
   ];
+
+  // Remove deleted templates from database
+  await prisma.template.deleteMany({
+    where: {
+      slug: {
+        notIn: templatesData.map(t => t.slug)
+      }
+    }
+  });
 
   for (const t of templatesData) {
     await prisma.template.upsert({

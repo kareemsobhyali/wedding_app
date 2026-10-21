@@ -43,19 +43,16 @@ interface LandingSettings {
 
 // Category Mapping helper for rich filtration
 const getThemeCategory = (id: string): string => {
-  if (['palace-doors-reveal', 'mughal-palace-portal', 'cathedral-grand-arch', 'sculpted-porcelain-arch', 'palace-gates', 'royal-velvet', 'royal-scroll', 'trifold-pocket-folio'].includes(id)) {
+  if (['palace-doors-reveal', 'mughal-palace-portal', 'cathedral-grand-arch', 'sculpted-porcelain-arch'].includes(id)) {
     return 'palace';
   }
-  if (['golden-arabic', 'arabian-crescent-lantern', 'laser-gold-gatefold', 'celestial-stardust', 'celestial-constellations'].includes(id)) {
+  if (['golden-arabic'].includes(id)) {
     return 'arabic';
   }
-  if (['floral-romance', 'botanical-rustic', 'blooming-garden-3d', 'vintage-calla-blooms', 'deckle-edge-cotton', 'heavenly-roses'].includes(id)) {
-    return 'floral';
-  }
-  if (['butterfly-elegance', 'wax-silk-reveal', 'luxury-flip-card', 'pearl-box', 'velvet-jewelry-box', 'vintage-vinyl-player', 'polaroid-photo-reel', 'boarding-pass-vip'].includes(id)) {
+  if (['butterfly-elegance'].includes(id)) {
     return '3d';
   }
-  return 'modern';
+  return 'palace';
 };
 
 // Top Priority display order
@@ -65,21 +62,7 @@ const PRIORITY_ORDER = [
   'cathedral-grand-arch',
   'sculpted-porcelain-arch',
   'butterfly-elegance',
-  'golden-arabic',
-  'classic-elegance',
-  'floral-romance',
-  'modern-minimalist',
-  'royal-velvet',
-  'blooming-garden-3d',
-  'wax-silk-reveal',
-  'laser-gold-gatefold',
-  'palace-gates',
-  'pearl-silk-minimalist',
-  'luxury-flip-card',
-  'arabian-crescent-lantern',
-  'vintage-calla-blooms',
-  'botanical-rustic',
-  'celestial-stardust'
+  'golden-arabic'
 ];
 
 export default function LandingClient({ 
@@ -199,9 +182,7 @@ export default function LandingClient({
     { id: 'all', label: 'جميع الثيمات', count: templatesList.length },
     { id: 'palace', label: 'أقواس وقصور ملكية 🏛️' },
     { id: 'arabic', label: 'طابع عربي وذهبي ⚜️' },
-    { id: 'floral', label: 'ورود وطبيعة 🌸' },
-    { id: '3d', label: 'تفاعلي ومجسم 3D 🦋' },
-    { id: 'modern', label: 'عصري وناعم ✨' },
+    { id: '3d', label: 'تفاعلي ومجسم 3D 🦋' }
   ];
 
   return (
