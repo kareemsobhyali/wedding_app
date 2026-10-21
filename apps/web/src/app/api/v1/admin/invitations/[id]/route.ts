@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { revalidatePath } from 'next/cache';
 import { prisma } from '@/lib/prisma';
 import { getAdminFromRequest } from '@/lib/auth';
 
@@ -197,6 +198,17 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
 
       return result;
     });
+
+    const currentSlug = updated.slugs?.find((s: any) => s.isCurrent)?.slug || updated.slugs?.[0]?.slug;
+    if (currentSlug) {
+      try {
+        revalidatePath(`/${currentSlug}`);
+        revalidatePath(`/${currentSlug}/card`);
+        revalidatePath(`/${currentSlug}/rsvp`);
+      } catch (e) {
+        console.error('Revalidation error:', e);
+      }
+    }
 
     return NextResponse.json({ data: updated, ...updated });
   } catch (error: any) {
