@@ -360,7 +360,7 @@ export default function LandingClient({
       {/* ========================================================= */}
       {/* 2. Hero Section - Royal Luxury Boutique & Floating Lights */}
       {/* ========================================================= */}
-      <section className="relative pt-28 pb-12 sm:pt-40 sm:pb-20 overflow-hidden bg-gradient-to-b from-[#FFFDF9] via-[#FAF7F2] to-[#FAF7F2]">
+      <section className="relative pt-20 pb-3 sm:pt-36 sm:pb-8 overflow-hidden bg-gradient-to-b from-[#FFFDF9] via-[#FAF7F2] to-[#FAF7F2]">
         
         {/* Animated Golden Ambient Glows */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -392,7 +392,7 @@ export default function LandingClient({
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.7 }}
-            className="mb-4 sm:mb-6 inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/95 border border-[#D5C7B2] text-[#8C6D38] text-xs font-extrabold shadow-sm backdrop-blur-sm"
+            className="mb-2 sm:mb-4 inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/95 border border-[#D5C7B2] text-[#8C6D38] text-[11px] sm:text-xs font-extrabold shadow-sm backdrop-blur-sm"
           >
             <Sparkles className="w-3.5 h-3.5 text-[#C5A059] animate-spin" style={{ animationDuration: '6s' }} />
             <span>دعوات زفاف إلكترونية تفاعلية فاخرة</span>
@@ -403,7 +403,7 @@ export default function LandingClient({
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.15 }}
-            className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-[#38260F] mb-4 sm:mb-6 leading-[1.3] sm:leading-[1.25] tracking-tight max-w-4xl px-2"
+            className="text-2xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-[#38260F] mb-2 sm:mb-4 leading-[1.25] tracking-tight max-w-4xl px-2"
             style={{ fontFamily: "'Aref Ruqaa', 'Cairo', serif" }}
           >
             {settings.heroTitle || 'دعوات زفاف ملكية تليق بليلة العمر'}
@@ -414,7 +414,7 @@ export default function LandingClient({
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.3 }}
-            className="text-sm sm:text-lg md:text-xl text-[#6B5338] mb-8 sm:mb-10 max-w-2xl mx-auto leading-relaxed font-medium px-4"
+            className="text-xs sm:text-base md:text-lg text-[#6B5338] mb-4 sm:mb-8 max-w-2xl mx-auto leading-relaxed font-medium px-4"
           >
             {settings.heroSubtitle || 'اختر ثيمك المفضل من تشكيلتنا الملكية الحصرية، عاينه حياً على هاتفك، واطلبه مباشرة عبر الواتساب مع رابط مخصص باسم كل ضيف وكارت QR جاهز للطباعة.'}
           </motion.p>
@@ -424,11 +424,11 @@ export default function LandingClient({
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.45 }}
-            className="flex flex-col sm:flex-row items-center justify-center gap-3.5 sm:gap-4 w-full sm:w-auto mb-8 sm:mb-12 px-4"
+            className="flex flex-col sm:flex-row items-center justify-center gap-2.5 sm:gap-4 w-full sm:w-auto mb-4 sm:mb-8 px-4"
           >
             <a 
               href="#templates" 
-              className="relative overflow-hidden w-full sm:w-auto px-8 sm:px-10 py-3.5 sm:py-4 rounded-full bg-gradient-to-r from-[#8C6D38] via-[#A88448] to-[#6E4E26] text-white font-extrabold text-sm sm:text-base shadow-xl shadow-[#8C6D38]/30 hover:shadow-[#8C6D38]/50 hover:brightness-110 transition-all transform hover:-translate-y-0.5 active:scale-95 flex items-center justify-center gap-2 group"
+              className="relative overflow-hidden w-full sm:w-auto px-6 sm:px-10 py-2.5 sm:py-3.5 rounded-full bg-gradient-to-r from-[#8C6D38] via-[#A88448] to-[#6E4E26] text-white font-extrabold text-xs sm:text-base shadow-xl shadow-[#8C6D38]/30 hover:shadow-[#8C6D38]/50 hover:brightness-110 transition-all transform hover:-translate-y-0.5 active:scale-95 flex items-center justify-center gap-2 group"
             >
               <span className="relative z-10">استعرض تشكيلة الثيمات ⚜️</span>
               {/* Shimmer sweep effect */}
@@ -439,7 +439,7 @@ export default function LandingClient({
               href={generalWhatsAppUrl} 
               target="_blank"
               rel="noopener noreferrer"
-              className="w-full sm:w-auto px-7 sm:px-8 py-3.5 sm:py-4 rounded-full bg-white text-[#4A3210] font-extrabold text-sm sm:text-base border border-[#D5C7B2] hover:bg-[#FAF5ED] shadow-sm transition-all transform hover:-translate-y-0.5 active:scale-95 flex items-center justify-center gap-2"
+              className="w-full sm:w-auto px-6 sm:px-8 py-2.5 sm:py-3.5 rounded-full bg-white text-[#4A3210] font-extrabold text-xs sm:text-base border border-[#D5C7B2] hover:bg-[#FAF5ED] shadow-sm transition-all transform hover:-translate-y-0.5 active:scale-95 flex items-center justify-center gap-2"
             >
               <WhatsAppIcon className="w-5 h-5 text-[#25D366]" />
               <span>تحدث معنا عبر واتساب</span>
@@ -451,7 +451,7 @@ export default function LandingClient({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.6 }}
-            className="flex items-center gap-4 text-xs text-[#7A6142] font-semibold"
+            className="flex items-center justify-center flex-wrap gap-2.5 sm:gap-4 text-[11px] sm:text-xs text-[#7A6142] font-semibold"
           >
             <span className="flex items-center gap-1.5">
               <span className="w-2 h-2 rounded-full bg-[#25D366] animate-pulse" />
@@ -470,29 +470,29 @@ export default function LandingClient({
       {/* ========================================================= */}
       {/* 3. Core Section: THEMES SHOWCASE (Slider & Grid Modes) */}
       {/* ========================================================= */}
-      <section id="templates" className="py-12 sm:py-20 bg-white relative overflow-hidden">
+      <section id="templates" className="pt-2 pb-10 sm:pt-6 sm:pb-16 bg-white relative overflow-hidden scroll-mt-16 sm:scroll-mt-20">
         
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           
           {/* Section Header */}
-          <div className="text-center max-w-3xl mx-auto mb-6 sm:mb-8">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FAF0D7] text-[#8C6D38] text-xs font-bold mb-2.5 border border-[#E5C987]/60">
-              <Sparkles className="w-3.5 h-3.5" />
+          <div className="text-center max-w-3xl mx-auto mb-3 sm:mb-6">
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#FAF0D7] text-[#8C6D38] text-[11px] sm:text-xs font-bold mb-1.5 border border-[#E5C987]/60">
+              <Sparkles className="w-3 h-3 text-[#C5A059]" />
               <span>معرض الثيمات الملكية الفاخرة</span>
             </div>
             <h2 
-              className="text-2xl sm:text-4xl md:text-5xl font-extrabold text-[#38260F] mb-2.5"
+              className="text-xl sm:text-3xl md:text-5xl font-extrabold text-[#38260F] mb-1 sm:mb-2"
               style={{ fontFamily: "'Aref Ruqaa', 'Cairo', serif" }}
             >
               تشكيلة الثيمات الحصرية (6 ثيمات ملكية)
             </h2>
-            <p className="text-xs sm:text-base text-gray-600 leading-relaxed max-w-2xl mx-auto">
+            <p className="text-[11px] sm:text-base text-gray-600 leading-relaxed max-w-2xl mx-auto">
               تصفح تصاميمنا الملكية المجهزة بمؤثرات فتح الأبواب ثلاثية الأبعاد والموسيقى. يمكنك معاينة أي ثيم حياً على هاتفك أو طلبه مباشرة.
             </p>
           </div>
 
           {/* Filter Bar, View Switcher & Live Search */}
-          <div className="bg-[#FAF7F2] p-3.5 sm:p-5 rounded-2xl sm:rounded-3xl border border-[#EADBCA] shadow-xs mb-6 sm:mb-8">
+          <div className="bg-[#FAF7F2] p-2.5 sm:p-4 rounded-xl sm:rounded-2xl border border-[#EADBCA] shadow-xs mb-3 sm:mb-6">
             <div className="flex flex-col md:flex-row items-center justify-between gap-3 sm:gap-4">
               
               {/* Category Filter Tabs */}
@@ -574,7 +574,7 @@ export default function LandingClient({
 
           {/* Quick Counter & Nav Controls (For Slider Mode) */}
           {viewMode === 'slider' && sortedAndFilteredTemplates.length > 0 && (
-            <div className="flex items-center justify-between mb-3 px-1 sm:px-2">
+            <div className="flex items-center justify-between mb-2 px-1 sm:px-2">
               <div className="flex items-center gap-2 text-xs font-bold text-[#8C6D38]">
                 <span>الثيم رقم ({activeIndex + 1}) من ({sortedAndFilteredTemplates.length})</span>
                 <span className="text-gray-400">•</span>
@@ -586,7 +586,7 @@ export default function LandingClient({
                   onClick={handlePrevTheme}
                   disabled={activeIndex === 0}
                   aria-label="الثيم السابق"
-                  className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white border border-[#D5C7B2] text-[#6E4E26] hover:bg-[#FAF5ED] disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center shadow-xs transition-all active:scale-95"
+                  className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-white border border-[#D5C7B2] text-[#6E4E26] hover:bg-[#FAF5ED] disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center shadow-xs transition-all active:scale-95"
                 >
                   <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5" />
                 </button>
@@ -594,7 +594,7 @@ export default function LandingClient({
                   onClick={handleNextTheme}
                   disabled={activeIndex === sortedAndFilteredTemplates.length - 1}
                   aria-label="الثيم التالي"
-                  className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-[#8C6D38] text-white hover:brightness-110 disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center shadow-md transition-all active:scale-95"
+                  className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-[#8C6D38] text-white hover:brightness-110 disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center shadow-md transition-all active:scale-95"
                 >
                   <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5" />
                 </button>
@@ -609,7 +609,7 @@ export default function LandingClient({
         {/* ========================================================= */}
         {sortedAndFilteredTemplates.length > 0 ? (
           viewMode === 'slider' ? (
-            <div className="relative w-full py-4 sm:py-6 overflow-hidden">
+            <div className="relative w-full py-1.5 sm:py-6 overflow-hidden">
               <div 
                 ref={carouselRef}
                 onScroll={handleCarouselScroll}
